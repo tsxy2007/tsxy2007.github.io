@@ -1,7 +1,7 @@
 ---
 title: DirectX12 第一节
 date: 2019-04-13 00:02:00
-tags:
+tags: DirectX12
 category:
 ---
 ## 一：创建Device
