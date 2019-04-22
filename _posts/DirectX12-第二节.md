@@ -44,4 +44,103 @@ psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
 psoDesc.SampleDesc.Count = 1;
 m_device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&m_pipelineState));
 ```
-## 创建命令队列
+## 三： 创建命令队列
+```
+m_device->CreateCommandList(0,D3D12_COMMAND_LIST_TYPE_DIRECT,m_commandAllocator.Get(),m_pipelineState.Get(),IID_PPV_ARGS(&m_commandList));
+m_commandList->Close();
+```
+## 四： 创建Vertex Buffer
+``` c++
+Vertex triangleVertices[] = 
+{
+	{ { 0.0f, 0.25f * m_aspectRatio, 0.0f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
+	{ { 0.25f, -0.25f * m_aspectRatio, 0.0f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
+	{ { -0.25f, -0.25f * m_aspectRatio, 0.0f }, { 0.0f, 0.0f, 1.0f, 1.0f } }
+};
+
+const UINT vertexBufferSize = sizeof(triangleVertices);
+m_device->CreateCommittedResource(
+    &CD3DX12_HEAP_PROERTIES(D3D12_HEAP_TYPE_UIPLOAD),
+    D3D12_HEAP_FLAG_NONE,
+    &CD3DX12_RESOURCE_DESC::buffer(vertexBufferSize),
+    nullptr,
+    IID_PPV_ARGS(&m_vertexBuffer)
+);
+
+// 复制这个三角形数据到vertex buffer
+UINT8* pVertexDataBegin;
+CD3DX12_RANGE readRange(0,0);
+m_vertexBuffer->Map(0,&readRange,reinterpret_cast<void**>(&pVertexDataBegin));
+memcpy(pVertexDataBegin,triangleVertices,sizeof(triangleVertices));
+m_vertexBuffer->Unmap(0,nullptr);
+//初始化vertexbuffer view
+m_vertexBufferView.BufferLocation = m_vertexBuffer->GetGPUVirtualAddress();
+m_vertexBufferView.StrideInBytes= sizeof(Vertex);
+m_vertexBufferView.SizeInBytes = vertexBufferSize;
+```
+## 五：创建Fence 异步并且等待assets被GPU加载
+```
+ThrowIfFailed(m_device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_fence)));
+m_fenceValue = 1;
+m_fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);
+if (m_fenceEvent == nullptr)
+{
+	ThrowIfFailed(HRESULT_FROM_WIN32(GetLastError()));
+}
+WaitForPreviousFrame();
+```
+## 六： 执行命令
+``` c++
+// 记录所有命令
+PopulateCommandList();
+//执行命令
+ID3D12CcommandList* ppCommandList[] = {m_commandList.Get()};
+m_commandQueue->ExecuteCommandLists(_countof(ppCommandLists),ppCommandLists);
+// 推送
+m_swapChain->Present(1,0);
+WaitForPreviousFrame();
+
+
+PopulateCommandList()
+{
+    ThrowIfFailed(m_commandAllocator->Reset());
+    ThrowIfFailed(m_commandList->Reset(m_commandAllocator.Get(), m_pipelineState.Get()));
+
+	//Set necessary state
+	m_commandList->SetGraphicsRootSignature(m_rootSignature.Get());
+	m_commandList->RSSetViewports(1, &m_viewport);
+	m_commandList->RSSetScissorRects(1, &m_scissorRect);
+
+	// 投射viewtarget
+	m_commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_frameIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
+
+	CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_rtvHeap->GetCPUDescriptorHandleForHeapStart(), m_frameIndex, m_rtvDescriptorSize);
+	m_commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
+
+	// Record commands
+	const float clearColor[] = { 0.f,0.2f,.4f,1.f };
+	m_commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
+	m_commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	m_commandList->IASetVertexBuffers(0, 1, &m_vertexBufferView);
+	m_commandList->DrawInstanced(3, 1, 0, 0);
+
+	// Indicate
+	m_commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_frameIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));
+
+	ThrowIfFailed(m_commandList->Close());  
+}
+
+void D3D12HelloTriangle::WaitForPreviousFrame()
+{
+	const UINT64 fence = m_fenceValue;
+	ThrowIfFailed(m_commandQueue->Signal(m_fence.Get(), fence));
+	m_fenceValue++;
+	if (m_fence->GetCompletedValue()<fence)
+	{
+		ThrowIfFailed(m_fence->SetEventOnCompletion(fence, m_fenceEvent));
+		WaitForSingleObject(m_fenceEvent, INFINITE);
+	}
+	m_frameIndex = m_swapChain->GetCurrentBackBufferIndex();
+}
+
+```
