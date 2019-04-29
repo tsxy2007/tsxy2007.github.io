@@ -152,6 +152,97 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-DirectX12-第三节" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/23/DirectX12-第三节/">DirectX12-第三节</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/23/DirectX12-第三节/" class="archive-article-date">
+  	<time datetime="2019-04-23T01:00:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="命令队列"><a href="#命令队列" class="headerlink" title="命令队列"></a>命令队列</h2><p>命令有6种:<br>1.ID3D12CommandQueue::ExecuteCommandLists:<br>2.ID3D12CommandQueue::Signal:<br>3.ID3D12CommandQueue::Wait:<br>4.ID3D12CommandQueue::UpdateTileMapping:<br>5.ID3D12CommandQueue::CopyTileMapping:<br>6.ISwapChain::Present:<br>命令队列作用：将并发串行化。<br>硬件层面上GPU有3个并行执行的引擎：复制引擎，计算引擎和图形引擎；<br>（1） 复制命令队列中的命令只能在复制引擎中执行；<br>（2） 计算命令队列中的命令只能可以在计算引擎或复制引擎上执行；<br>（3） 直接命令队列中的命令可以在任意引擎上执行；<br>只有计算或直接类型命令才允许调用ID3D12CommandQueue接口的UpdateTileMapping和CopyTileMapping方法；</p>
+<h2 id="Fence"><a href="#Fence" class="headerlink" title="Fence"></a>Fence</h2><p>Fence可用于控制命令队列中不同命令之间的同步，但是命令队列中同一命令内部的并发性对fence而言是不可见的。</p>
+<h2 id="命令分配器和命令列表"><a href="#命令分配器和命令列表" class="headerlink" title="命令分配器和命令列表"></a>命令分配器和命令列表</h2><p>命令列表：<br>1.记录状态：在此状态下允许向其添加添加命令；<br>2.关闭状态：在此状态下允许作为ID3D12CommandQueue::ExecuteCommandLists的实参；<br>不允许被CPU并发访问；<br>命令列表并不维护其在命令分配器中所分配的内存的相关信息；需要手动释放内存；方法是ID3D12CommandAllocator::Reset;</p>
+<h2 id="捆绑包"><a href="#捆绑包" class="headerlink" title="捆绑包"></a>捆绑包</h2><p>命令列表不被CPU线程和GPU线程之间并发访问，也不允许被CPU线程并发访问；但是允许被GPU线程并发访问；</p>
+<h2 id="资源屏障"><a href="#资源屏障" class="headerlink" title="资源屏障"></a>资源屏障</h2><p>D3D12_RESOURCE_BARRIER结构体描述：<br><strong><em>分三种类型</em></strong>：</p>
+<ol>
+<li>D3D12_RESOURCE_BARRIER_TYPE_TRANSTION 转换资源屏障</li>
+<li>D3D12_RESOURCE_BARRIER_TYPE_ALIASING  别名资源屏障</li>
+<li>D3D12_RESOURCE_BARRIER_TYPE_UAV       无序访问视图资源屏障</li>
+</ol>
+<h3 id="转换资源屏障："><a href="#转换资源屏障：" class="headerlink" title="转换资源屏障："></a>转换资源屏障：</h3><p>命令队列有且仅有图形/计算类和复制类：<br><strong><em>图形/计算类</em></strong>： 所有的直接命令队列和计算命令队列<br><strong><em>复制类</em></strong>： 所有的复制命令队列</p>
+<h4 id="子资源权限："><a href="#子资源权限：" class="headerlink" title="子资源权限："></a>子资源权限：</h4><p>D3D12_RESOURCE_BARRIER中的Transition成员的StateBefore和StateAfter成员表明子资源对命令队列的权限用D3D12_RESOURCE_STATES表示。<br>（1） 子资源对复制类的权限只能是一下三种：</p>
+<ul>
+<li>D3D12_RESOURCE_STATE_COMMON 公共（可写）</li>
+<li>D3D12_RESOURCE_STATE_COPY_DEST 可作为复制宿（可写）</li>
+<li>D3D12_RESOURCE_STATE_COPY_SOURCE 可作为复制源（只读）<br>（2） 子资源对图形/计算类的权限可以是任意一种权限，除以上3种还有</li>
+<li>D3D12_RESOURCE_STATE_RESOLVE_DEST 可作为解析宿（可写）</li>
+<li>D3D12_RESOURCE_STATE_RESOLVE_SOURCE 可作为解析源（只读）</li>
+<li>D3D12_RESOURCE_STATE_STREAM_OUT 可作为流输出（可写）</li>
+<li>D3D12_RESOURCE_STATE_DEPTH_WRITE 可作为深度模板（可写）</li>
+<li>D3D12_RESOURCE_STATE_RENDER_TARGET 可作为渲染目标(可写)</li>
+<li>D3D12_RESOURCE_STATE_INDIRECT_ARGUMENT 可作为间接参数（只读）</li>
+<li>D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER 可作为顶点或常量缓冲（只读）</li>
+<li>D3D12_RESOURCE_STATE_INDEX_BUFFER 可作为索引缓冲（只读）</li>
+<li>D3D12_RESOURCE_STATE_STATE_NON_SHADER_RESOURCE 可作为非像素着色器资源（只读）</li>
+<li>D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOUCE 可作为像素着色器资源（只读）</li>
+<li>D3D12_RESOURCE_STATE_UNORDERED_ACCESS 可作为只读深度模板（只读）<br><strong>通用读写权限</strong>：D3D12_RESOURCE_STATE_GENERIC_READ<br>最多只有两个只读权限。</li>
+</ul>
+<h4 id="转换资源屏障对并发性的控制"><a href="#转换资源屏障对并发性的控制" class="headerlink" title="转换资源屏障对并发性的控制"></a>转换资源屏障对并发性的控制</h4><p>（1） 绘制到渲染目标视图<br>（2） 将相关子资源对命令队列类的权限从可作为渲染目标转换为可作为复制类<br>（3） 将渲染目标视图的底层资源复制到一个纹理中</p>
+<h4 id="分离资源屏障"><a href="#分离资源屏障" class="headerlink" title="分离资源屏障"></a>分离资源屏障</h4>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/23/DirectX12-第三节/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-UE4网络分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
