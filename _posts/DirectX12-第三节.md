@@ -58,3 +58,15 @@ D3D12_RESOURCE_BARRIER中的Transition成员的StateBefore和StateAfter成员表
 * D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOUCE 可作为像素着色器资源（只读）
 * D3D12_RESOURCE_STATE_UNORDERED_ACCESS 可作为只读深度模板（只读）
 **通用读写权限**：D3D12_RESOURCE_STATE_GENERIC_READ
+最多只有两个只读权限。
+
+#### 转换资源屏障对并发性的控制
+（1） 绘制到渲染目标视图
+（2） 将相关子资源对命令队列类的权限从可作为渲染目标转换为可作为复制类
+（3） 将渲染目标视图的底层资源复制到一个纹理中
+
+#### 分离资源屏障
+分离资源屏障由开始和结束两个资源屏障构成；
+
+D3D12_RESOURCE_BARRIER_FLAG_BEGIN_ONLY
+D3D12_RESOURCE_BARRIER_FLAG_END_ONLY;
