@@ -1,7 +1,7 @@
 ---
 title: DirectX12-第三节
 date: 2019-04-23 09:00:55
-tags:
+tags: DirectX12
 category:
 ---
 ## 命令队列
@@ -66,7 +66,31 @@ D3D12_RESOURCE_BARRIER中的Transition成员的StateBefore和StateAfter成员表
 （3） 将渲染目标视图的底层资源复制到一个纹理中
 
 #### 分离资源屏障
-分离资源屏障由开始和结束两个资源屏障构成；
-
+分离资源屏障由开始和结束两个资源屏障构成； 临时无权限
+描述D3D12_RESOURCE_BARRIER结构体的Type成员D3D12_RESOURCE_BARRIER_TYPE_TRANSITION
 D3D12_RESOURCE_BARRIER_FLAG_BEGIN_ONLY
 D3D12_RESOURCE_BARRIER_FLAG_END_ONLY;
+“不可见” 只是复制类才有
+“临时无权限” 复制类和计算/图形类都有
+
+#### 提升和衰退
+隐式地执行转换资源屏障
+显式地执行转换资源屏障会有性能消耗
+
+### 别名资源屏障
+与定位资源有关。
+D3D12_RESOURCE_BARRIER描述资源屏障的时候，
+1. flags成员应设置为D3D12_RESOURCE_BARRIER_FLAG_NONE
+2. TYPE成员应设置为D3D12_RESOURCE_BARRIER_TYPE_ALIASING
+3. Aliasing 成员应设置为D3D12_RESOURCE_ALIASING_BARRIER
+#### D3D12_RESOURCE_ALIASING_BARRIER结构体：
+1. pResourceBefore
+表示在该别名资源屏障之前的所有访问pResourceBefore表示的别名资源的命令在该别名资源屏障之前执行
+2. pResourceAfter
+表示在该别名资源屏障之后的所有访问pResourceAfter表示的别名资源的命令在该别名资源屏障之后执行
+
+### 无序访问资源屏障
+D3D12_RESOURCE_BARRIER 与无序访问视图有关
+1. Flags D3D12_RESOURCE_BARRIER_FLAG_NONE
+2. TYPE D3D12_RESOURCE_BARRIER_TYPE_UAV
+3. UAV D3D12_RESOURCE_UAV_BARRIER
