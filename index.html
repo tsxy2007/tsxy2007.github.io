@@ -214,6 +214,164 @@
 
 
   
+    <article id="post-DirectX12-第四节" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/05/09/DirectX12-第四节/">DirectX12-第四节</a>
+    </h1>
+  
+
+        
+        <a href="/2019/05/09/DirectX12-第四节/" class="archive-article-date">
+  	<time datetime="2019-05-09T01:41:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="显卡架构和存储管理"><a href="#显卡架构和存储管理" class="headerlink" title="显卡架构和存储管理"></a>显卡架构和存储管理</h2><p><img src="https://img-blog.csdnimg.cn/20181027170417659.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTQwMzgxNDM=,size_27,color_FFFFFF,t_70" alt="avatar"></p>
+<p>以上图片来自MSDN，很形象的说明了一个GPU至少有三大类复制引擎（Copy Engine）,计算引擎（Compute Engine），3D引擎（3d Engine）。同时这图片进一步说明了Cpu和Gpu之间如何交互命令，以及并行原理：核心还是使用命令列表记录命令，再将命令列表在命令队列中排队，然后各引擎从命令队列中不断获取命令并执行的基本模式。<br>SMP架构分为三种：</p>
+<ol>
+<li><strong>均匀存储器存取（UMA)</strong><br><img src="https://img-blog.csdnimg.cn/20181027170417615.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTQwMzgxNDM=,size_27,color_FFFFFF,t_70" alt="avatar"></li>
+<li><strong>非均匀存储器存取（Nonuniform-Memory-Access，简称NUMA）</strong><br><img src="https://img-blog.csdnimg.cn/20181027170417620.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTQwMzgxNDM=,size_27,color_FFFFFF,t_70" alt="avatar"></li>
+<li><strong>高速缓存相关的存储器结构（cache-coherent Memory Architecture，简称CC-UMA）模型</strong><br><img src="https://img-blog.csdnimg.cn/20181027170417625.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTQwMzgxNDM=,size_27,color_FFFFFF,t_70" alt="avatar"></li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Directx12</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/05/09/DirectX12-第四节/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-光照" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/30/光照/">光照</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/30/光照/" class="archive-article-date">
+  	<time datetime="2019-04-30T02:36:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-30</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="基础光照"><a href="#基础光照" class="headerlink" title="基础光照"></a>基础光照</h2><p>冯氏光照：</p>
+<h3 id="环境光（Ambient）"><a href="#环境光（Ambient）" class="headerlink" title="环境光（Ambient）"></a>环境光（Ambient）</h3><p>来之不同分散的很多光源，全局照明算法。</p>
+<h3 id="漫反射（Diffuse）"><a href="#漫反射（Diffuse）" class="headerlink" title="漫反射（Diffuse）"></a>漫反射（Diffuse）</h3><p><strong>法向量</strong>： 一个垂直于顶点表面的向量<br><strong>定向的光线</strong>： 作为光源的位置与片段的位置之间向量差的方向向量。</p>
+<h3 id="镜面-（Specular）"><a href="#镜面-（Specular）" class="headerlink" title="镜面 （Specular）"></a>镜面 （Specular）</h3><p><strong>光照的方向向量</strong><br><strong>物体的法向量</strong><br>我们通过反射法向量周围光的方向来计算反射向量。然后我们计算反射向量和视线方向的角度差，如果夹角越小，那么镜面光的影响就会越大。它的作用效果就是，当我们去看光被物体所反射的那个方向的时候，我们会看到一个高光。</p>
+<p>镜面强度：<br>观察者位置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">// GL-shader</span><br><span class="line">//环境光 </span><br><span class="line">float ambientStrength = 0.1;</span><br><span class="line">vec3 ambient = ambientStrength * lightColor;</span><br><span class="line">// 漫反射</span><br><span class="line">vec3 norm = normailze(Normal);</span><br><span class="line">vec3 lightDir = normalize(lightPos - FragPos);</span><br><span class="line">float diff = max(dot(norm,lightDir),0.0);</span><br><span class="line">vec3 diffuse = diff * lightColor;</span><br><span class="line"></span><br><span class="line">// 高光</span><br><span class="line">float specularStrength = 0.5;</span><br><span class="line">vec3 viewDir = normalize(-FragPos);</span><br><span class="line">vec3 reflectDir = reflect(-lightDir,norm);</span><br><span class="line">float spec = pow(max(dot(viewDir,reflectDir),0.0),32);</span><br><span class="line">vec3 specular = specularStrength * spec * lightColor;</span><br><span class="line"></span><br><span class="line">// 结果</span><br><span class="line">vec3 result = (ambient + diffuse + specular) * objectColor;</span><br><span class="line">FragColor = vec4(result , 1.0);</span><br></pre></td></tr></table></figure>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">图形</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/30/光照/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-DirectX12-第三节" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -263,8 +421,22 @@
 <li>D3D12_RESOURCE_STATE_UNORDERED_ACCESS 可作为只读深度模板（只读）<br><strong>通用读写权限</strong>：D3D12_RESOURCE_STATE_GENERIC_READ<br>最多只有两个只读权限。</li>
 </ul>
 <h4 id="转换资源屏障对并发性的控制"><a href="#转换资源屏障对并发性的控制" class="headerlink" title="转换资源屏障对并发性的控制"></a>转换资源屏障对并发性的控制</h4><p>（1） 绘制到渲染目标视图<br>（2） 将相关子资源对命令队列类的权限从可作为渲染目标转换为可作为复制类<br>（3） 将渲染目标视图的底层资源复制到一个纹理中</p>
-<h4 id="分离资源屏障"><a href="#分离资源屏障" class="headerlink" title="分离资源屏障"></a>分离资源屏障</h4><p>分离资源屏障由开始和结束两个资源屏障构成；</p>
-<p>D3D12_RESOURCE_BARRIER_FLAG_BEGIN_ONLY<br>D3D12_RESOURCE_BARRIER_FLAG_END_ONLY;</p>
+<h4 id="分离资源屏障"><a href="#分离资源屏障" class="headerlink" title="分离资源屏障"></a>分离资源屏障</h4><p>分离资源屏障由开始和结束两个资源屏障构成； 临时无权限<br>描述D3D12_RESOURCE_BARRIER结构体的Type成员D3D12_RESOURCE_BARRIER_TYPE_TRANSITION<br>D3D12_RESOURCE_BARRIER_FLAG_BEGIN_ONLY<br>D3D12_RESOURCE_BARRIER_FLAG_END_ONLY;<br>“不可见” 只是复制类才有<br>“临时无权限” 复制类和计算/图形类都有</p>
+<h4 id="提升和衰退"><a href="#提升和衰退" class="headerlink" title="提升和衰退"></a>提升和衰退</h4><p>隐式地执行转换资源屏障<br>显式地执行转换资源屏障会有性能消耗</p>
+<h3 id="别名资源屏障"><a href="#别名资源屏障" class="headerlink" title="别名资源屏障"></a>别名资源屏障</h3><p>与定位资源有关。<br>D3D12_RESOURCE_BARRIER描述资源屏障的时候，</p>
+<ol>
+<li>flags成员应设置为D3D12_RESOURCE_BARRIER_FLAG_NONE</li>
+<li>TYPE成员应设置为D3D12_RESOURCE_BARRIER_TYPE_ALIASING</li>
+<li>Aliasing 成员应设置为D3D12_RESOURCE_ALIASING_BARRIER<h4 id="D3D12-RESOURCE-ALIASING-BARRIER结构体："><a href="#D3D12-RESOURCE-ALIASING-BARRIER结构体：" class="headerlink" title="D3D12_RESOURCE_ALIASING_BARRIER结构体："></a>D3D12_RESOURCE_ALIASING_BARRIER结构体：</h4></li>
+<li>pResourceBefore<br>表示在该别名资源屏障之前的所有访问pResourceBefore表示的别名资源的命令在该别名资源屏障之前执行</li>
+<li>pResourceAfter<br>表示在该别名资源屏障之后的所有访问pResourceAfter表示的别名资源的命令在该别名资源屏障之后执行</li>
+</ol>
+<h3 id="无序访问资源屏障"><a href="#无序访问资源屏障" class="headerlink" title="无序访问资源屏障"></a>无序访问资源屏障</h3><p>D3D12_RESOURCE_BARRIER 与无序访问视图有关</p>
+<ol>
+<li>Flags D3D12_RESOURCE_BARRIER_FLAG_NONE</li>
+<li>TYPE D3D12_RESOURCE_BARRIER_TYPE_UAV</li>
+<li>UAV D3D12_RESOURCE_UAV_BARRIER</li>
+</ol>
 
       
 
@@ -273,6 +445,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -336,6 +519,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ue4</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -461,7 +655,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/13/DirectX12-第一节/">DirectX12 第一节</a>
+      <a class="article-title" href="/2019/04/13/DirectX12-第一节/">DirectX12-第一节</a>
     </h1>
   
 
@@ -631,6 +825,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">DirectX12</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ue4</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">图形</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Directx12</a>
               </li>
             
             <div class="clearfix"></div>

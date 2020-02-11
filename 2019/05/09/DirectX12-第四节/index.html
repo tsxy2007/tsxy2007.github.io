@@ -6,19 +6,25 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>纹理格式 | 飞舞轻扬</title>
+  <title>DirectX12-第四节 | 飞舞轻扬</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1.DXGI_FORMAT_R32G32B32_FLOAT: 每个元素由3个32位浮点数分量构成2.DXGI_FORMAT_R16G16B16A16_UNORM: 每个元素由4个8位无符号分量构成，每个分量都被映射到[0,1]区间；3.DXGI_FORMAT_R32G32_UINT:每个元素由2个32位无符号整数分量构成；4.">
+  <meta name="description" content="显卡架构和存储管理 以上图片来自MSDN，很形象的说明了一个GPU至少有三大类复制引擎（Copy Engine）,计算引擎（Compute Engine），3D引擎（3d Engine）。同时这图片进一步说明了Cpu和Gpu之间如何交互命令，以及并行原理：核心还是使用命令列表记录命令，再将命令列表在命令队列中排队，然后各引擎从命令队列中不断获取命令并执行的基本模式。SMP架构分为三种：  均匀存储">
+<meta name="keywords" content="Directx12">
 <meta property="og:type" content="article">
-<meta property="og:title" content="纹理格式">
-<meta property="og:url" content="http://yoursite.com/2020/02/11/纹理格式/index.html">
+<meta property="og:title" content="DirectX12-第四节">
+<meta property="og:url" content="http://yoursite.com/2019/05/09/DirectX12-第四节/index.html">
 <meta property="og:site_name" content="飞舞轻扬">
-<meta property="og:description" content="1.DXGI_FORMAT_R32G32B32_FLOAT: 每个元素由3个32位浮点数分量构成2.DXGI_FORMAT_R16G16B16A16_UNORM: 每个元素由4个8位无符号分量构成，每个分量都被映射到[0,1]区间；3.DXGI_FORMAT_R32G32_UINT:每个元素由2个32位无符号整数分量构成；4.">
+<meta property="og:description" content="显卡架构和存储管理 以上图片来自MSDN，很形象的说明了一个GPU至少有三大类复制引擎（Copy Engine）,计算引擎（Compute Engine），3D引擎（3d Engine）。同时这图片进一步说明了Cpu和Gpu之间如何交互命令，以及并行原理：核心还是使用命令列表记录命令，再将命令列表在命令队列中排队，然后各引擎从命令队列中不断获取命令并执行的基本模式。SMP架构分为三种：  均匀存储">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-02-11T03:00:38.979Z">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181027170417659.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTQwMzgxNDM=,size_27,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181027170417615.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTQwMzgxNDM=,size_27,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181027170417620.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTQwMzgxNDM=,size_27,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20181027170417625.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTQwMzgxNDM=,size_27,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2020-02-11T03:03:09.676Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="纹理格式">
-<meta name="twitter:description" content="1.DXGI_FORMAT_R32G32B32_FLOAT: 每个元素由3个32位浮点数分量构成2.DXGI_FORMAT_R16G16B16A16_UNORM: 每个元素由4个8位无符号分量构成，每个分量都被映射到[0,1]区间；3.DXGI_FORMAT_R32G32_UINT:每个元素由2个32位无符号整数分量构成；4.">
+<meta name="twitter:title" content="DirectX12-第四节">
+<meta name="twitter:description" content="显卡架构和存储管理 以上图片来自MSDN，很形象的说明了一个GPU至少有三大类复制引擎（Copy Engine）,计算引擎（Compute Engine），3D引擎（3d Engine）。同时这图片进一步说明了Cpu和Gpu之间如何交互命令，以及并行原理：核心还是使用命令列表记录命令，再将命令列表在命令队列中排队，然后各引擎从命令队列中不断获取命令并执行的基本模式。SMP架构分为三种：  均匀存储">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20181027170417659.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTQwMzgxNDM=,size_27,color_FFFFFF,t_70">
   
     <link rel="alternative" href="/atom.xml" title="飞舞轻扬" type="application/atom+xml">
   
@@ -154,27 +160,34 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="directx12-纹理格式" class="article article-type-directx12 " itemscope itemprop="blogPost">
+            <article id="post-DirectX12-第四节" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      纹理格式
+      DirectX12-第四节
     </h1>
   
 
         
-        <a href="/2020/02/11/纹理格式/" class="archive-article-date">
-  	<time datetime="2020-02-11T02:56:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-11</time>
+        <a href="/2019/05/09/DirectX12-第四节/" class="archive-article-date">
+  	<time datetime="2019-05-09T01:41:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-09</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="1-DXGI-FORMAT-R32G32B32-FLOAT-每个元素由3个32位浮点数分量构成"><a href="#1-DXGI-FORMAT-R32G32B32-FLOAT-每个元素由3个32位浮点数分量构成" class="headerlink" title="1.DXGI_FORMAT_R32G32B32_FLOAT: 每个元素由3个32位浮点数分量构成"></a>1.DXGI_FORMAT_R32G32B32_FLOAT: 每个元素由3个32位浮点数分量构成</h3><h3 id="2-DXGI-FORMAT-R16G16B16A16-UNORM-每个元素由4个8位无符号分量构成，每个分量都被映射到-0-1-区间；"><a href="#2-DXGI-FORMAT-R16G16B16A16-UNORM-每个元素由4个8位无符号分量构成，每个分量都被映射到-0-1-区间；" class="headerlink" title="2.DXGI_FORMAT_R16G16B16A16_UNORM: 每个元素由4个8位无符号分量构成，每个分量都被映射到[0,1]区间；"></a>2.DXGI_FORMAT_R16G16B16A16_UNORM: 每个元素由4个8位无符号分量构成，每个分量都被映射到[0,1]区间；</h3><h3 id="3-DXGI-FORMAT-R32G32-UINT-每个元素由2个32位无符号整数分量构成；"><a href="#3-DXGI-FORMAT-R32G32-UINT-每个元素由2个32位无符号整数分量构成；" class="headerlink" title="3.DXGI_FORMAT_R32G32_UINT:每个元素由2个32位无符号整数分量构成；"></a>3.DXGI_FORMAT_R32G32_UINT:每个元素由2个32位无符号整数分量构成；</h3><h3 id="4"><a href="#4" class="headerlink" title="4."></a>4.</h3>
+        <h2 id="显卡架构和存储管理"><a href="#显卡架构和存储管理" class="headerlink" title="显卡架构和存储管理"></a>显卡架构和存储管理</h2><p><img src="https://img-blog.csdnimg.cn/20181027170417659.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTQwMzgxNDM=,size_27,color_FFFFFF,t_70" alt="avatar"></p>
+<p>以上图片来自MSDN，很形象的说明了一个GPU至少有三大类复制引擎（Copy Engine）,计算引擎（Compute Engine），3D引擎（3d Engine）。同时这图片进一步说明了Cpu和Gpu之间如何交互命令，以及并行原理：核心还是使用命令列表记录命令，再将命令列表在命令队列中排队，然后各引擎从命令队列中不断获取命令并执行的基本模式。<br>SMP架构分为三种：</p>
+<ol>
+<li><strong>均匀存储器存取（UMA)</strong><br><img src="https://img-blog.csdnimg.cn/20181027170417615.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTQwMzgxNDM=,size_27,color_FFFFFF,t_70" alt="avatar"></li>
+<li><strong>非均匀存储器存取（Nonuniform-Memory-Access，简称NUMA）</strong><br><img src="https://img-blog.csdnimg.cn/20181027170417620.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTQwMzgxNDM=,size_27,color_FFFFFF,t_70" alt="avatar"></li>
+<li><strong>高速缓存相关的存储器结构（cache-coherent Memory Architecture，简称CC-UMA）模型</strong><br><img src="https://img-blog.csdnimg.cn/20181027170417625.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTQwMzgxNDM=,size_27,color_FFFFFF,t_70" alt="avatar"></li>
+</ol>
+
       
 
       
@@ -203,6 +216,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Directx12</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -253,7 +277,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/02/11/纹理格式/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/05/09/DirectX12-第四节/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -267,9 +291,18 @@
   
 <nav id="article-nav">
   
+    <a href="/2020/02/11/纹理格式/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          纹理格式
+        
+      </div>
+    </a>
   
-    <a href="/2019/05/09/DirectX12-第四节/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">DirectX12-第四节</div>
+  
+    <a href="/2019/04/30/光照/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">光照</div>
       <i class="icon-circle-right"></i>
     </a>
   

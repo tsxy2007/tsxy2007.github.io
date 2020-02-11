@@ -6,19 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>纹理格式 | 飞舞轻扬</title>
+  <title>光照 | 飞舞轻扬</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1.DXGI_FORMAT_R32G32B32_FLOAT: 每个元素由3个32位浮点数分量构成2.DXGI_FORMAT_R16G16B16A16_UNORM: 每个元素由4个8位无符号分量构成，每个分量都被映射到[0,1]区间；3.DXGI_FORMAT_R32G32_UINT:每个元素由2个32位无符号整数分量构成；4.">
+  <meta name="description" content="基础光照冯氏光照： 环境光（Ambient）来之不同分散的很多光源，全局照明算法。 漫反射（Diffuse）法向量： 一个垂直于顶点表面的向量定向的光线： 作为光源的位置与片段的位置之间向量差的方向向量。 镜面 （Specular）光照的方向向量物体的法向量我们通过反射法向量周围光的方向来计算反射向量。然后我们计算反射向量和视线方向的角度差，如果夹角越小，那么镜面光的影响就会越大。它的作用效果就是">
+<meta name="keywords" content="图形">
 <meta property="og:type" content="article">
-<meta property="og:title" content="纹理格式">
-<meta property="og:url" content="http://yoursite.com/2020/02/11/纹理格式/index.html">
+<meta property="og:title" content="光照">
+<meta property="og:url" content="http://yoursite.com/2019/04/30/光照/index.html">
 <meta property="og:site_name" content="飞舞轻扬">
-<meta property="og:description" content="1.DXGI_FORMAT_R32G32B32_FLOAT: 每个元素由3个32位浮点数分量构成2.DXGI_FORMAT_R16G16B16A16_UNORM: 每个元素由4个8位无符号分量构成，每个分量都被映射到[0,1]区间；3.DXGI_FORMAT_R32G32_UINT:每个元素由2个32位无符号整数分量构成；4.">
+<meta property="og:description" content="基础光照冯氏光照： 环境光（Ambient）来之不同分散的很多光源，全局照明算法。 漫反射（Diffuse）法向量： 一个垂直于顶点表面的向量定向的光线： 作为光源的位置与片段的位置之间向量差的方向向量。 镜面 （Specular）光照的方向向量物体的法向量我们通过反射法向量周围光的方向来计算反射向量。然后我们计算反射向量和视线方向的角度差，如果夹角越小，那么镜面光的影响就会越大。它的作用效果就是">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-02-11T03:00:38.979Z">
+<meta property="og:updated_time" content="2020-02-11T03:03:09.684Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="纹理格式">
-<meta name="twitter:description" content="1.DXGI_FORMAT_R32G32B32_FLOAT: 每个元素由3个32位浮点数分量构成2.DXGI_FORMAT_R16G16B16A16_UNORM: 每个元素由4个8位无符号分量构成，每个分量都被映射到[0,1]区间；3.DXGI_FORMAT_R32G32_UINT:每个元素由2个32位无符号整数分量构成；4.">
+<meta name="twitter:title" content="光照">
+<meta name="twitter:description" content="基础光照冯氏光照： 环境光（Ambient）来之不同分散的很多光源，全局照明算法。 漫反射（Diffuse）法向量： 一个垂直于顶点表面的向量定向的光线： 作为光源的位置与片段的位置之间向量差的方向向量。 镜面 （Specular）光照的方向向量物体的法向量我们通过反射法向量周围光的方向来计算反射向量。然后我们计算反射向量和视线方向的角度差，如果夹角越小，那么镜面光的影响就会越大。它的作用效果就是">
   
     <link rel="alternative" href="/atom.xml" title="飞舞轻扬" type="application/atom+xml">
   
@@ -154,27 +155,32 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="directx12-纹理格式" class="article article-type-directx12 " itemscope itemprop="blogPost">
+            <article id="post-光照" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      纹理格式
+      光照
     </h1>
   
 
         
-        <a href="/2020/02/11/纹理格式/" class="archive-article-date">
-  	<time datetime="2020-02-11T02:56:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-11</time>
+        <a href="/2019/04/30/光照/" class="archive-article-date">
+  	<time datetime="2019-04-30T02:36:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-30</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="1-DXGI-FORMAT-R32G32B32-FLOAT-每个元素由3个32位浮点数分量构成"><a href="#1-DXGI-FORMAT-R32G32B32-FLOAT-每个元素由3个32位浮点数分量构成" class="headerlink" title="1.DXGI_FORMAT_R32G32B32_FLOAT: 每个元素由3个32位浮点数分量构成"></a>1.DXGI_FORMAT_R32G32B32_FLOAT: 每个元素由3个32位浮点数分量构成</h3><h3 id="2-DXGI-FORMAT-R16G16B16A16-UNORM-每个元素由4个8位无符号分量构成，每个分量都被映射到-0-1-区间；"><a href="#2-DXGI-FORMAT-R16G16B16A16-UNORM-每个元素由4个8位无符号分量构成，每个分量都被映射到-0-1-区间；" class="headerlink" title="2.DXGI_FORMAT_R16G16B16A16_UNORM: 每个元素由4个8位无符号分量构成，每个分量都被映射到[0,1]区间；"></a>2.DXGI_FORMAT_R16G16B16A16_UNORM: 每个元素由4个8位无符号分量构成，每个分量都被映射到[0,1]区间；</h3><h3 id="3-DXGI-FORMAT-R32G32-UINT-每个元素由2个32位无符号整数分量构成；"><a href="#3-DXGI-FORMAT-R32G32-UINT-每个元素由2个32位无符号整数分量构成；" class="headerlink" title="3.DXGI_FORMAT_R32G32_UINT:每个元素由2个32位无符号整数分量构成；"></a>3.DXGI_FORMAT_R32G32_UINT:每个元素由2个32位无符号整数分量构成；</h3><h3 id="4"><a href="#4" class="headerlink" title="4."></a>4.</h3>
+        <h2 id="基础光照"><a href="#基础光照" class="headerlink" title="基础光照"></a>基础光照</h2><p>冯氏光照：</p>
+<h3 id="环境光（Ambient）"><a href="#环境光（Ambient）" class="headerlink" title="环境光（Ambient）"></a>环境光（Ambient）</h3><p>来之不同分散的很多光源，全局照明算法。</p>
+<h3 id="漫反射（Diffuse）"><a href="#漫反射（Diffuse）" class="headerlink" title="漫反射（Diffuse）"></a>漫反射（Diffuse）</h3><p><strong>法向量</strong>： 一个垂直于顶点表面的向量<br><strong>定向的光线</strong>： 作为光源的位置与片段的位置之间向量差的方向向量。</p>
+<h3 id="镜面-（Specular）"><a href="#镜面-（Specular）" class="headerlink" title="镜面 （Specular）"></a>镜面 （Specular）</h3><p><strong>光照的方向向量</strong><br><strong>物体的法向量</strong><br>我们通过反射法向量周围光的方向来计算反射向量。然后我们计算反射向量和视线方向的角度差，如果夹角越小，那么镜面光的影响就会越大。它的作用效果就是，当我们去看光被物体所反射的那个方向的时候，我们会看到一个高光。</p>
+<p>镜面强度：<br>观察者位置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">// GL-shader</span><br><span class="line">//环境光 </span><br><span class="line">float ambientStrength = 0.1;</span><br><span class="line">vec3 ambient = ambientStrength * lightColor;</span><br><span class="line">// 漫反射</span><br><span class="line">vec3 norm = normailze(Normal);</span><br><span class="line">vec3 lightDir = normalize(lightPos - FragPos);</span><br><span class="line">float diff = max(dot(norm,lightDir),0.0);</span><br><span class="line">vec3 diffuse = diff * lightColor;</span><br><span class="line"></span><br><span class="line">// 高光</span><br><span class="line">float specularStrength = 0.5;</span><br><span class="line">vec3 viewDir = normalize(-FragPos);</span><br><span class="line">vec3 reflectDir = reflect(-lightDir,norm);</span><br><span class="line">float spec = pow(max(dot(viewDir,reflectDir),0.0),32);</span><br><span class="line">vec3 specular = specularStrength * spec * lightColor;</span><br><span class="line"></span><br><span class="line">// 结果</span><br><span class="line">vec3 result = (ambient + diffuse + specular) * objectColor;</span><br><span class="line">FragColor = vec4(result , 1.0);</span><br></pre></td></tr></table></figure>
       
 
       
@@ -203,6 +209,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">图形</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -253,7 +270,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/02/11/纹理格式/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/04/30/光照/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -267,9 +284,18 @@
   
 <nav id="article-nav">
   
+    <a href="/2019/05/09/DirectX12-第四节/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          DirectX12-第四节
+        
+      </div>
+    </a>
   
-    <a href="/2019/05/09/DirectX12-第四节/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">DirectX12-第四节</div>
+  
+    <a href="/2019/04/23/DirectX12-第三节/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">DirectX12-第三节</div>
       <i class="icon-circle-right"></i>
     </a>
   

@@ -9,13 +9,14 @@
   <title>DirectX12-第三节 | 飞舞轻扬</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="命令队列命令有6种:1.ID3D12CommandQueue::ExecuteCommandLists:2.ID3D12CommandQueue::Signal:3.ID3D12CommandQueue::Wait:4.ID3D12CommandQueue::UpdateTileMapping:5.ID3D12CommandQueue::CopyTileMapping:6.ISwapChain::">
+<meta name="keywords" content="DirectX12">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DirectX12-第三节">
 <meta property="og:url" content="http://yoursite.com/2019/04/23/DirectX12-第三节/index.html">
 <meta property="og:site_name" content="飞舞轻扬">
 <meta property="og:description" content="命令队列命令有6种:1.ID3D12CommandQueue::ExecuteCommandLists:2.ID3D12CommandQueue::Signal:3.ID3D12CommandQueue::Wait:4.ID3D12CommandQueue::UpdateTileMapping:5.ID3D12CommandQueue::CopyTileMapping:6.ISwapChain::">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-04-29T16:31:35.096Z">
+<meta property="og:updated_time" content="2020-02-11T03:03:09.672Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DirectX12-第三节">
 <meta name="twitter:description" content="命令队列命令有6种:1.ID3D12CommandQueue::ExecuteCommandLists:2.ID3D12CommandQueue::Signal:3.ID3D12CommandQueue::Wait:4.ID3D12CommandQueue::UpdateTileMapping:5.ID3D12CommandQueue::CopyTileMapping:6.ISwapChain::">
@@ -203,8 +204,22 @@
 <li>D3D12_RESOURCE_STATE_UNORDERED_ACCESS 可作为只读深度模板（只读）<br><strong>通用读写权限</strong>：D3D12_RESOURCE_STATE_GENERIC_READ<br>最多只有两个只读权限。</li>
 </ul>
 <h4 id="转换资源屏障对并发性的控制"><a href="#转换资源屏障对并发性的控制" class="headerlink" title="转换资源屏障对并发性的控制"></a>转换资源屏障对并发性的控制</h4><p>（1） 绘制到渲染目标视图<br>（2） 将相关子资源对命令队列类的权限从可作为渲染目标转换为可作为复制类<br>（3） 将渲染目标视图的底层资源复制到一个纹理中</p>
-<h4 id="分离资源屏障"><a href="#分离资源屏障" class="headerlink" title="分离资源屏障"></a>分离资源屏障</h4><p>分离资源屏障由开始和结束两个资源屏障构成；</p>
-<p>D3D12_RESOURCE_BARRIER_FLAG_BEGIN_ONLY<br>D3D12_RESOURCE_BARRIER_FLAG_END_ONLY;</p>
+<h4 id="分离资源屏障"><a href="#分离资源屏障" class="headerlink" title="分离资源屏障"></a>分离资源屏障</h4><p>分离资源屏障由开始和结束两个资源屏障构成； 临时无权限<br>描述D3D12_RESOURCE_BARRIER结构体的Type成员D3D12_RESOURCE_BARRIER_TYPE_TRANSITION<br>D3D12_RESOURCE_BARRIER_FLAG_BEGIN_ONLY<br>D3D12_RESOURCE_BARRIER_FLAG_END_ONLY;<br>“不可见” 只是复制类才有<br>“临时无权限” 复制类和计算/图形类都有</p>
+<h4 id="提升和衰退"><a href="#提升和衰退" class="headerlink" title="提升和衰退"></a>提升和衰退</h4><p>隐式地执行转换资源屏障<br>显式地执行转换资源屏障会有性能消耗</p>
+<h3 id="别名资源屏障"><a href="#别名资源屏障" class="headerlink" title="别名资源屏障"></a>别名资源屏障</h3><p>与定位资源有关。<br>D3D12_RESOURCE_BARRIER描述资源屏障的时候，</p>
+<ol>
+<li>flags成员应设置为D3D12_RESOURCE_BARRIER_FLAG_NONE</li>
+<li>TYPE成员应设置为D3D12_RESOURCE_BARRIER_TYPE_ALIASING</li>
+<li>Aliasing 成员应设置为D3D12_RESOURCE_ALIASING_BARRIER<h4 id="D3D12-RESOURCE-ALIASING-BARRIER结构体："><a href="#D3D12-RESOURCE-ALIASING-BARRIER结构体：" class="headerlink" title="D3D12_RESOURCE_ALIASING_BARRIER结构体："></a>D3D12_RESOURCE_ALIASING_BARRIER结构体：</h4></li>
+<li>pResourceBefore<br>表示在该别名资源屏障之前的所有访问pResourceBefore表示的别名资源的命令在该别名资源屏障之前执行</li>
+<li>pResourceAfter<br>表示在该别名资源屏障之后的所有访问pResourceAfter表示的别名资源的命令在该别名资源屏障之后执行</li>
+</ol>
+<h3 id="无序访问资源屏障"><a href="#无序访问资源屏障" class="headerlink" title="无序访问资源屏障"></a>无序访问资源屏障</h3><p>D3D12_RESOURCE_BARRIER 与无序访问视图有关</p>
+<ol>
+<li>Flags D3D12_RESOURCE_BARRIER_FLAG_NONE</li>
+<li>TYPE D3D12_RESOURCE_BARRIER_TYPE_UAV</li>
+<li>UAV D3D12_RESOURCE_UAV_BARRIER</li>
+</ol>
 
       
 
@@ -234,6 +249,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -298,11 +324,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2020/02/11/纹理格式/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/04/30/光照/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          纹理格式
+          光照
         
       </div>
     </a>
@@ -436,6 +462,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">DirectX12</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ue4</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">图形</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Directx12</a>
               </li>
             
             <div class="clearfix"></div>
