@@ -6,19 +6,15 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>DirectX12-第三节 | 飞舞轻扬</title>
+  <title>Archives: 2020/2 | 飞舞轻扬</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="命令队列命令有6种:1.ID3D12CommandQueue::ExecuteCommandLists:2.ID3D12CommandQueue::Signal:3.ID3D12CommandQueue::Wait:4.ID3D12CommandQueue::UpdateTileMapping:5.ID3D12CommandQueue::CopyTileMapping:6.ISwapChain::">
-<meta property="og:type" content="article">
-<meta property="og:title" content="DirectX12-第三节">
-<meta property="og:url" content="http://yoursite.com/2019/04/23/DirectX12-第三节/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="飞舞轻扬">
+<meta property="og:url" content="http://yoursite.com/archives/2020/02/index.html">
 <meta property="og:site_name" content="飞舞轻扬">
-<meta property="og:description" content="命令队列命令有6种:1.ID3D12CommandQueue::ExecuteCommandLists:2.ID3D12CommandQueue::Signal:3.ID3D12CommandQueue::Wait:4.ID3D12CommandQueue::UpdateTileMapping:5.ID3D12CommandQueue::CopyTileMapping:6.ISwapChain::">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-04-29T16:31:35.096Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="DirectX12-第三节">
-<meta name="twitter:description" content="命令队列命令有6种:1.ID3D12CommandQueue::ExecuteCommandLists:2.ID3D12CommandQueue::Signal:3.ID3D12CommandQueue::Wait:4.ID3D12CommandQueue::UpdateTileMapping:5.ID3D12CommandQueue::CopyTileMapping:6.ISwapChain::">
+<meta name="twitter:title" content="飞舞轻扬">
   
     <link rel="alternative" href="/atom.xml" title="飞舞轻扬" type="application/atom+xml">
   
@@ -154,195 +150,49 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-DirectX12-第三节" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      DirectX12-第三节
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2020" class="archive-year">2020</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-directx12">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2020/02/11/纹理格式/" class="archive-article-date">
+  	<time datetime="2020-02-11T02:56:08.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-11</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2020/02/11/纹理格式/">纹理格式</a>
     </h1>
   
 
-        
-        <a href="/2019/04/23/DirectX12-第三节/" class="archive-article-date">
-  	<time datetime="2019-04-23T01:00:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="命令队列"><a href="#命令队列" class="headerlink" title="命令队列"></a>命令队列</h2><p>命令有6种:<br>1.ID3D12CommandQueue::ExecuteCommandLists:<br>2.ID3D12CommandQueue::Signal:<br>3.ID3D12CommandQueue::Wait:<br>4.ID3D12CommandQueue::UpdateTileMapping:<br>5.ID3D12CommandQueue::CopyTileMapping:<br>6.ISwapChain::Present:<br>命令队列作用：将并发串行化。<br>硬件层面上GPU有3个并行执行的引擎：复制引擎，计算引擎和图形引擎；<br>（1） 复制命令队列中的命令只能在复制引擎中执行；<br>（2） 计算命令队列中的命令只能可以在计算引擎或复制引擎上执行；<br>（3） 直接命令队列中的命令可以在任意引擎上执行；<br>只有计算或直接类型命令才允许调用ID3D12CommandQueue接口的UpdateTileMapping和CopyTileMapping方法；</p>
-<h2 id="Fence"><a href="#Fence" class="headerlink" title="Fence"></a>Fence</h2><p>Fence可用于控制命令队列中不同命令之间的同步，但是命令队列中同一命令内部的并发性对fence而言是不可见的。</p>
-<h2 id="命令分配器和命令列表"><a href="#命令分配器和命令列表" class="headerlink" title="命令分配器和命令列表"></a>命令分配器和命令列表</h2><p>命令列表：<br>1.记录状态：在此状态下允许向其添加添加命令；<br>2.关闭状态：在此状态下允许作为ID3D12CommandQueue::ExecuteCommandLists的实参；<br>不允许被CPU并发访问；<br>命令列表并不维护其在命令分配器中所分配的内存的相关信息；需要手动释放内存；方法是ID3D12CommandAllocator::Reset;</p>
-<h2 id="捆绑包"><a href="#捆绑包" class="headerlink" title="捆绑包"></a>捆绑包</h2><p>命令列表不被CPU线程和GPU线程之间并发访问，也不允许被CPU线程并发访问；但是允许被GPU线程并发访问；</p>
-<h2 id="资源屏障"><a href="#资源屏障" class="headerlink" title="资源屏障"></a>资源屏障</h2><p>D3D12_RESOURCE_BARRIER结构体描述：<br><strong><em>分三种类型</em></strong>：</p>
-<ol>
-<li>D3D12_RESOURCE_BARRIER_TYPE_TRANSTION 转换资源屏障</li>
-<li>D3D12_RESOURCE_BARRIER_TYPE_ALIASING  别名资源屏障</li>
-<li>D3D12_RESOURCE_BARRIER_TYPE_UAV       无序访问视图资源屏障</li>
-</ol>
-<h3 id="转换资源屏障："><a href="#转换资源屏障：" class="headerlink" title="转换资源屏障："></a>转换资源屏障：</h3><p>命令队列有且仅有图形/计算类和复制类：<br><strong><em>图形/计算类</em></strong>： 所有的直接命令队列和计算命令队列<br><strong><em>复制类</em></strong>： 所有的复制命令队列</p>
-<h4 id="子资源权限："><a href="#子资源权限：" class="headerlink" title="子资源权限："></a>子资源权限：</h4><p>D3D12_RESOURCE_BARRIER中的Transition成员的StateBefore和StateAfter成员表明子资源对命令队列的权限用D3D12_RESOURCE_STATES表示。<br>（1） 子资源对复制类的权限只能是一下三种：</p>
-<ul>
-<li>D3D12_RESOURCE_STATE_COMMON 公共（可写）</li>
-<li>D3D12_RESOURCE_STATE_COPY_DEST 可作为复制宿（可写）</li>
-<li>D3D12_RESOURCE_STATE_COPY_SOURCE 可作为复制源（只读）<br>（2） 子资源对图形/计算类的权限可以是任意一种权限，除以上3种还有</li>
-<li>D3D12_RESOURCE_STATE_RESOLVE_DEST 可作为解析宿（可写）</li>
-<li>D3D12_RESOURCE_STATE_RESOLVE_SOURCE 可作为解析源（只读）</li>
-<li>D3D12_RESOURCE_STATE_STREAM_OUT 可作为流输出（可写）</li>
-<li>D3D12_RESOURCE_STATE_DEPTH_WRITE 可作为深度模板（可写）</li>
-<li>D3D12_RESOURCE_STATE_RENDER_TARGET 可作为渲染目标(可写)</li>
-<li>D3D12_RESOURCE_STATE_INDIRECT_ARGUMENT 可作为间接参数（只读）</li>
-<li>D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER 可作为顶点或常量缓冲（只读）</li>
-<li>D3D12_RESOURCE_STATE_INDEX_BUFFER 可作为索引缓冲（只读）</li>
-<li>D3D12_RESOURCE_STATE_STATE_NON_SHADER_RESOURCE 可作为非像素着色器资源（只读）</li>
-<li>D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOUCE 可作为像素着色器资源（只读）</li>
-<li>D3D12_RESOURCE_STATE_UNORDERED_ACCESS 可作为只读深度模板（只读）<br><strong>通用读写权限</strong>：D3D12_RESOURCE_STATE_GENERIC_READ<br>最多只有两个只读权限。</li>
-</ul>
-<h4 id="转换资源屏障对并发性的控制"><a href="#转换资源屏障对并发性的控制" class="headerlink" title="转换资源屏障对并发性的控制"></a>转换资源屏障对并发性的控制</h4><p>（1） 绘制到渲染目标视图<br>（2） 将相关子资源对命令队列类的权限从可作为渲染目标转换为可作为复制类<br>（3） 将渲染目标视图的底层资源复制到一个纹理中</p>
-<h4 id="分离资源屏障"><a href="#分离资源屏障" class="headerlink" title="分离资源屏障"></a>分离资源屏障</h4><p>分离资源屏障由开始和结束两个资源屏障构成；</p>
-<p>D3D12_RESOURCE_BARRIER_FLAG_BEGIN_ONLY<br>D3D12_RESOURCE_BARRIER_FLAG_END_ONLY;</p>
+        <div class="article-info info-on-right">
+          
+          
 
-      
-
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
         </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
-        </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/04/23/DirectX12-第三节/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2020/02/11/纹理格式/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          纹理格式
-        
-      </div>
-    </a>
   
   
-    <a href="/2019/04/20/UE4网络分析/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">UE4网络分析</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
-  
+    
 
 
           </div>
@@ -365,8 +215,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
