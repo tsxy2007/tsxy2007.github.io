@@ -6,20 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>光照 | 飞舞轻扬</title>
+  <title>资源与描述符 | 飞舞轻扬</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="基础光照冯氏光照： 环境光（Ambient）来之不同分散的很多光源，全局照明算法。 漫反射（Diffuse）法向量： 一个垂直于顶点表面的向量定向的光线： 作为光源的位置与片段的位置之间向量差的方向向量。 镜面 （Specular）光照的方向向量物体的法向量我们通过反射法向量周围光的方向来计算反射向量。然后我们计算反射向量和视线方向的角度差，如果夹角越小，那么镜面光的影响就会越大。它的作用效果就是">
-<meta name="keywords" content="图形">
+  <meta name="description" content="前言在渲染处理的过程中，GPU可能对资源进行读写。需要调用Draw Call相关的资源绑定到渲染流水线上。部分资源可能在每次绘制调用时都会有变化，并非与渲染流水线相绑定，而是通过一种名为描述符的对象来对它间接引用，我们可以把描述符视为一种对送往GPU的资源进行描述的轻量级结构。 原因GPU资源实质都是些普通的内存块;部分资源绑定至渲染流水线； 常用的描述符：1.CBV/SRV/UAV 描述符分别表">
 <meta property="og:type" content="article">
-<meta property="og:title" content="光照">
-<meta property="og:url" content="http://yoursite.com/2019/04/30/光照/index.html">
+<meta property="og:title" content="资源与描述符">
+<meta property="og:url" content="http://yoursite.com/2020/05/20/资源与描述符/index.html">
 <meta property="og:site_name" content="飞舞轻扬">
-<meta property="og:description" content="基础光照冯氏光照： 环境光（Ambient）来之不同分散的很多光源，全局照明算法。 漫反射（Diffuse）法向量： 一个垂直于顶点表面的向量定向的光线： 作为光源的位置与片段的位置之间向量差的方向向量。 镜面 （Specular）光照的方向向量物体的法向量我们通过反射法向量周围光的方向来计算反射向量。然后我们计算反射向量和视线方向的角度差，如果夹角越小，那么镜面光的影响就会越大。它的作用效果就是">
+<meta property="og:description" content="前言在渲染处理的过程中，GPU可能对资源进行读写。需要调用Draw Call相关的资源绑定到渲染流水线上。部分资源可能在每次绘制调用时都会有变化，并非与渲染流水线相绑定，而是通过一种名为描述符的对象来对它间接引用，我们可以把描述符视为一种对送往GPU的资源进行描述的轻量级结构。 原因GPU资源实质都是些普通的内存块;部分资源绑定至渲染流水线； 常用的描述符：1.CBV/SRV/UAV 描述符分别表">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-02-11T03:03:09.684Z">
+<meta property="og:updated_time" content="2020-05-20T15:52:51.349Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="光照">
-<meta name="twitter:description" content="基础光照冯氏光照： 环境光（Ambient）来之不同分散的很多光源，全局照明算法。 漫反射（Diffuse）法向量： 一个垂直于顶点表面的向量定向的光线： 作为光源的位置与片段的位置之间向量差的方向向量。 镜面 （Specular）光照的方向向量物体的法向量我们通过反射法向量周围光的方向来计算反射向量。然后我们计算反射向量和视线方向的角度差，如果夹角越小，那么镜面光的影响就会越大。它的作用效果就是">
+<meta name="twitter:title" content="资源与描述符">
+<meta name="twitter:description" content="前言在渲染处理的过程中，GPU可能对资源进行读写。需要调用Draw Call相关的资源绑定到渲染流水线上。部分资源可能在每次绘制调用时都会有变化，并非与渲染流水线相绑定，而是通过一种名为描述符的对象来对它间接引用，我们可以把描述符视为一种对送往GPU的资源进行描述的轻量级结构。 原因GPU资源实质都是些普通的内存块;部分资源绑定至渲染流水线； 常用的描述符：1.CBV/SRV/UAV 描述符分别表">
   
     <link rel="alternative" href="/atom.xml" title="飞舞轻扬" type="application/atom+xml">
   
@@ -155,32 +154,31 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-光照" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-资源与描述符" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      光照
+      资源与描述符
     </h1>
   
 
         
-        <a href="/2019/04/30/光照/" class="archive-article-date">
-  	<time datetime="2019-04-30T02:36:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-30</time>
+        <a href="/2020/05/20/资源与描述符/" class="archive-article-date">
+  	<time datetime="2020-05-20T15:41:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-20</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="基础光照"><a href="#基础光照" class="headerlink" title="基础光照"></a>基础光照</h2><p>冯氏光照：</p>
-<h3 id="环境光（Ambient）"><a href="#环境光（Ambient）" class="headerlink" title="环境光（Ambient）"></a>环境光（Ambient）</h3><p>来之不同分散的很多光源，全局照明算法。</p>
-<h3 id="漫反射（Diffuse）"><a href="#漫反射（Diffuse）" class="headerlink" title="漫反射（Diffuse）"></a>漫反射（Diffuse）</h3><p><strong>法向量</strong>： 一个垂直于顶点表面的向量<br><strong>定向的光线</strong>： 作为光源的位置与片段的位置之间向量差的方向向量。</p>
-<h3 id="镜面-（Specular）"><a href="#镜面-（Specular）" class="headerlink" title="镜面 （Specular）"></a>镜面 （Specular）</h3><p><strong>光照的方向向量</strong><br><strong>物体的法向量</strong><br>我们通过反射法向量周围光的方向来计算反射向量。然后我们计算反射向量和视线方向的角度差，如果夹角越小，那么镜面光的影响就会越大。它的作用效果就是，当我们去看光被物体所反射的那个方向的时候，我们会看到一个高光。</p>
-<p>镜面强度：<br>观察者位置：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">// GL-shader</span><br><span class="line">//环境光 </span><br><span class="line">float ambientStrength = 0.1;</span><br><span class="line">vec3 ambient = ambientStrength * lightColor;</span><br><span class="line">// 漫反射</span><br><span class="line">vec3 norm = normailze(Normal);</span><br><span class="line">vec3 lightDir = normalize(lightPos - FragPos);</span><br><span class="line">float diff = max(dot(norm,lightDir),0.0);</span><br><span class="line">vec3 diffuse = diff * lightColor;</span><br><span class="line"></span><br><span class="line">// 高光</span><br><span class="line">float specularStrength = 0.5;</span><br><span class="line">vec3 viewDir = normalize(-FragPos);</span><br><span class="line">vec3 reflectDir = reflect(-lightDir,norm);</span><br><span class="line">float spec = pow(max(dot(viewDir,reflectDir),0.0),32);</span><br><span class="line">vec3 specular = specularStrength * spec * lightColor;</span><br><span class="line"></span><br><span class="line">// 结果</span><br><span class="line">vec3 result = (ambient + diffuse + specular) * objectColor;</span><br><span class="line">FragColor = vec4(result , 1.0);</span><br></pre></td></tr></table></figure>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在渲染处理的过程中，GPU可能对资源进行读写。需要调用Draw Call相关的资源绑定到渲染流水线上。部分资源可能在每次绘制调用时都会有变化，并非与渲染流水线相绑定，而是通过一种名为描述符的对象来对它间接引用，我们可以把描述符视为一种对送往GPU的资源进行描述的轻量级结构。</p>
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>GPU资源实质都是些普通的内存块;部分资源绑定至渲染流水线；</p>
+<h2 id="常用的描述符："><a href="#常用的描述符：" class="headerlink" title="常用的描述符："></a>常用的描述符：</h2><p>1.CBV/SRV/UAV 描述符分别表示的是常量缓冲视图，着色器资源视图，无序访问视图；<br>2.采样器；<br>3.RTV描述符表示的是渲染目标视图资源；<br>4.DSV描述符表示的是深度/模板视图资源；</p>
+<h2 id="描述符堆"><a href="#描述符堆" class="headerlink" title="描述符堆"></a>描述符堆</h2><p>存有一系列描述符，本质是存放用户程序中某种特定类型描述符的内存；<br>1.每种类型的描述符都创建出单独的描述符；<br>2.同一种描述符类型创建出多个描述符堆；<br>3.用多个描述符引用同一个资源；</p>
+
       
 
       
@@ -209,17 +207,6 @@
     <div class="article-info article-info-index">
       
       
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">图形</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
       
 
       
@@ -270,7 +257,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/04/30/光照/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/05/20/资源与描述符/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -284,18 +271,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/05/09/DirectX12-第四节/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          DirectX12-第四节
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/04/23/DirectX12-第三节/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">DirectX12-第三节</div>
+    <a href="/2020/02/11/渲染管线流程概述/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">渲染管线流程概述</div>
       <i class="icon-circle-right"></i>
     </a>
   

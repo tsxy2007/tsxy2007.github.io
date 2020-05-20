@@ -152,6 +152,72 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-资源与描述符" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/20/资源与描述符/">资源与描述符</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/20/资源与描述符/" class="archive-article-date">
+  	<time datetime="2020-05-20T15:41:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在渲染处理的过程中，GPU可能对资源进行读写。需要调用Draw Call相关的资源绑定到渲染流水线上。部分资源可能在每次绘制调用时都会有变化，并非与渲染流水线相绑定，而是通过一种名为描述符的对象来对它间接引用，我们可以把描述符视为一种对送往GPU的资源进行描述的轻量级结构。</p>
+<h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><p>GPU资源实质都是些普通的内存块;部分资源绑定至渲染流水线；</p>
+<h2 id="常用的描述符："><a href="#常用的描述符：" class="headerlink" title="常用的描述符："></a>常用的描述符：</h2><p>1.CBV/SRV/UAV 描述符分别表示的是常量缓冲视图，着色器资源视图，无序访问视图；<br>2.采样器；<br>3.RTV描述符表示的是渲染目标视图资源；<br>4.DSV描述符表示的是深度/模板视图资源；</p>
+<h2 id="描述符堆"><a href="#描述符堆" class="headerlink" title="描述符堆"></a>描述符堆</h2><p>存有一系列描述符，本质是存放用户程序中某种特定类型描述符的内存；<br>1.每种类型的描述符都创建出单独的描述符；<br>2.同一种描述符类型创建出多个描述符堆；<br>3.用多个描述符引用同一个资源；</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/20/资源与描述符/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-渲染管线流程概述" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -173,7 +239,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="一：整体流程"><a href="#一：整体流程" class="headerlink" title="一：整体流程"></a>一：整体流程</h2><p>输入装配器阶段-&gt;顶点着色器阶段-&gt;hull shader stage-&gt;Tessellator stage-&gt;Domain shader stage-&gt;Geometry shader stage-&gt;1.流输出阶段；2.光栅化阶段；-&gt;Pixel shader stage-&gt;Output Merger stage;</p>
-<h3 id="1-输入装配器阶段"><a href="#1-输入装配器阶段" class="headerlink" title="1.输入装配器阶段"></a>1.输入装配器阶段</h3>
+<h3 id="1-输入装配器阶段"><a href="#1-输入装配器阶段" class="headerlink" title="1.输入装配器阶段"></a>1.输入装配器阶段</h3><p>顶点：<br>图元拓扑：</p>
+
       
 
       
@@ -891,15 +958,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Directx12</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">ue4</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">图形</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Directx12</a>
               </li>
             
             <div class="clearfix"></div>
