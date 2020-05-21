@@ -6,20 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>UE4网络分析 | 飞舞轻扬</title>
+  <title>Directx12-CPU与GPU间的交互 | 飞舞轻扬</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="网络功能：1.UNetDriver：网络驱动;2.UReplicationGraph： 网络表格;3.FSocket： 创建Socket;4.PacketHandler ;5.channel： 数据通道;6.PlayerController： 玩家控制器，对应一个LocalPlayer,同时对应一个connenction,记录了当前的连接信息。7.UPendingNetGame：8.PacketH">
-<meta name="keywords" content="ue4">
+  <meta name="description" content="命令队列和命令列表：GPU维护一个命令队列 command queue;CPU利用命令列表 command list将命令提交到这个队列中  创建命令队列ID3D12Device::CreateCommandQueue;ID3D12CommandQueue desc;ID3D12CommandQueue::ExecuteCommandLists(UINT count,ID3D12CommandLi">
 <meta property="og:type" content="article">
-<meta property="og:title" content="UE4网络分析">
-<meta property="og:url" content="http://yoursite.com/2019/04/20/UE4网络分析/index.html">
+<meta property="og:title" content="Directx12-CPU与GPU间的交互">
+<meta property="og:url" content="http://yoursite.com/2020/05/22/Directx12-CPU与GPU间的交互/index.html">
 <meta property="og:site_name" content="飞舞轻扬">
-<meta property="og:description" content="网络功能：1.UNetDriver：网络驱动;2.UReplicationGraph： 网络表格;3.FSocket： 创建Socket;4.PacketHandler ;5.channel： 数据通道;6.PlayerController： 玩家控制器，对应一个LocalPlayer,同时对应一个connenction,记录了当前的连接信息。7.UPendingNetGame：8.PacketH">
+<meta property="og:description" content="命令队列和命令列表：GPU维护一个命令队列 command queue;CPU利用命令列表 command list将命令提交到这个队列中  创建命令队列ID3D12Device::CreateCommandQueue;ID3D12CommandQueue desc;ID3D12CommandQueue::ExecuteCommandLists(UINT count,ID3D12CommandLi">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-02-11T03:03:09.680Z">
+<meta property="og:updated_time" content="2020-05-21T23:13:16.760Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="UE4网络分析">
-<meta name="twitter:description" content="网络功能：1.UNetDriver：网络驱动;2.UReplicationGraph： 网络表格;3.FSocket： 创建Socket;4.PacketHandler ;5.channel： 数据通道;6.PlayerController： 玩家控制器，对应一个LocalPlayer,同时对应一个connenction,记录了当前的连接信息。7.UPendingNetGame：8.PacketH">
+<meta name="twitter:title" content="Directx12-CPU与GPU间的交互">
+<meta name="twitter:description" content="命令队列和命令列表：GPU维护一个命令队列 command queue;CPU利用命令列表 command list将命令提交到这个队列中  创建命令队列ID3D12Device::CreateCommandQueue;ID3D12CommandQueue desc;ID3D12CommandQueue::ExecuteCommandLists(UINT count,ID3D12CommandLi">
   
     <link rel="alternative" href="/atom.xml" title="飞舞轻扬" type="application/atom+xml">
   
@@ -155,28 +154,43 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-UE4网络分析" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-Directx12-CPU与GPU间的交互" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      UE4网络分析
+      Directx12-CPU与GPU间的交互
     </h1>
   
 
         
-        <a href="/2019/04/20/UE4网络分析/" class="archive-article-date">
-  	<time datetime="2019-04-20T04:52:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-20</time>
+        <a href="/2020/05/22/Directx12-CPU与GPU间的交互/" class="archive-article-date">
+  	<time datetime="2020-05-21T22:25:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-22</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="网络功能："><a href="#网络功能：" class="headerlink" title="网络功能："></a>网络功能：</h2><p>1.<strong>UNetDriver</strong>：网络驱动;<br>2.<strong>UReplicationGraph</strong>： 网络表格;<br>3.<strong>FSocket</strong>： 创建Socket;<br>4.<strong>PacketHandler</strong> ;<br>5.<strong>channel</strong>： 数据通道;<br>6.<strong>PlayerController</strong>： 玩家控制器，对应一个LocalPlayer,同时对应一个connenction,记录了当前的连接信息。<br>7.<strong>UPendingNetGame</strong>：<br>8.<strong>PacketHandler</strong>：该类维护所有PacketHandler组件的数组，并将每个组件的传入包和传出包转发<br>9.<strong>UNetConnection</strong>：</p>
-
+        <h2 id="命令队列和命令列表："><a href="#命令队列和命令列表：" class="headerlink" title="命令队列和命令列表："></a>命令队列和命令列表：</h2><p>GPU维护一个命令队列 command queue;<br>CPU利用命令列表 command list将命令提交到这个队列中</p>
+<ol>
+<li>创建命令队列<br>ID3D12Device::CreateCommandQueue;<br>ID3D12CommandQueue desc;<br>ID3D12CommandQueue::ExecuteCommandLists(UINT count,ID3D12CommandList<em> const</em> ppCommandLists);</li>
+<li><p>ID3D12GraphicsCommandList 接口封装了一系列的图形渲染命令，继承于ID3D12CommandList接口。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mCommandList-&gt;ResetViewports(1,&amp;mScreenViewport); // 重置视口</span><br><span class="line">mCommandList-&gt;ClearRenderTargetView(mBackBufferView,Colors::LightSteelBlue,0,nullptr); //清除渲染目标视口</span><br><span class="line">mCommandList-&gt;DrawIndexedInstanced(36,1,0,0);//发起绘制调用的命令；</span><br><span class="line">mCommandList-&gt;Close();// 结束命令的记录 在调用ID3D12CommandQueue::ExecuteCommandLists提交命令列表之前，一定要将其关闭</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>ID3D12CommandAllocator: 内存管理类接口，记录在命令列表的命令，实际上是存储在与之关联的命令分配器。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ID3D12Device::CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE Type,REFIID riid,void ** ppCommandAllocator);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>Type: 指定与此命令分配器相关联的命令列表类型。</p>
+<pre><code>a) D3D12_COMMAND_LIST_TYPE_DIRECT.存储的是一系列可供GPU直接执行的命令
+b) D3D12_COMMAND_LIST_TYPE_BUNDLE. 将命令打包（集合），构建命令列表时会产生一定的CPU开销，因此directx12 提供一种优化方法，允许我们将一系列的命令打成所谓的包。
+</code></pre><p>riid： 待创建ID3D12CommandAllocator接口的COMID。<br>ppCommandAllocator:输出指向所创建命令分配器的指针。</p>
+<p>4.命令列表同样由ID3D12Device接口创建<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">HRESULT ID3D12Device::CreateCommandList(UINT nodeMask,D3D12_COMMAND_LIST_TYPE type,ID3D12CommandAllocator* pCommandAllocator,ID3D12PipelineState* pInitialState,REFIID riid,void ** ppCommandList);</span><br><span class="line">/**</span><br><span class="line">1.nodeMask: 仅有一个GPU的系统，要将此值设置为0，对于多GPU系统而言，此节点掩码指定的是所创建命令列表相关联的物理GPU。</span><br><span class="line">2.type：命令列表的类型，常用的选项为D3D12_COMMAND_LIST_TYPE_DIRECT和D3D12_COMMAND_LIST_TYPE_BUNDLE.</span><br><span class="line">3.pCommandAllocator: 与所建命令列表相关联的命令分配器。</span><br><span class="line">4.pInitialState：指定命令列表的渲染流水线初始状态。</span><br><span class="line">5.riid： 略；</span><br><span class="line">6.ppCommandList： 略；</span><br><span class="line">*/</span><br></pre></td></tr></table></figure></p>
+<p>可以创建多个关联于同一命令分配器的命令列表，但不能同时使用他们来记录命令。<br>在调用ID3D12CommandQueue::ExecuteCommandList方法之后，我们可以通过ID3D12GraphicsCommandList::Reset方法，安全的复用命令列表C占用的相关底层内存来记录新的命令集。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HRESULT ID3D12GraphicsCommandList::Reset(ID3D12CommandAllocator* pAllocator,ID3D12PipelineState* pInitialState);</span><br></pre></td></tr></table></figure>
       
 
       
@@ -205,17 +219,6 @@
     <div class="article-info article-info-index">
       
       
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ue4</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
       
 
       
@@ -266,7 +269,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/04/20/UE4网络分析/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/05/22/Directx12-CPU与GPU间的交互/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -280,18 +283,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/04/23/DirectX12-第三节/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          DirectX12-第三节
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/04/19/DirectX12-第二节/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">DirectX12-第二节</div>
+    <a href="/2020/05/21/C++记录精确时间/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">c++记录精确时间</div>
       <i class="icon-circle-right"></i>
     </a>
   

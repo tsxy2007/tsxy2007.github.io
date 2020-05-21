@@ -6,20 +6,15 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>UE4网络分析 | 飞舞轻扬</title>
+  <title>飞舞轻扬</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="网络功能：1.UNetDriver：网络驱动;2.UReplicationGraph： 网络表格;3.FSocket： 创建Socket;4.PacketHandler ;5.channel： 数据通道;6.PlayerController： 玩家控制器，对应一个LocalPlayer,同时对应一个connenction,记录了当前的连接信息。7.UPendingNetGame：8.PacketH">
-<meta name="keywords" content="ue4">
-<meta property="og:type" content="article">
-<meta property="og:title" content="UE4网络分析">
-<meta property="og:url" content="http://yoursite.com/2019/04/20/UE4网络分析/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="飞舞轻扬">
+<meta property="og:url" content="http://yoursite.com/page/2/index.html">
 <meta property="og:site_name" content="飞舞轻扬">
-<meta property="og:description" content="网络功能：1.UNetDriver：网络驱动;2.UReplicationGraph： 网络表格;3.FSocket： 创建Socket;4.PacketHandler ;5.channel： 数据通道;6.PlayerController： 玩家控制器，对应一个LocalPlayer,同时对应一个connenction,记录了当前的连接信息。7.UPendingNetGame：8.PacketH">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-02-11T03:03:09.680Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="UE4网络分析">
-<meta name="twitter:description" content="网络功能：1.UNetDriver：网络驱动;2.UReplicationGraph： 网络表格;3.FSocket： 创建Socket;4.PacketHandler ;5.channel： 数据通道;6.PlayerController： 玩家控制器，对应一个LocalPlayer,同时对应一个connenction,记录了当前的连接信息。7.UPendingNetGame：8.PacketH">
+<meta name="twitter:title" content="飞舞轻扬">
   
     <link rel="alternative" href="/atom.xml" title="飞舞轻扬" type="application/atom+xml">
   
@@ -155,51 +150,41 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-UE4网络分析" class="article article-type-post " itemscope itemprop="blogPost">
+            
+  
+    <article id="post-DirectX12-第一节" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 class="article-title" itemprop="name">
-      UE4网络分析
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/13/DirectX12-第一节/">DirectX12-第一节</a>
     </h1>
   
 
         
-        <a href="/2019/04/20/UE4网络分析/" class="archive-article-date">
-  	<time datetime="2019-04-20T04:52:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-20</time>
+        <a href="/2019/04/13/DirectX12-第一节/" class="archive-article-date">
+  	<time datetime="2019-04-12T16:02:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-13</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="网络功能："><a href="#网络功能：" class="headerlink" title="网络功能："></a>网络功能：</h2><p>1.<strong>UNetDriver</strong>：网络驱动;<br>2.<strong>UReplicationGraph</strong>： 网络表格;<br>3.<strong>FSocket</strong>： 创建Socket;<br>4.<strong>PacketHandler</strong> ;<br>5.<strong>channel</strong>： 数据通道;<br>6.<strong>PlayerController</strong>： 玩家控制器，对应一个LocalPlayer,同时对应一个connenction,记录了当前的连接信息。<br>7.<strong>UPendingNetGame</strong>：<br>8.<strong>PacketHandler</strong>：该类维护所有PacketHandler组件的数组，并将每个组件的传入包和传出包转发<br>9.<strong>UNetConnection</strong>：</p>
-
+        <h2 id="一：创建Device"><a href="#一：创建Device" class="headerlink" title="一：创建Device"></a>一：创建Device</h2><h3 id="1-创建Factory"><a href="#1-创建Factory" class="headerlink" title="1.创建Factory"></a>1.创建Factory</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">UINT dxgiFactoryFlags = 0;</span><br><span class="line">ComPtr&lt;IDXGIFactory6&gt; factory;</span><br><span class="line">CreateDXGIFactory2(dxgiFactoryFlags,IID_PPV_ARGS(&amp;factory));</span><br></pre></td></tr></table></figure>
+<h3 id="2-创建上下文-Adapter"><a href="#2-创建上下文-Adapter" class="headerlink" title="2.创建上下文 Adapter"></a>2.创建上下文 Adapter</h3> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">factory-&gt;EnumWarpAdapter(IID_PPV_ARGS(&amp;warpAdapter));</span><br></pre></td></tr></table></figure>
+<h3 id="3-创建Device"><a href="#3-创建Device" class="headerlink" title="3.创建Device"></a>3.创建Device</h3> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">D3D12CreateDevice(warpAdapter.Get(),D3D_FEATURE_LEVEL_11_0,IID_PPV_ARGS(&amp;m_device)); </span><br><span class="line">// DirectX 12 需要设置为 D3D_FEATURE_LEVEL_11_0 或者以上</span><br></pre></td></tr></table></figure>
+<h2 id="二：-创建命令队列"><a href="#二：-创建命令队列" class="headerlink" title="二： 创建命令队列"></a>二： 创建命令队列</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">D3D12_COMMAND_QUEUE_DESC queueDesc = &#123;&#125;;</span><br><span class="line">queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;</span><br><span class="line">queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;</span><br><span class="line">m_device-&gt;CreateCommandQueue(&amp;queueDesc,IID_PPV_ARGS(&amp;m_commandQueue));</span><br></pre></td></tr></table></figure>
+<h3 id="Type-类型："><a href="#Type-类型：" class="headerlink" title="Type 类型："></a>Type 类型：</h3><p>D3D12_COMMAND_LIST_TYPE_DIRECT（直接命令队列）;<br>D3D12_COMMAND_LIST_TYPE_BUNDLE（捆绑包）;<br>D3D12_COMMAND_LIST_TYPE_COMPUTE（计算命令队列）;<br>D3D12_COMMAND_LIST_TYPE_COPY（复制命令队列）;<br>D3D12_COMMAND_LIST_TYPE_VIDEO_DECODE（视频解码命令队列）;<br>D3D12_COMMAND_LIST_TYPE_VIDEO_PROCESS（视频处理命令队列）;</p>
+<h2 id="三：创建交换缓存区"><a href="#三：创建交换缓存区" class="headerlink" title="三：创建交换缓存区"></a>三：创建交换缓存区</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">DXGI_SWAP_CHAIN_DESC1 swapChainDesc = &#123;&#125;;</span><br><span class="line">swapChainDesc.BufferCount = 3;</span><br><span class="line">swapChainDesc.Width = 1280;</span><br><span class="line">swapChainDesc.Height = 800;</span><br><span class="line">swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;</span><br><span class="line">swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;</span><br><span class="line">swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;</span><br><span class="line">swapChainDesc.SampleDesc.Count = 1;</span><br><span class="line"></span><br><span class="line">ComPtr&lt;IDXGISwapChain&gt; swapChain;</span><br><span class="line">factory-&gt;CreateSwapChainForHwnd(</span><br><span class="line">    m_commandQueue.Get(),</span><br><span class="line">    Win32Application::GetHwnd();</span><br><span class="line">    &amp;swapChainDesc,</span><br><span class="line">    nullptr,</span><br><span class="line">    nullptr,</span><br><span class="line">    &amp;swapChain</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h2 id="四-创建描述符堆对象"><a href="#四-创建描述符堆对象" class="headerlink" title="四.创建描述符堆对象"></a>四.创建描述符堆对象</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = &#123;&#125;;</span><br><span class="line">rtvHeapDesc.NumDescriptors = 3;</span><br><span class="line">rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;</span><br><span class="line">rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;</span><br><span class="line">m_device-&gt;CreateDescriptorHeap(&amp;rtvHeapDesc,IID_PPV_ARGS(&amp;m_rtvHeap));</span><br><span class="line">m_rtvDescriptorSize = m_device-&gt;GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);</span><br></pre></td></tr></table></figure>
+<h3 id="Type"><a href="#Type" class="headerlink" title="Type"></a>Type</h3><p><strong>D3D12_DESCRIPTOR_HEAP_TYPE : 指定堆中描述符类型的类型化值</strong>。<br>  D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV （用于组合常量缓冲区、着色器资源和无序访问视图的描述符堆。）,<br>  D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER（采样器的描述符堆。）,<br>  D3D12_DESCRIPTOR_HEAP_TYPE_RTV（目标视图的描述符堆。）,<br>  D3D12_DESCRIPTOR_HEAP_TYPE_DSV（深度模板视图的描述符堆。）,<br>  D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES（描述符堆的类型数。）</p>
+<h3 id="Flags"><a href="#Flags" class="headerlink" title="Flags"></a>Flags</h3><p><strong>D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE</strong>:可以在描述符堆上选择性地设置D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE标志，以指示它被绑定在命令列表上，以供着色器引用。没有此标志创建的描述符堆允许应用程序在将描述符复制到着色器可见描述符堆之前在CPU内存中阶段描述符，这是一种便利。但是，应用程序也可以直接将描述符创建为着色器可见描述符堆，而不需要在CPU上执行任何操作。此标志仅适用于CBV、SRV、UAV和采样器。它不适用于其他描述符堆类型，因为着色器不直接引用其他类型。<br><strong>D3D12_DESCRIPTOR_HEAP_FLAG_NONE</strong>: 默认</p>
+<h2 id="五-创建RenderTargetView"><a href="#五-创建RenderTargetView" class="headerlink" title="五.创建RenderTargetView"></a>五.创建RenderTargetView</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_rtvHeap-&gt;GetCPUDescriptorHandleForHeapStart());</span><br><span class="line">for (UINT i = 0; i &lt; FrameCount; i++)</span><br><span class="line">&#123;</span><br><span class="line">	ThrowIfFailed(m_swapChain-&gt;GetBuffer(i, IID_PPV_ARGS(&amp;m_renderTargets[i])));</span><br><span class="line">	m_device-&gt;CreateRenderTargetView(m_renderTargets[i].Get(), nullptr, rtvHandle);</span><br><span class="line">	rtvHandle.Offset(1, m_rtvDescriptorSize);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="六-创建命令分配器"><a href="#六-创建命令分配器" class="headerlink" title="六.创建命令分配器"></a>六.创建命令分配器</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">m_device-&gt;CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT,IID_PPV_ARGS(&amp;m_commandAllocator));</span><br></pre></td></tr></table></figure>
       
 
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
-        </div>
       
     </div>
     <div class="article-info article-info-index">
@@ -210,7 +195,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ue4</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
         		</li>
       		
 		</ul>
@@ -219,84 +204,16 @@
       
 
       
-
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/13/DirectX12-第一节/">展开全文 >></a>
+        </p>
       
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
-        </div>
-      </div>
-    </span>
-  </div>
-</div>
 
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/04/20/UE4网络分析/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2019/04/23/DirectX12-第三节/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          DirectX12-第三节
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2019/04/19/DirectX12-第二节/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">DirectX12-第二节</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -316,14 +233,12 @@
 
 
 
-  
-  
-  
 
   
-
   
-
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    </nav>
   
 
 
@@ -346,8 +261,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: false,
-		isPost: true,
+		isHome: true,
+		isPost: false,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
