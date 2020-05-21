@@ -152,19 +152,19 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-Directx12-CPU与GPU间的交互" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-DirectX12-CPU与GPU间的交互" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/22/Directx12-CPU与GPU间的交互/">Directx12-CPU与GPU间的交互</a>
+      <a class="article-title" href="/2020/05/22/DirectX12-CPU与GPU间的交互/">Directx12-CPU与GPU间的交互</a>
     </h1>
   
 
         
-        <a href="/2020/05/22/Directx12-CPU与GPU间的交互/" class="archive-article-date">
+        <a href="/2020/05/22/DirectX12-CPU与GPU间的交互/" class="archive-article-date">
   	<time datetime="2020-05-21T22:25:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-22</time>
 </a>
         
@@ -189,6 +189,8 @@ b) D3D12_COMMAND_LIST_TYPE_BUNDLE. 将命令打包（集合），构建命令列
 <p>4.命令列表同样由ID3D12Device接口创建<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">HRESULT ID3D12Device::CreateCommandList(UINT nodeMask,D3D12_COMMAND_LIST_TYPE type,ID3D12CommandAllocator* pCommandAllocator,ID3D12PipelineState* pInitialState,REFIID riid,void ** ppCommandList);</span><br><span class="line">/**</span><br><span class="line">1.nodeMask: 仅有一个GPU的系统，要将此值设置为0，对于多GPU系统而言，此节点掩码指定的是所创建命令列表相关联的物理GPU。</span><br><span class="line">2.type：命令列表的类型，常用的选项为D3D12_COMMAND_LIST_TYPE_DIRECT和D3D12_COMMAND_LIST_TYPE_BUNDLE.</span><br><span class="line">3.pCommandAllocator: 与所建命令列表相关联的命令分配器。</span><br><span class="line">4.pInitialState：指定命令列表的渲染流水线初始状态。</span><br><span class="line">5.riid： 略；</span><br><span class="line">6.ppCommandList： 略；</span><br><span class="line">*/</span><br></pre></td></tr></table></figure></p>
 <p>可以创建多个关联于同一命令分配器的命令列表，但不能同时使用他们来记录命令。<br>在调用ID3D12CommandQueue::ExecuteCommandList方法之后，我们可以通过ID3D12GraphicsCommandList::Reset方法，安全的复用命令列表C占用的相关底层内存来记录新的命令集。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HRESULT ID3D12GraphicsCommandList::Reset(ID3D12CommandAllocator* pAllocator,ID3D12PipelineState* pInitialState);</span><br></pre></td></tr></table></figure>
+<p>整体代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// 1.创建命令队列</span><br><span class="line">    D3D12_COMMAND_QUEUE_DESC queueDesc = &#123;&#125;;</span><br><span class="line">    queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;</span><br><span class="line">    queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;</span><br><span class="line">    ThrowIfFailed(md3dDevice-&gt;CreateCommandQueue(&amp;queueDesc, IID_PPV_ARGS(&amp;mCommandQueue)));</span><br><span class="line">//2.创建命令内存管理接口：</span><br><span class="line">    ThrowIfFailed(md3dDevice-&gt;CreateCommandAllocator(</span><br><span class="line">    D3D12_COMMAND_LIST_TYPE_DIRECT,</span><br><span class="line">    IID_PPV_ARGS(mDirectCmdListAlloc.GetAddressOf())));</span><br><span class="line">//3. 创建命令列表：</span><br><span class="line">    ThrowIfFailed(md3dDevice-&gt;CreateCommandList(</span><br><span class="line">	    	0,</span><br><span class="line">		    D3D12_COMMAND_LIST_TYPE_DIRECT,</span><br><span class="line">		    mDirectCmdListAlloc.Get(), // Associated command allocator</span><br><span class="line">		    nullptr,                   // Initial   PipelineStateObject</span><br><span class="line">		    IID_PPV_ARGS(mCommandList.GetAddressOf())));</span><br><span class="line">//4.设置此命令列表状态为关闭</span><br><span class="line">    mCommandList-&gt;Close();</span><br></pre></td></tr></table></figure></p>
+
       
 
       
@@ -200,7 +202,7 @@ b) D3D12_COMMAND_LIST_TYPE_BUNDLE. 将命令打包（集合），构建命令列
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/22/Directx12-CPU与GPU间的交互/">展开全文 >></a>
+          <a class="article-more-a" href="/2020/05/22/DirectX12-CPU与GPU间的交互/">展开全文 >></a>
         </p>
       
 
@@ -1038,15 +1040,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ue4</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Directx12</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">图形</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ue4</a>
               </li>
             
             <div class="clearfix"></div>
