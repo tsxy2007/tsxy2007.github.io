@@ -48,3 +48,25 @@ HRESULT ID3D12Device::CreateCommandList(UINT nodeMask,D3D12_COMMAND_LIST_TYPE ty
 ~~~
 HRESULT ID3D12GraphicsCommandList::Reset(ID3D12CommandAllocator* pAllocator,ID3D12PipelineState* pInitialState);
 ~~~
+
+整体代码如下：
+~~~
+// 1.创建命令队列
+    D3D12_COMMAND_QUEUE_DESC queueDesc = {};
+    queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
+    queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
+    ThrowIfFailed(md3dDevice->CreateCommandQueue(&queueDesc, IID_PPV_ARGS(&mCommandQueue)));
+//2.创建命令内存管理接口：
+    ThrowIfFailed(md3dDevice->CreateCommandAllocator(
+    D3D12_COMMAND_LIST_TYPE_DIRECT,
+    IID_PPV_ARGS(mDirectCmdListAlloc.GetAddressOf())));
+//3. 创建命令列表：
+    ThrowIfFailed(md3dDevice->CreateCommandList(
+	    	0,
+		    D3D12_COMMAND_LIST_TYPE_DIRECT,
+		    mDirectCmdListAlloc.Get(), // Associated command allocator
+		    nullptr,                   // Initial   PipelineStateObject
+		    IID_PPV_ARGS(mCommandList.GetAddressOf())));
+//4.设置此命令列表状态为关闭
+    mCommandList->Close();
+~~~
