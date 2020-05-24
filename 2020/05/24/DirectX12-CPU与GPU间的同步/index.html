@@ -6,15 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Tag: ue4 | 飞舞轻扬</title>
+  <title>DirectX12-CPU与GPU间的同步 | 飞舞轻扬</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="飞舞轻扬">
-<meta property="og:url" content="http://yoursite.com/tags/ue4/index.html">
+  <meta name="description" content="GPU和CPU并行工作的时候，自然会产生一系列的同步问题。解决此问题其中的一种办法是： 强制CPU等待，直到GPU完成所有命令的处理，达到某个指定的Fence点为止。我们称之为：刷新命令队列，可以通过fence实现这一点。创建fence：12HRESULT ID3D12Device::CreateFence(UINT64 InitialValue,D3D12_FENCE_FLAGS Flags,R">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DirectX12-CPU与GPU间的同步">
+<meta property="og:url" content="http://yoursite.com/2020/05/24/DirectX12-CPU与GPU间的同步/index.html">
 <meta property="og:site_name" content="飞舞轻扬">
+<meta property="og:description" content="GPU和CPU并行工作的时候，自然会产生一系列的同步问题。解决此问题其中的一种办法是： 强制CPU等待，直到GPU完成所有命令的处理，达到某个指定的Fence点为止。我们称之为：刷新命令队列，可以通过fence实现这一点。创建fence：12HRESULT ID3D12Device::CreateFence(UINT64 InitialValue,D3D12_FENCE_FLAGS Flags,R">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-05-24T08:05:58.322Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="飞舞轻扬">
+<meta name="twitter:title" content="DirectX12-CPU与GPU间的同步">
+<meta name="twitter:description" content="GPU和CPU并行工作的时候，自然会产生一系列的同步问题。解决此问题其中的一种办法是： 强制CPU等待，直到GPU完成所有命令的处理，达到某个指定的Fence点为止。我们称之为：刷新命令队列，可以通过fence实现这一点。创建fence：12HRESULT ID3D12Device::CreateFence(UINT64 InitialValue,D3D12_FENCE_FLAGS Flags,R">
   
     <link rel="alternative" href="/atom.xml" title="飞舞轻扬" type="application/atom+xml">
   
@@ -150,60 +154,158 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-DirectX12-CPU与GPU间的同步" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/20/UE4网络分析/" class="archive-article-date">
-  	<time datetime="2019-04-20T04:52:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-20</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/20/UE4网络分析/">UE4网络分析</a>
+    <h1 class="article-title" itemprop="name">
+      DirectX12-CPU与GPU间的同步
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ue4</a>
-        		</li>
-      		
-		</ul>
-	</div>
+        
+        <a href="/2020/05/24/DirectX12-CPU与GPU间的同步/" class="archive-article-date">
+  	<time datetime="2020-05-24T05:35:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-24</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>GPU和CPU并行工作的时候，自然会产生一系列的同步问题。<br>解决此问题其中的一种办法是： 强制CPU等待，直到GPU完成所有命令的处理，达到某个指定的Fence点为止。我们称之为：刷新命令队列，可以通过fence实现这一点。<br>创建fence：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HRESULT ID3D12Device::CreateFence(UINT64 InitialValue,D3D12_FENCE_FLAGS Flags,REFIID riid,void** pFence);</span><br><span class="line">// 每个fence 维护一个UINT64类型的值，此为用来标记fence point的整数。</span><br></pre></td></tr></table></figure></p>
+<p>一下是用一个Fence刷新CommandQueue；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">    // 增加Fence值，接下来将命令标记到此Fence point</span><br><span class="line">    mCurrentFence++; </span><br><span class="line">	</span><br><span class="line">    // 向命令队列中添加一条用来设置新Fence point的命令</span><br><span class="line">    // 由于这条命令交由GPU处理（即由GPU端来修改Fence的值），所以在GPU处理完CommandQueue此Signal();</span><br><span class="line">    // 在所有命令完成之前，不会设置新的Fence point；</span><br><span class="line">    ThrowIfFailed( mCommandQueue-&gt;Signal( mFence.Get( ), mCurrentFence ) );</span><br><span class="line"></span><br><span class="line">// CPU端等待GPU，直到后者执行完这个Fence point之前所有的命令</span><br><span class="line">	if (mFence-&gt;GetCompletedValue() &lt; mCurrentFence)</span><br><span class="line">	&#123;</span><br><span class="line">		HANDLE eventHandle = CreateEventEx( nullptr, false, false, EVENT_ALL_ACCESS );</span><br><span class="line">        //若GPU命中当前的Fence point，激发预定事件</span><br><span class="line">		ThrowIfFailed( mFence-&gt;SetEventOnCompletion( mCurrentFence, eventHandle ) );</span><br><span class="line">// 等待GPU命中Fence 激发事件；</span><br><span class="line">		WaitForSingleObject( eventHandle, INFINITE );</span><br><span class="line">		CloseHandle( eventHandle );</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这种方案并不完美，因为这意味着在等待GPU处理命令的时候，CPU会处于空闲状态，第七章解决此问题；</p>
 
-          
+      
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/05/24/DirectX12-CPU与GPU间的同步/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2020/05/22/DirectX12-CPU与GPU间的交互/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Directx12-CPU与GPU间的交互</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -226,9 +328,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
