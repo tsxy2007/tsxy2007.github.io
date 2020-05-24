@@ -152,6 +152,85 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-DirectX12-命令与多线程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/25/DirectX12-命令与多线程/">DirectX12-命令与多线程</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/25/DirectX12-命令与多线程/" class="archive-article-date">
+  	<time datetime="2020-05-24T23:35:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="使用命令列表注意问题"><a href="#使用命令列表注意问题" class="headerlink" title="使用命令列表注意问题"></a>使用命令列表注意问题</h2><ol>
+<li>命令列表并非自由线程对象。</li>
+<li>命令分配器也不是线程自由对象；多线程既不能同时共享一个命令分配器，也不能同时调用同一命令分配器；</li>
+<li>命令队列是线程自由对象，多线程可以同时访问同一命令队列，也能够同时调用它的方法；</li>
+<li>出于性能原因，应用程序必须在初始化期间，指出用于并行记录命令的命令列表最大数量。</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/25/DirectX12-命令与多线程/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-DirectX12-资源转换" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -792,124 +871,6 @@ b) D3D12_COMMAND_LIST_TYPE_BUNDLE. 将命令打包（集合），构建命令列
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2019/04/30/光照/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-DirectX12-第三节" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/23/DirectX12-第三节/">DirectX12-第三节</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/23/DirectX12-第三节/" class="archive-article-date">
-  	<time datetime="2019-04-23T01:00:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-23</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="命令队列"><a href="#命令队列" class="headerlink" title="命令队列"></a>命令队列</h2><p>命令有6种:<br>1.ID3D12CommandQueue::ExecuteCommandLists:<br>2.ID3D12CommandQueue::Signal:<br>3.ID3D12CommandQueue::Wait:<br>4.ID3D12CommandQueue::UpdateTileMapping:<br>5.ID3D12CommandQueue::CopyTileMapping:<br>6.ISwapChain::Present:<br>命令队列作用：将并发串行化。<br>硬件层面上GPU有3个并行执行的引擎：复制引擎，计算引擎和图形引擎；<br>（1） 复制命令队列中的命令只能在复制引擎中执行；<br>（2） 计算命令队列中的命令只能可以在计算引擎或复制引擎上执行；<br>（3） 直接命令队列中的命令可以在任意引擎上执行；<br>只有计算或直接类型命令才允许调用ID3D12CommandQueue接口的UpdateTileMapping和CopyTileMapping方法；</p>
-<h2 id="Fence"><a href="#Fence" class="headerlink" title="Fence"></a>Fence</h2><p>Fence可用于控制命令队列中不同命令之间的同步，但是命令队列中同一命令内部的并发性对fence而言是不可见的。</p>
-<h2 id="命令分配器和命令列表"><a href="#命令分配器和命令列表" class="headerlink" title="命令分配器和命令列表"></a>命令分配器和命令列表</h2><p>命令列表：<br>1.记录状态：在此状态下允许向其添加添加命令；<br>2.关闭状态：在此状态下允许作为ID3D12CommandQueue::ExecuteCommandLists的实参；<br>不允许被CPU并发访问；<br>命令列表并不维护其在命令分配器中所分配的内存的相关信息；需要手动释放内存；方法是ID3D12CommandAllocator::Reset;</p>
-<h2 id="捆绑包"><a href="#捆绑包" class="headerlink" title="捆绑包"></a>捆绑包</h2><p>命令列表不被CPU线程和GPU线程之间并发访问，也不允许被CPU线程并发访问；但是允许被GPU线程并发访问；</p>
-<h2 id="资源屏障"><a href="#资源屏障" class="headerlink" title="资源屏障"></a>资源屏障</h2><p>D3D12_RESOURCE_BARRIER结构体描述：<br><strong><em>分三种类型</em></strong>：</p>
-<ol>
-<li>D3D12_RESOURCE_BARRIER_TYPE_TRANSTION 转换资源屏障</li>
-<li>D3D12_RESOURCE_BARRIER_TYPE_ALIASING  别名资源屏障</li>
-<li>D3D12_RESOURCE_BARRIER_TYPE_UAV       无序访问视图资源屏障</li>
-</ol>
-<h3 id="转换资源屏障："><a href="#转换资源屏障：" class="headerlink" title="转换资源屏障："></a>转换资源屏障：</h3><p>命令队列有且仅有图形/计算类和复制类：<br><strong><em>图形/计算类</em></strong>： 所有的直接命令队列和计算命令队列<br><strong><em>复制类</em></strong>： 所有的复制命令队列</p>
-<h4 id="子资源权限："><a href="#子资源权限：" class="headerlink" title="子资源权限："></a>子资源权限：</h4><p>D3D12_RESOURCE_BARRIER中的Transition成员的StateBefore和StateAfter成员表明子资源对命令队列的权限用D3D12_RESOURCE_STATES表示。<br>（1） 子资源对复制类的权限只能是一下三种：</p>
-<ul>
-<li>D3D12_RESOURCE_STATE_COMMON 公共（可写）</li>
-<li>D3D12_RESOURCE_STATE_COPY_DEST 可作为复制宿（可写）</li>
-<li>D3D12_RESOURCE_STATE_COPY_SOURCE 可作为复制源（只读）<br>（2） 子资源对图形/计算类的权限可以是任意一种权限，除以上3种还有</li>
-<li>D3D12_RESOURCE_STATE_RESOLVE_DEST 可作为解析宿（可写）</li>
-<li>D3D12_RESOURCE_STATE_RESOLVE_SOURCE 可作为解析源（只读）</li>
-<li>D3D12_RESOURCE_STATE_STREAM_OUT 可作为流输出（可写）</li>
-<li>D3D12_RESOURCE_STATE_DEPTH_WRITE 可作为深度模板（可写）</li>
-<li>D3D12_RESOURCE_STATE_RENDER_TARGET 可作为渲染目标(可写)</li>
-<li>D3D12_RESOURCE_STATE_INDIRECT_ARGUMENT 可作为间接参数（只读）</li>
-<li>D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER 可作为顶点或常量缓冲（只读）</li>
-<li>D3D12_RESOURCE_STATE_INDEX_BUFFER 可作为索引缓冲（只读）</li>
-<li>D3D12_RESOURCE_STATE_STATE_NON_SHADER_RESOURCE 可作为非像素着色器资源（只读）</li>
-<li>D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOUCE 可作为像素着色器资源（只读）</li>
-<li>D3D12_RESOURCE_STATE_UNORDERED_ACCESS 可作为只读深度模板（只读）<br><strong>通用读写权限</strong>：D3D12_RESOURCE_STATE_GENERIC_READ<br>最多只有两个只读权限。</li>
-</ul>
-<h4 id="转换资源屏障对并发性的控制"><a href="#转换资源屏障对并发性的控制" class="headerlink" title="转换资源屏障对并发性的控制"></a>转换资源屏障对并发性的控制</h4><p>（1） 绘制到渲染目标视图<br>（2） 将相关子资源对命令队列类的权限从可作为渲染目标转换为可作为复制类<br>（3） 将渲染目标视图的底层资源复制到一个纹理中</p>
-<h4 id="分离资源屏障"><a href="#分离资源屏障" class="headerlink" title="分离资源屏障"></a>分离资源屏障</h4><p>分离资源屏障由开始和结束两个资源屏障构成； 临时无权限<br>描述D3D12_RESOURCE_BARRIER结构体的Type成员D3D12_RESOURCE_BARRIER_TYPE_TRANSITION<br>D3D12_RESOURCE_BARRIER_FLAG_BEGIN_ONLY<br>D3D12_RESOURCE_BARRIER_FLAG_END_ONLY;<br>“不可见” 只是复制类才有<br>“临时无权限” 复制类和计算/图形类都有</p>
-<h4 id="提升和衰退"><a href="#提升和衰退" class="headerlink" title="提升和衰退"></a>提升和衰退</h4><p>隐式地执行转换资源屏障<br>显式地执行转换资源屏障会有性能消耗</p>
-<h3 id="别名资源屏障"><a href="#别名资源屏障" class="headerlink" title="别名资源屏障"></a>别名资源屏障</h3><p>与定位资源有关。<br>D3D12_RESOURCE_BARRIER描述资源屏障的时候，</p>
-<ol>
-<li>flags成员应设置为D3D12_RESOURCE_BARRIER_FLAG_NONE</li>
-<li>TYPE成员应设置为D3D12_RESOURCE_BARRIER_TYPE_ALIASING</li>
-<li>Aliasing 成员应设置为D3D12_RESOURCE_ALIASING_BARRIER<h4 id="D3D12-RESOURCE-ALIASING-BARRIER结构体："><a href="#D3D12-RESOURCE-ALIASING-BARRIER结构体：" class="headerlink" title="D3D12_RESOURCE_ALIASING_BARRIER结构体："></a>D3D12_RESOURCE_ALIASING_BARRIER结构体：</h4></li>
-<li>pResourceBefore<br>表示在该别名资源屏障之前的所有访问pResourceBefore表示的别名资源的命令在该别名资源屏障之前执行</li>
-<li>pResourceAfter<br>表示在该别名资源屏障之后的所有访问pResourceAfter表示的别名资源的命令在该别名资源屏障之后执行</li>
-</ol>
-<h3 id="无序访问资源屏障"><a href="#无序访问资源屏障" class="headerlink" title="无序访问资源屏障"></a>无序访问资源屏障</h3><p>D3D12_RESOURCE_BARRIER 与无序访问视图有关</p>
-<ol>
-<li>Flags D3D12_RESOURCE_BARRIER_FLAG_NONE</li>
-<li>TYPE D3D12_RESOURCE_BARRIER_TYPE_UAV</li>
-<li>UAV D3D12_RESOURCE_UAV_BARRIER</li>
-</ol>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/23/DirectX12-第三节/">展开全文 >></a>
         </p>
       
 
