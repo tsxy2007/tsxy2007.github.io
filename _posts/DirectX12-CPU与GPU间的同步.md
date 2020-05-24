@@ -1,7 +1,7 @@
 ---
 title: DirectX12-CPU与GPU间的同步
 date: 2020-05-24 13:35:35
-tags:
+tags: DirectX12
 ---
 
 GPU和CPU并行工作的时候，自然会产生一系列的同步问题。

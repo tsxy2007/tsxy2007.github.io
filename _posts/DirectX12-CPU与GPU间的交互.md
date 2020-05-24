@@ -1,7 +1,7 @@
 ---
 title: DirectX12-CPU与GPU间的交互
 date: 2020-05-22 06:25:15
-tags:
+tags: DirectX12
 ---
 
 ## 命令队列和命令列表：
