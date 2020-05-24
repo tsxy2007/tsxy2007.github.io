@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Tag: 图形 | 飞舞轻扬</title>
+  <title>DirectX12-资源转换 | 飞舞轻扬</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="飞舞轻扬">
-<meta property="og:url" content="http://yoursite.com/tags/图形/index.html">
+  <meta name="description" content="为了实现常见的渲染效果，我们会经常通过GPU对某个资源按顺序进行先写后读两种操作。如果GPU的写操作还没有完成甚至还没开始，却开始读取资源，便会导致resource hazard（资源冒险）。Direct3D专门针对资源设计了一组相关状态。资源在创建一开始处于默认状态，该状态将一直持续到应用程序通过Direct3D将其转换为另一种状态为止。如执行写操作，转换为渲染目标状态；读操作，状态设置为着色器">
+<meta name="keywords" content="DirectX12">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DirectX12-资源转换">
+<meta property="og:url" content="http://yoursite.com/2020/05/25/DirectX12-资源转换/index.html">
 <meta property="og:site_name" content="飞舞轻扬">
+<meta property="og:description" content="为了实现常见的渲染效果，我们会经常通过GPU对某个资源按顺序进行先写后读两种操作。如果GPU的写操作还没有完成甚至还没开始，却开始读取资源，便会导致resource hazard（资源冒险）。Direct3D专门针对资源设计了一组相关状态。资源在创建一开始处于默认状态，该状态将一直持续到应用程序通过Direct3D将其转换为另一种状态为止。如执行写操作，转换为渲染目标状态；读操作，状态设置为着色器">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-05-24T23:15:17.766Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="飞舞轻扬">
+<meta name="twitter:title" content="DirectX12-资源转换">
+<meta name="twitter:description" content="为了实现常见的渲染效果，我们会经常通过GPU对某个资源按顺序进行先写后读两种操作。如果GPU的写操作还没有完成甚至还没开始，却开始读取资源，便会导致resource hazard（资源冒险）。Direct3D专门针对资源设计了一组相关状态。资源在创建一开始处于默认状态，该状态将一直持续到应用程序通过Direct3D将其转换为另一种状态为止。如执行写操作，转换为渲染目标状态；读操作，状态设置为着色器">
   
     <link rel="alternative" href="/atom.xml" title="飞舞轻扬" type="application/atom+xml">
   
@@ -150,60 +155,168 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-DirectX12-资源转换" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/30/光照/" class="archive-article-date">
-  	<time datetime="2019-04-30T02:36:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-30</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/30/光照/">光照</a>
+    <h1 class="article-title" itemprop="name">
+      DirectX12-资源转换
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2020/05/25/DirectX12-资源转换/" class="archive-article-date">
+  	<time datetime="2020-05-24T23:01:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>为了实现常见的渲染效果，我们会经常通过GPU对某个资源按顺序进行先写后读两种操作。如果GPU的写操作还没有完成甚至还没开始，<br>却开始读取资源，便会导致resource hazard（资源冒险）。Direct3D专门针对资源设计了一组相关状态。资源在创建一开始处于默<br>认状态，该状态将一直持续到应用程序通过Direct3D将其转换为另一种状态为止。如执行写操作，转换为渲染目标状态；读操作，状<br>态设置为着色器资源状态。</p>
+<p>通过命令列表设置转换资源屏障数组；<br>D3D12_RESOURCE_BARRIER（资源屏障）；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cmdList-&gt;ResourceBarrier(1, &amp;CD3DX12_RESOURCE_BARRIER::Transition(defaultBuffer.Get(), </span><br><span class="line">	D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST));</span><br></pre></td></tr></table></figure></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">图形</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/05/25/DirectX12-资源转换/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2020/05/24/DirectX12-CPU与GPU间的同步/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">DirectX12-CPU与GPU间的同步</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -226,9 +339,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,

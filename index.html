@@ -152,6 +152,81 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-DirectX12-资源转换" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/25/DirectX12-资源转换/">DirectX12-资源转换</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/25/DirectX12-资源转换/" class="archive-article-date">
+  	<time datetime="2020-05-24T23:01:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>为了实现常见的渲染效果，我们会经常通过GPU对某个资源按顺序进行先写后读两种操作。如果GPU的写操作还没有完成甚至还没开始，<br>却开始读取资源，便会导致resource hazard（资源冒险）。Direct3D专门针对资源设计了一组相关状态。资源在创建一开始处于默<br>认状态，该状态将一直持续到应用程序通过Direct3D将其转换为另一种状态为止。如执行写操作，转换为渲染目标状态；读操作，状<br>态设置为着色器资源状态。</p>
+<p>通过命令列表设置转换资源屏障数组；<br>D3D12_RESOURCE_BARRIER（资源屏障）；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cmdList-&gt;ResourceBarrier(1, &amp;CD3DX12_RESOURCE_BARRIER::Transition(defaultBuffer.Get(), </span><br><span class="line">	D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST));</span><br></pre></td></tr></table></figure></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/25/DirectX12-资源转换/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-DirectX12-CPU与GPU间的同步" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -183,6 +258,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -263,6 +349,17 @@ b) D3D12_COMMAND_LIST_TYPE_BUNDLE. 将命令打包（集合），构建命令列
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -842,80 +939,6 @@ b) D3D12_COMMAND_LIST_TYPE_BUNDLE. 将命令打包（集合），构建命令列
 
 
   
-    <article id="post-UE4网络分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/20/UE4网络分析/">UE4网络分析</a>
-    </h1>
-  
-
-        
-        <a href="/2019/04/20/UE4网络分析/" class="archive-article-date">
-  	<time datetime="2019-04-20T04:52:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="网络功能："><a href="#网络功能：" class="headerlink" title="网络功能："></a>网络功能：</h2><p>1.<strong>UNetDriver</strong>：网络驱动;<br>2.<strong>UReplicationGraph</strong>： 网络表格;<br>3.<strong>FSocket</strong>： 创建Socket;<br>4.<strong>PacketHandler</strong> ;<br>5.<strong>channel</strong>： 数据通道;<br>6.<strong>PlayerController</strong>： 玩家控制器，对应一个LocalPlayer,同时对应一个connenction,记录了当前的连接信息。<br>7.<strong>UPendingNetGame</strong>：<br>8.<strong>PacketHandler</strong>：该类维护所有PacketHandler组件的数组，并将每个组件的传入包和传出包转发<br>9.<strong>UNetConnection</strong>：</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ue4</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/04/20/UE4网络分析/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1013,15 +1036,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">c++</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">DirectX12</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Directx12</a>
+                <a href="javascript:void(0)" class="js-tag color4">c++</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1030,6 +1049,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">图形</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Directx12</a>
               </li>
             
             <div class="clearfix"></div>

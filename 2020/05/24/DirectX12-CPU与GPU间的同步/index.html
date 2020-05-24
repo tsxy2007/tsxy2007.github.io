@@ -9,13 +9,14 @@
   <title>DirectX12-CPU与GPU间的同步 | 飞舞轻扬</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="GPU和CPU并行工作的时候，自然会产生一系列的同步问题。解决此问题其中的一种办法是： 强制CPU等待，直到GPU完成所有命令的处理，达到某个指定的Fence点为止。我们称之为：刷新命令队列，可以通过fence实现这一点。创建fence：12HRESULT ID3D12Device::CreateFence(UINT64 InitialValue,D3D12_FENCE_FLAGS Flags,R">
+<meta name="keywords" content="DirectX12">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DirectX12-CPU与GPU间的同步">
 <meta property="og:url" content="http://yoursite.com/2020/05/24/DirectX12-CPU与GPU间的同步/index.html">
 <meta property="og:site_name" content="飞舞轻扬">
 <meta property="og:description" content="GPU和CPU并行工作的时候，自然会产生一系列的同步问题。解决此问题其中的一种办法是： 强制CPU等待，直到GPU完成所有命令的处理，达到某个指定的Fence点为止。我们称之为：刷新命令队列，可以通过fence实现这一点。创建fence：12HRESULT ID3D12Device::CreateFence(UINT64 InitialValue,D3D12_FENCE_FLAGS Flags,R">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-05-24T08:05:58.322Z">
+<meta property="og:updated_time" content="2020-05-24T23:02:03.871Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DirectX12-CPU与GPU间的同步">
 <meta name="twitter:description" content="GPU和CPU并行工作的时候，自然会产生一系列的同步问题。解决此问题其中的一种办法是： 强制CPU等待，直到GPU完成所有命令的处理，达到某个指定的Fence点为止。我们称之为：刷新命令队列，可以通过fence实现这一点。创建fence：12HRESULT ID3D12Device::CreateFence(UINT64 InitialValue,D3D12_FENCE_FLAGS Flags,R">
@@ -206,6 +207,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -269,6 +281,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2020/05/25/DirectX12-资源转换/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          DirectX12-资源转换
+        
+      </div>
+    </a>
   
   
     <a href="/2020/05/22/DirectX12-CPU与GPU间的交互/" id="article-nav-older" class="article-nav-link-wrap">
@@ -398,15 +419,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">c++</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">DirectX12</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Directx12</a>
+                <a href="javascript:void(0)" class="js-tag color4">c++</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -415,6 +432,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">图形</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Directx12</a>
               </li>
             
             <div class="clearfix"></div>
