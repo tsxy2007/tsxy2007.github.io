@@ -152,71 +152,6 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-DirectX12-CPU与GPU间的同步" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/24/DirectX12-CPU与GPU间的同步/">DirectX12-CPU与GPU间的同步</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/24/DirectX12-CPU与GPU间的同步/" class="archive-article-date">
-  	<time datetime="2020-05-24T05:35:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-24</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>GPU和CPU并行工作的时候，自然会产生一系列的同步问题。<br>解决此问题其中的一种办法是： 强制CPU等待，直到GPU完成所有命令的处理，达到某个指定的Fence点为止。我们称之为：刷新命令队列，可以通过fence实现这一点。<br>创建fence：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HRESULT ID3D12Device::CreateFence(UINT64 InitialValue,D3D12_FENCE_FLAGS Flags,REFIID riid,void** pFence);</span><br><span class="line">// 每个fence 维护一个UINT64类型的值，此为用来标记fence point的整数。</span><br></pre></td></tr></table></figure></p>
-<p>一下是用一个Fence刷新CommandQueue；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">    // 增加Fence值，接下来将命令标记到此Fence point</span><br><span class="line">    mCurrentFence++; </span><br><span class="line">	</span><br><span class="line">    // 向命令队列中添加一条用来设置新Fence point的命令</span><br><span class="line">    // 由于这条命令交由GPU处理（即由GPU端来修改Fence的值），所以在GPU处理完CommandQueue此Signal();</span><br><span class="line">    // 在所有命令完成之前，不会设置新的Fence point；</span><br><span class="line">    ThrowIfFailed( mCommandQueue-&gt;Signal( mFence.Get( ), mCurrentFence ) );</span><br><span class="line"></span><br><span class="line">// CPU端等待GPU，直到后者执行完这个Fence point之前所有的命令</span><br><span class="line">	if (mFence-&gt;GetCompletedValue() &lt; mCurrentFence)</span><br><span class="line">	&#123;</span><br><span class="line">		HANDLE eventHandle = CreateEventEx( nullptr, false, false, EVENT_ALL_ACCESS );</span><br><span class="line">        //若GPU命中当前的Fence point，激发预定事件</span><br><span class="line">		ThrowIfFailed( mFence-&gt;SetEventOnCompletion( mCurrentFence, eventHandle ) );</span><br><span class="line">// 等待GPU命中Fence 激发事件；</span><br><span class="line">		WaitForSingleObject( eventHandle, INFINITE );</span><br><span class="line">		CloseHandle( eventHandle );</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这种方案并不完美，因为这意味着在等待GPU处理命令的时候，CPU会处于空闲状态，第七章解决此问题；</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/24/DirectX12-CPU与GPU间的同步/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-DirectX12-CPU与GPU间的交互" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -916,6 +851,90 @@ b) D3D12_COMMAND_LIST_TYPE_BUNDLE. 将命令打包（集合），构建命令列
 
 
   
+    <article id="post-DirectX12-第二节" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/19/DirectX12-第二节/">DirectX12-第二节</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/19/DirectX12-第二节/" class="archive-article-date">
+  	<time datetime="2019-04-19T11:16:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一：-创建RootSignature"><a href="#一：-创建RootSignature" class="headerlink" title="一： 创建RootSignature"></a>一： 创建RootSignature</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CD3DX12_ROOT_SIGNATURE_DESC rootSignatureDesc;</span><br><span class="line">rootSignatureDesc.Init(<span class="number">0</span>, <span class="literal">nullptr</span>, <span class="number">0</span>, <span class="literal">nullptr</span>, D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);</span><br><span class="line">ComPtr&lt;ID3DBlob&gt; signature;</span><br><span class="line">ComPtr&lt;ID3DBlob&gt; error;</span><br><span class="line">D3D12SerializeRootSignature(&amp;rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, &amp;signature, &amp;error);</span><br><span class="line">m_device-&gt;CreateRootSignature(<span class="number">0</span>, signature-&gt;GetBufferPointer(), signature-&gt;GetBufferSize(), IID_PPV_ARGS(&amp;m_rootSignature));</span><br></pre></td></tr></table></figure>
+<h2 id="二：-创建PSO"><a href="#二：-创建PSO" class="headerlink" title="二： 创建PSO"></a>二： 创建PSO</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">UINT compileFlags = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;</span><br><span class="line">ComPtr&lt;ID3DBlob&gt; vertexShader;</span><br><span class="line">ComPtr&lt;ID3DBlob&gt; pixelShader;</span><br><span class="line"><span class="built_in">std</span>::wstring shaderFile = <span class="string">L"shaders.hlsl"</span>;</span><br><span class="line">D3DCompileFromFile(shaderFile,<span class="literal">nullptr</span>,<span class="literal">nullptr</span>,<span class="string">"VSMain"</span>,<span class="string">"vs_5_0"</span>,compileFlags,<span class="number">0</span>,&amp;vertexShader,<span class="literal">nullptr</span>);</span><br><span class="line">D3DCompileFromFile(shaderFile,<span class="literal">nullptr</span>,<span class="literal">nullptr</span>,<span class="string">"PSMain"</span>,<span class="string">"ps_5_0"</span>,compileFlags,<span class="number">0</span>,&amp;pixelShader,<span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line">D3D12_INPUT_ELEMENT_DESC inputElementDesc[] = </span><br><span class="line">&#123;</span><br><span class="line">    &#123;<span class="string">"POSITION"</span>,<span class="number">0</span>,DXGI_FORMAT_R32G32B32_FLOAT,<span class="number">0</span>,<span class="number">0</span>,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,<span class="number">0</span>&#125;,</span><br><span class="line"></span><br><span class="line">    &#123;<span class="string">"COLOR"</span>,<span class="number">0</span>,DXGI_FORMAT_R32G32B32A32_FLOAT,<span class="number">0</span>,<span class="number">12</span>,D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,<span class="number">0</span>&#125;,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 创建pso</span></span><br><span class="line">D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = &#123;&#125;;</span><br><span class="line">psoDesc.InputLayout =&#123;inputElementDesc,_countof(inputElementDesc)&#125;;</span><br><span class="line">psoDesc.pRootSignature = m_rootSignture.Get();</span><br><span class="line">psoDesc.VS = CD3DX12_SHADER_BYTECODE(vertexShader.Get());</span><br><span class="line">psoDesc.PS = CD3DX12_SHADER_BYTECODE(pixelShader.Get());</span><br><span class="line">psoDesc.RaterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);</span><br><span class="line">psoDesc.DepthStencilState.DepthEnable = FALSE;</span><br><span class="line">psoDesc.SampleMask = UINT_MAX;</span><br><span class="line">psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;</span><br><span class="line">psoDesc.NumRenderTargets = <span class="number">1</span>;</span><br><span class="line">psoDesc.RTVFormats[<span class="number">0</span>] = DXGI_FORMAT_R8G8B8A8_UNORM;</span><br><span class="line">psoDesc.SampleDesc.Count = <span class="number">1</span>;</span><br><span class="line">m_device-&gt;CreateGraphicsPipelineState(&amp;psoDesc, IID_PPV_ARGS(&amp;m_pipelineState));</span><br></pre></td></tr></table></figure>
+<h2 id="三：-创建命令队列"><a href="#三：-创建命令队列" class="headerlink" title="三： 创建命令队列"></a>三： 创建命令队列</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">m_device-&gt;CreateCommandList(0,D3D12_COMMAND_LIST_TYPE_DIRECT,m_commandAllocator.Get(),m_pipelineState.Get(),IID_PPV_ARGS(&amp;m_commandList));</span><br><span class="line">m_commandList-&gt;Close();</span><br><span class="line"></span><br><span class="line">enum D3D12_COMMAND_LIST_TYPE</span><br><span class="line">&#123;</span><br><span class="line">    D3D12_COMMAND_LIST_TYPE_DIRECT	= 0, //直接</span><br><span class="line">    D3D12_COMMAND_LIST_TYPE_BUNDLE	= 1,// 捆绑包</span><br><span class="line">    D3D12_COMMAND_LIST_TYPE_COMPUTE	= 2, // 计算</span><br><span class="line">    D3D12_COMMAND_LIST_TYPE_COPY	= 3,// copy</span><br><span class="line">    D3D12_COMMAND_LIST_TYPE_VIDEO_DECODE	= 4, // 视频解码</span><br><span class="line">    D3D12_COMMAND_LIST_TYPE_VIDEO_PROCESS	= 5 // 视频编码</span><br><span class="line">&#125; 	D3D12_COMMAND_LIST_TYPE;</span><br></pre></td></tr></table></figure>
+<h2 id="四：-创建Vertex-Buffer"><a href="#四：-创建Vertex-Buffer" class="headerlink" title="四： 创建Vertex Buffer"></a>四： 创建Vertex Buffer</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">Vertex triangleVertices[] = </span><br><span class="line">&#123;</span><br><span class="line">	&#123; &#123; <span class="number">0.0f</span>, <span class="number">0.25f</span> * m_aspectRatio, <span class="number">0.0f</span> &#125;, &#123; <span class="number">1.0f</span>, <span class="number">0.0f</span>, <span class="number">0.0f</span>, <span class="number">1.0f</span> &#125; &#125;,</span><br><span class="line">	&#123; &#123; <span class="number">0.25f</span>, <span class="number">-0.25f</span> * m_aspectRatio, <span class="number">0.0f</span> &#125;, &#123; <span class="number">0.0f</span>, <span class="number">1.0f</span>, <span class="number">0.0f</span>, <span class="number">1.0f</span> &#125; &#125;,</span><br><span class="line">	&#123; &#123; <span class="number">-0.25f</span>, <span class="number">-0.25f</span> * m_aspectRatio, <span class="number">0.0f</span> &#125;, &#123; <span class="number">0.0f</span>, <span class="number">0.0f</span>, <span class="number">1.0f</span>, <span class="number">1.0f</span> &#125; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> UINT vertexBufferSize = <span class="keyword">sizeof</span>(triangleVertices);</span><br><span class="line">m_device-&gt;CreateCommittedResource(</span><br><span class="line">    &amp;CD3DX12_HEAP_PROERTIES(D3D12_HEAP_TYPE_UIPLOAD),</span><br><span class="line">    D3D12_HEAP_FLAG_NONE,</span><br><span class="line">    &amp;CD3DX12_RESOURCE_DESC::buffer(vertexBufferSize),</span><br><span class="line">    <span class="literal">nullptr</span>,</span><br><span class="line">    IID_PPV_ARGS(&amp;m_vertexBuffer)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 复制这个三角形数据到vertex buffer</span></span><br><span class="line">UINT8* pVertexDataBegin;</span><br><span class="line"><span class="function">CD3DX12_RANGE <span class="title">readRange</span><span class="params">(<span class="number">0</span>,<span class="number">0</span>)</span></span>;</span><br><span class="line">m_vertexBuffer-&gt;Map(<span class="number">0</span>,&amp;readRange,<span class="keyword">reinterpret_cast</span>&lt;<span class="keyword">void</span>**&gt;(&amp;pVertexDataBegin));</span><br><span class="line"><span class="built_in">memcpy</span>(pVertexDataBegin,triangleVertices,<span class="keyword">sizeof</span>(triangleVertices));</span><br><span class="line">m_vertexBuffer-&gt;Unmap(<span class="number">0</span>,<span class="literal">nullptr</span>);</span><br><span class="line"><span class="comment">//初始化vertexbuffer view</span></span><br><span class="line">m_vertexBufferView.BufferLocation = m_vertexBuffer-&gt;GetGPUVirtualAddress();</span><br><span class="line">m_vertexBufferView.StrideInBytes= <span class="keyword">sizeof</span>(Vertex);</span><br><span class="line">m_vertexBufferView.SizeInBytes = vertexBufferSize;</span><br></pre></td></tr></table></figure>
+<h2 id="五：创建Fence-异步并且等待assets被GPU加载"><a href="#五：创建Fence-异步并且等待assets被GPU加载" class="headerlink" title="五：创建Fence 异步并且等待assets被GPU加载"></a>五：创建Fence 异步并且等待assets被GPU加载</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ThrowIfFailed(m_device-&gt;CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&amp;m_fence)));</span><br><span class="line">m_fenceValue = 1;</span><br><span class="line">m_fenceEvent = CreateEvent(nullptr, FALSE, FALSE, nullptr);</span><br><span class="line">if (m_fenceEvent == nullptr)</span><br><span class="line">&#123;</span><br><span class="line">	ThrowIfFailed(HRESULT_FROM_WIN32(GetLastError()));</span><br><span class="line">&#125;</span><br><span class="line">WaitForPreviousFrame();</span><br></pre></td></tr></table></figure>
+<h2 id="六：-执行命令"><a href="#六：-执行命令" class="headerlink" title="六： 执行命令"></a>六： 执行命令</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 记录所有命令</span></span><br><span class="line">PopulateCommandList();</span><br><span class="line"><span class="comment">//执行命令</span></span><br><span class="line">ID3D12CcommandList* ppCommandList[] = &#123;m_commandList.Get()&#125;;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 命令列表不允许被CPU线程和GPU线程之间并发访问。为此命令列表被分为两种状态：记录和关闭</span></span><br><span class="line"><span class="comment">* 记录： 允许向其中添加命令</span></span><br><span class="line"><span class="comment">* 关闭： 允许将其作为ExecuteCommandLists的实参。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">m_commandQueue-&gt;ExecuteCommandLists(_countof(ppCommandLists),ppCommandLists);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 推送</span></span><br><span class="line">m_swapChain-&gt;Present(<span class="number">1</span>,<span class="number">0</span>);</span><br><span class="line">WaitForPreviousFrame();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">PopulateCommandList()</span><br><span class="line">&#123;</span><br><span class="line">    ThrowIfFailed(m_commandAllocator-&gt;Reset());</span><br><span class="line">    ThrowIfFailed(m_commandList-&gt;Reset(m_commandAllocator.Get(), m_pipelineState.Get()));</span><br><span class="line"></span><br><span class="line">	<span class="comment">//Set necessary state</span></span><br><span class="line">	m_commandList-&gt;SetGraphicsRootSignature(m_rootSignature.Get()); <span class="comment">// 控制是否启用IA阶段的输入布局和是否启用流输出阶段</span></span><br><span class="line">	m_commandList-&gt;RSSetViewports(<span class="number">1</span>, &amp;m_viewport); <span class="comment">// 设置光栅化阶段的视口数组</span></span><br><span class="line">	m_commandList-&gt;RSSetScissorRects(<span class="number">1</span>, &amp;m_scissorRect); <span class="comment">// 设置光栅化阶段的裁剪数组</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 投射viewtarget</span></span><br><span class="line">	m_commandList-&gt;ResourceBarrier(<span class="number">1</span>, &amp;CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_frameIndex].Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));</span><br><span class="line"></span><br><span class="line">	<span class="function">CD3DX12_CPU_DESCRIPTOR_HANDLE <span class="title">rtvHandle</span><span class="params">(m_rtvHeap-&gt;GetCPUDescriptorHandleForHeapStart(), m_frameIndex, m_rtvDescriptorSize)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置输出混合阶段的渲染目标</span></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">    * 指定渲染目标试图的数量，在DirectX12中最多指定8个渲染目标试图</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">	m_commandList-&gt;OMSetRenderTargets(<span class="number">1</span>, &amp;rtvHandle, FALSE, <span class="literal">nullptr</span>); </span><br><span class="line"></span><br><span class="line">	<span class="comment">// Record commands</span></span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">float</span> clearColor[] = &#123; <span class="number">0.f</span>,<span class="number">0.2f</span>,<span class="number">.4</span>f,<span class="number">1.f</span> &#125;;</span><br><span class="line">	m_commandList-&gt;ClearRenderTargetView(rtvHandle, clearColor, <span class="number">0</span>, <span class="literal">nullptr</span>);</span><br><span class="line">	m_commandList-&gt;IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST); <span class="comment">// 用于设置输入装配阶段的图元拓扑类类型</span></span><br><span class="line">	m_commandList-&gt;IASetVertexBuffers(<span class="number">0</span>, <span class="number">1</span>, &amp;m_vertexBufferView); <span class="comment">// 设置Vertex Buffer;</span></span><br><span class="line">	m_commandList-&gt;DrawInstanced(<span class="number">3</span>, <span class="number">1</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Indicate</span></span><br><span class="line">	m_commandList-&gt;ResourceBarrier(<span class="number">1</span>, &amp;CD3DX12_RESOURCE_BARRIER::Transition(m_renderTargets[m_frameIndex].Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));</span><br><span class="line"></span><br><span class="line">	ThrowIfFailed(m_commandList-&gt;Close());  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span> D3D12HelloTriangle::WaitForPreviousFrame()</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">const</span> UINT64 fence = m_fenceValue;</span><br><span class="line">	ThrowIfFailed(m_commandQueue-&gt;Signal(m_fence.Get(), fence));</span><br><span class="line">	m_fenceValue++;</span><br><span class="line">	<span class="keyword">if</span> (m_fence-&gt;GetCompletedValue()&lt;fence)</span><br><span class="line">	&#123;</span><br><span class="line">		ThrowIfFailed(m_fence-&gt;SetEventOnCompletion(fence, m_fenceEvent));</span><br><span class="line">		WaitForSingleObject(m_fenceEvent, INFINITE);</span><br><span class="line">	&#125;</span><br><span class="line">	m_frameIndex = m_swapChain-&gt;GetCurrentBackBufferIndex();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="附带shader-hlsl"><a href="#附带shader-hlsl" class="headerlink" title="附带shader.hlsl"></a>附带shader.hlsl</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">struct PSInput</span><br><span class="line">&#123;</span><br><span class="line">	float4 position : SV_POSITION;</span><br><span class="line">	float4 color : COLOR;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">PSInput VSMain(float4 position : POSITION, float4 color : COLOR)</span><br><span class="line">&#123;</span><br><span class="line">	PSInput result;</span><br><span class="line"></span><br><span class="line">	result.position = position;</span><br><span class="line">	result.color = color;</span><br><span class="line"></span><br><span class="line">	return result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">float4 PSMain(PSInput input) : SV_TARGET</span><br><span class="line">&#123;</span><br><span class="line">	return input.color;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="着色器类型：根签名对象。"><a href="#着色器类型：根签名对象。" class="headerlink" title="着色器类型：根签名对象。"></a>着色器类型：根签名对象。</h2><ol>
+<li>用D3D12_ROOT_SIGNTURE_DESC描述根签名对象，并调用D3D12SerializeRootSignature函数序列号生成根签名对象的字节码；</li>
+<li>用HLSL描述根签名对象，并编译生成根签名对象的字节码。</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/19/DirectX12-第二节/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1025,11 +1044,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">图形</a>
+                <a href="javascript:void(0)" class="js-tag color5">Directx12</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Directx12</a>
+                <a href="javascript:void(0)" class="js-tag color3">图形</a>
               </li>
             
             <div class="clearfix"></div>
