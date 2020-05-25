@@ -152,6 +152,84 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-光照" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/30/光照/">光照</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/30/光照/" class="archive-article-date">
+  	<time datetime="2019-04-30T02:36:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-30</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="基础光照"><a href="#基础光照" class="headerlink" title="基础光照"></a>基础光照</h2><p>冯氏光照：</p>
+<h3 id="环境光（Ambient）"><a href="#环境光（Ambient）" class="headerlink" title="环境光（Ambient）"></a>环境光（Ambient）</h3><p>来之不同分散的很多光源，全局照明算法。</p>
+<h3 id="漫反射（Diffuse）"><a href="#漫反射（Diffuse）" class="headerlink" title="漫反射（Diffuse）"></a>漫反射（Diffuse）</h3><p><strong>法向量</strong>： 一个垂直于顶点表面的向量<br><strong>定向的光线</strong>： 作为光源的位置与片段的位置之间向量差的方向向量。</p>
+<h3 id="镜面-（Specular）"><a href="#镜面-（Specular）" class="headerlink" title="镜面 （Specular）"></a>镜面 （Specular）</h3><p><strong>光照的方向向量</strong><br><strong>物体的法向量</strong><br>我们通过反射法向量周围光的方向来计算反射向量。然后我们计算反射向量和视线方向的角度差，如果夹角越小，那么镜面光的影响就会越大。它的作用效果就是，当我们去看光被物体所反射的那个方向的时候，我们会看到一个高光。</p>
+<p>镜面强度：<br>观察者位置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">// GL-shader</span><br><span class="line">//环境光 </span><br><span class="line">float ambientStrength = 0.1;</span><br><span class="line">vec3 ambient = ambientStrength * lightColor;</span><br><span class="line">// 漫反射</span><br><span class="line">vec3 norm = normailze(Normal);</span><br><span class="line">vec3 lightDir = normalize(lightPos - FragPos);</span><br><span class="line">float diff = max(dot(norm,lightDir),0.0);</span><br><span class="line">vec3 diffuse = diff * lightColor;</span><br><span class="line"></span><br><span class="line">// 高光</span><br><span class="line">float specularStrength = 0.5;</span><br><span class="line">vec3 viewDir = normalize(-FragPos);</span><br><span class="line">vec3 reflectDir = reflect(-lightDir,norm);</span><br><span class="line">float spec = pow(max(dot(viewDir,reflectDir),0.0),32);</span><br><span class="line">vec3 specular = specularStrength * spec * lightColor;</span><br><span class="line"></span><br><span class="line">// 结果</span><br><span class="line">vec3 result = (ambient + diffuse + specular) * objectColor;</span><br><span class="line">FragColor = vec4(result , 1.0);</span><br></pre></td></tr></table></figure>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">图形</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/30/光照/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-DirectX12-第三节" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -616,11 +694,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Directx12</a>
+                <a href="javascript:void(0)" class="js-tag color4">ue4</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ue4</a>
+                <a href="javascript:void(0)" class="js-tag color5">Directx12</a>
               </li>
              
               <li class="article-tag-list-item">
