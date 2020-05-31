@@ -76,6 +76,7 @@ typedef struct D3D12_HEAP_PROPERTIES
 	depthStencilDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
 	depthStencilDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
 
+    // 创建上传堆;
 	D3D12_CLEAR_VALUE optClear;
 	optClear.Format = mDepthStencilFormat;
 	optClear.DepthStencil.Depth = 1.0f;
@@ -88,6 +89,7 @@ typedef struct D3D12_HEAP_PROPERTIES
 		&optClear,
 		IID_PPV_ARGS( mDepthStencilBuffer.GetAddressOf( ) ) ) );
 
+    // 创建资源描述符
 	// Create descriptor to mip level 0 of entire resource using the format of the resource.
 	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc;
 	dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
@@ -96,6 +98,7 @@ typedef struct D3D12_HEAP_PROPERTIES
 	dsvDesc.Texture2D.MipSlice = 0;
 	md3dDevice->CreateDepthStencilView( mDepthStencilBuffer.Get( ), &dsvDesc, DepthStencilView( ) );
 
+    // 转换;
 	// Transition the resource from its initial state to be used as a depth buffer.
 	mCommandList->ResourceBarrier( 1, &CD3DX12_RESOURCE_BARRIER::Transition( mDepthStencilBuffer.Get( ),
 		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_DEPTH_WRITE ) );
