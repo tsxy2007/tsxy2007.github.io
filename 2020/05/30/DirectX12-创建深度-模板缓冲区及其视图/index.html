@@ -6,20 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>DirectX12-创建渲染目标视图 | 飞舞轻扬</title>
+  <title>DirectX12-创建深度/模板缓冲区及其视图 | 飞舞轻扬</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="资源不能与渲染流水线中的阶段直接绑定，所以我们必须先为资源创建视图（描述符），并将其绑定到流水线阶段。例如：为了将后台缓冲区绑定到流水线的输出合并阶段，需要为该后台缓冲区创建一个渲染目标视图。1.获取交换链中的缓冲区资源：123456HRESULT IDXGISwapChain::GetBuffer&amp;#123;    UINT Buffer, // 希望获得的特定后台缓冲区的索引    REFII">
+  <meta name="description" content="深度/模板缓冲区深度缓冲区其实就是一种2D纹理，存储着离观察者最近的可视对象的深度信息（如果使用了模板，还会附有模板信息）。纹理是一种GPU资源，因此我们要通过填写D3D12_RESOURCE_DESC结构体来描述纹理资源，再用ID3D12Device::CreateCommittedResource 方法来创建它。1234567891011121314151617181920212223type">
 <meta name="keywords" content="DirectX12">
 <meta property="og:type" content="article">
-<meta property="og:title" content="DirectX12-创建渲染目标视图">
-<meta property="og:url" content="http://yoursite.com/2020/05/27/DirectX12-创建渲染目标视图/index.html">
+<meta property="og:title" content="DirectX12-创建深度&#x2F;模板缓冲区及其视图">
+<meta property="og:url" content="http://yoursite.com/2020/05/30/DirectX12-创建深度-模板缓冲区及其视图/index.html">
 <meta property="og:site_name" content="飞舞轻扬">
-<meta property="og:description" content="资源不能与渲染流水线中的阶段直接绑定，所以我们必须先为资源创建视图（描述符），并将其绑定到流水线阶段。例如：为了将后台缓冲区绑定到流水线的输出合并阶段，需要为该后台缓冲区创建一个渲染目标视图。1.获取交换链中的缓冲区资源：123456HRESULT IDXGISwapChain::GetBuffer&amp;#123;    UINT Buffer, // 希望获得的特定后台缓冲区的索引    REFII">
+<meta property="og:description" content="深度/模板缓冲区深度缓冲区其实就是一种2D纹理，存储着离观察者最近的可视对象的深度信息（如果使用了模板，还会附有模板信息）。纹理是一种GPU资源，因此我们要通过填写D3D12_RESOURCE_DESC结构体来描述纹理资源，再用ID3D12Device::CreateCommittedResource 方法来创建它。1234567891011121314151617181920212223type">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-05-26T22:13:16.209Z">
+<meta property="og:updated_time" content="2020-05-31T03:43:57.743Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="DirectX12-创建渲染目标视图">
-<meta name="twitter:description" content="资源不能与渲染流水线中的阶段直接绑定，所以我们必须先为资源创建视图（描述符），并将其绑定到流水线阶段。例如：为了将后台缓冲区绑定到流水线的输出合并阶段，需要为该后台缓冲区创建一个渲染目标视图。1.获取交换链中的缓冲区资源：123456HRESULT IDXGISwapChain::GetBuffer&amp;#123;    UINT Buffer, // 希望获得的特定后台缓冲区的索引    REFII">
+<meta name="twitter:title" content="DirectX12-创建深度&#x2F;模板缓冲区及其视图">
+<meta name="twitter:description" content="深度/模板缓冲区深度缓冲区其实就是一种2D纹理，存储着离观察者最近的可视对象的深度信息（如果使用了模板，还会附有模板信息）。纹理是一种GPU资源，因此我们要通过填写D3D12_RESOURCE_DESC结构体来描述纹理资源，再用ID3D12Device::CreateCommittedResource 方法来创建它。1234567891011121314151617181920212223type">
   
     <link rel="alternative" href="/atom.xml" title="飞舞轻扬" type="application/atom+xml">
   
@@ -155,28 +155,30 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-DirectX12-创建渲染目标视图" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-DirectX12-创建深度-模板缓冲区及其视图" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      DirectX12-创建渲染目标视图
+      DirectX12-创建深度/模板缓冲区及其视图
     </h1>
   
 
         
-        <a href="/2020/05/27/DirectX12-创建渲染目标视图/" class="archive-article-date">
-  	<time datetime="2020-05-26T22:02:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-27</time>
+        <a href="/2020/05/30/DirectX12-创建深度-模板缓冲区及其视图/" class="archive-article-date">
+  	<time datetime="2020-05-30T02:49:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-30</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>资源不能与渲染流水线中的阶段直接绑定，所以我们必须先为资源创建视图（描述符），并将其绑定到流水线阶段。<br>例如：为了将后台缓冲区绑定到流水线的输出合并阶段，需要为该后台缓冲区创建一个渲染目标视图。<br>1.获取交换链中的缓冲区资源：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">HRESULT IDXGISwapChain::GetBuffer</span><br><span class="line">&#123;</span><br><span class="line">    UINT Buffer, // 希望获得的特定后台缓冲区的索引</span><br><span class="line">    REFIID riid,</span><br><span class="line">    void ** ppSurface// 返回一个指向ID3D12Resource接口的指针，这便是希望获得的后台的缓冲区。</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>2.使用ID3D12Device::CreateRenderTargetView方法来为获取的后台缓冲区创建渲染目标视图<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">void ID3D12Device::CreateRenderTargetView(</span><br><span class="line">    ID3D12Resource* pResource, // 指定用作渲染目标的资源</span><br><span class="line">    const D3D12_RENDER_TARGET_VIEW_DESC* pDesc,//指向D3D12_RENDER_TARGET_VIEW_DESC数据结构的实例的指针。</span><br><span class="line">    D3D12_CPU_DESCRIPTOR_HANDLE DestDescriptro//引用所创建渲染目标视图的描述符句柄</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHeapHandle( mRtvHeap-&gt;GetCPUDescriptorHandleForHeapStart( ) );</span><br><span class="line">	for (UINT i = 0; i &lt; SwapChainBufferCount; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		ThrowIfFailed( mSwapChain-&gt;GetBuffer( i, IID_PPV_ARGS( &amp;mSwapChainBuffer[i] ) ) );</span><br><span class="line">		md3dDevice-&gt;CreateRenderTargetView( mSwapChainBuffer[i].Get( ), nullptr, rtvHeapHandle );</span><br><span class="line">		rtvHeapHandle.Offset( 1, mRtvDescriptorSize );</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
+        <h2 id="深度-模板缓冲区"><a href="#深度-模板缓冲区" class="headerlink" title="深度/模板缓冲区"></a>深度/模板缓冲区</h2><p>深度缓冲区其实就是一种2D纹理，存储着离观察者最近的可视对象的深度信息（如果使用了模板，还会附有模板信息）。纹理是一种GPU资源，因此我们要通过填写D3D12_RESOURCE_DESC结构体来描述纹理资源，再用ID3D12Device::CreateCommittedResource 方法来创建它。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">typedef struct D3D12_RESOURCE_DESC</span><br><span class="line">    &#123;</span><br><span class="line">    D3D12_RESOURCE_DIMENSION Dimension; // 资源的维度</span><br><span class="line">    UINT64 Alignment; </span><br><span class="line">    UINT64 Width; // 以纹理为单位来表示的纹理宽度。对于缓冲区资源来说，此项是缓冲区占用的字节数</span><br><span class="line">    UINT Height; // 以纹理为单位来表示的纹理高度</span><br><span class="line">    UINT16 DepthOrArraySize; // 以文素为单位来表示的纹理深度，纹理数组的大小</span><br><span class="line">    UINT16 MipLevels; // mipmap 层级的数量。</span><br><span class="line">    DXGI_FORMAT Format; // DXGI_FORMAT枚举类型中的成员之一，用于指定纹素的格式。</span><br><span class="line">    DXGI_SAMPLE_DESC SampleDesc; // 多重采样的质量级别以及对每个像素的采样次数，</span><br><span class="line">    D3D12_TEXTURE_LAYOUT Layout; // 用于指定纹理的布局。</span><br><span class="line">    D3D12_RESOURCE_FLAGS Flags; // 资源有关的杂项标记。指定为D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL.</span><br><span class="line">    &#125; 	D3D12_RESOURCE_DESC;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    typedef enum D3D12_RESOURCE_DIMENSION</span><br><span class="line">    &#123;</span><br><span class="line">        D3D12_RESOURCE_DIMENSION_UNKNOWN	= 0,</span><br><span class="line">        D3D12_RESOURCE_DIMENSION_BUFFER	= 1,</span><br><span class="line">        D3D12_RESOURCE_DIMENSION_TEXTURE1D	= 2,</span><br><span class="line">        D3D12_RESOURCE_DIMENSION_TEXTURE2D	= 3,</span><br><span class="line">        D3D12_RESOURCE_DIMENSION_TEXTURE3D	= 4</span><br><span class="line">    &#125; 	D3D12_RESOURCE_DIMENSION;</span><br></pre></td></tr></table></figure></p>
+<pre><code>GPU资源都存于堆（heap）中，其本质是具有特定属性的GPU显存块。ID3D12Device::CreateCommittedResource方法将根据我们提供的属性创建一个资源与一个堆，并把该资源提交到这个堆中。
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">HRESULT STDMETHODCALLTYPE CreateCommittedResource( </span><br><span class="line">            _In_  const D3D12_HEAP_PROPERTIES *pHeapProperties, //（资源欲提交至的）堆所具有的属性。有一些属性是针对高级用法而设。</span><br><span class="line">            D3D12_HEAP_FLAGS HeapFlags, // 与堆有关的额外选项标记。通常设置为D3D12_HEAP_FLAG_NONE.</span><br><span class="line">            _In_  const D3D12_RESOURCE_DESC *pDesc, // 指向一个D3D12_RESOURCE_DESC实例的指针，用它描述待创建的资源。</span><br><span class="line">            D3D12_RESOURCE_STATES InitialResourceState, // 不管何时，每个资源都会处于一种特定的使用状态。在资源创建时，需要用此参数来设置它的初始状态。对于深度/模板缓冲区来说，通常设置为D3D12_RESOURCE_USAGE_INITTAL,我们随后就会将它的状态转换为D3D12_RESOURCE_STATE_COMMON,再利用ResourceBarrier方法辅以D3D12_RESOURCE_STATE_DEPTH_WRITE状态，将其转换为可以绑定在渲染流水线上的深度/模板缓冲区。</span><br><span class="line">            _In_opt_  const D3D12_CLEAR_VALUE *pOptimizedClearValue, // 指向一个D3D12_CLEAR_VALUE对象的指针。描述一个用于清除资源的优化值。</span><br><span class="line">            REFIID riidResource,</span><br><span class="line">            _COM_Outptr_opt_  void **ppvResource);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">typedef struct D3D12_HEAP_PROPERTIES</span><br><span class="line">    &#123;</span><br><span class="line">    D3D12_HEAP_TYPE Type;</span><br><span class="line">    D3D12_CPU_PAGE_PROPERTY CPUPageProperty;</span><br><span class="line">    D3D12_MEMORY_POOL MemoryPoolPreference;</span><br><span class="line">    UINT CreationNodeMask;</span><br><span class="line">    UINT VisibleNodeMask;</span><br><span class="line">    &#125; 	D3D12_HEAP_PROPERTIES;</span><br></pre></td></tr></table></figure>
+<p>实例代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">// Create the depth/stencil buffer and view.</span><br><span class="line">	D3D12_RESOURCE_DESC depthStencilDesc;</span><br><span class="line">	depthStencilDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;</span><br><span class="line">	depthStencilDesc.Alignment = 0;</span><br><span class="line">	depthStencilDesc.Width = mClientWidth;</span><br><span class="line">	depthStencilDesc.Height = mClientHeight;</span><br><span class="line">	depthStencilDesc.DepthOrArraySize = 1;</span><br><span class="line">	depthStencilDesc.MipLevels = 1;</span><br><span class="line"></span><br><span class="line">	// Correction 11/12/2016: SSAO chapter requires an SRV to the depth buffer to read from </span><br><span class="line">	// the depth buffer.  Therefore, because we need to create two views to the same resource:</span><br><span class="line">	//   1. SRV format: DXGI_FORMAT_R24_UNORM_X8_TYPELESS</span><br><span class="line">	//   2. DSV Format: DXGI_FORMAT_D24_UNORM_S8_UINT</span><br><span class="line">	// we need to create the depth buffer resource with a typeless format.  </span><br><span class="line">	depthStencilDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;</span><br><span class="line"></span><br><span class="line">	depthStencilDesc.SampleDesc.Count = m4xMsaaState ? 4 : 1;</span><br><span class="line">	depthStencilDesc.SampleDesc.Quality = m4xMsaaState ? (m4xMsaaQuality - 1) : 0;</span><br><span class="line">	depthStencilDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;</span><br><span class="line">	depthStencilDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;</span><br><span class="line"></span><br><span class="line">	D3D12_CLEAR_VALUE optClear;</span><br><span class="line">	optClear.Format = mDepthStencilFormat;</span><br><span class="line">	optClear.DepthStencil.Depth = 1.0f;</span><br><span class="line">	optClear.DepthStencil.Stencil = 0;</span><br><span class="line">	ThrowIfFailed( md3dDevice-&gt;CreateCommittedResource(</span><br><span class="line">		&amp;CD3DX12_HEAP_PROPERTIES( D3D12_HEAP_TYPE_DEFAULT ),</span><br><span class="line">		D3D12_HEAP_FLAG_NONE,</span><br><span class="line">		&amp;depthStencilDesc,</span><br><span class="line">		D3D12_RESOURCE_STATE_COMMON,</span><br><span class="line">		&amp;optClear,</span><br><span class="line">		IID_PPV_ARGS( mDepthStencilBuffer.GetAddressOf( ) ) ) );</span><br><span class="line"></span><br><span class="line">	// Create descriptor to mip level 0 of entire resource using the format of the resource.</span><br><span class="line">	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc;</span><br><span class="line">	dsvDesc.Flags = D3D12_DSV_FLAG_NONE;</span><br><span class="line">	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;</span><br><span class="line">	dsvDesc.Format = mDepthStencilFormat;</span><br><span class="line">	dsvDesc.Texture2D.MipSlice = 0;</span><br><span class="line">	md3dDevice-&gt;CreateDepthStencilView( mDepthStencilBuffer.Get( ), &amp;dsvDesc, DepthStencilView( ) );</span><br><span class="line"></span><br><span class="line">	// Transition the resource from its initial state to be used as a depth buffer.</span><br><span class="line">	mCommandList-&gt;ResourceBarrier( 1, &amp;CD3DX12_RESOURCE_BARRIER::Transition( mDepthStencilBuffer.Get( ),</span><br><span class="line">		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_DEPTH_WRITE ) );</span><br></pre></td></tr></table></figure></p>
 
       
 
@@ -267,7 +269,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/05/27/DirectX12-创建渲染目标视图/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/05/30/DirectX12-创建深度-模板缓冲区及其视图/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -281,18 +283,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2020/05/30/DirectX12-创建深度-模板缓冲区及其视图/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          DirectX12-创建深度/模板缓冲区及其视图
-        
-      </div>
-    </a>
   
-  
-    <a href="/2020/05/27/DirectX12-创建描述符堆/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">DirectX12-创建描述符堆</div>
+    <a href="/2020/05/27/DirectX12-创建渲染目标视图/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">DirectX12-创建渲染目标视图</div>
       <i class="icon-circle-right"></i>
     </a>
   
