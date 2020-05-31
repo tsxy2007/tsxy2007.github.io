@@ -152,6 +152,85 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-DirectX12-设置视口" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/31/DirectX12-设置视口/">DirectX12-设置视口</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/31/DirectX12-设置视口/" class="archive-article-date">
+  	<time datetime="2020-05-31T08:38:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="设置视口"><a href="#设置视口" class="headerlink" title="设置视口"></a>设置视口</h1><pre><code>我们通常会将3D场景绘制到与整个屏幕（在全屏模式下）或整个窗口工作区大小相当的后台缓冲区中。如果只想绘制到后台缓冲区的某个矩形子区域中。我们把后台缓冲区中的矩形子区域叫做视口，一下时结构体描述它：
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">typedef struct D3D12_VIEWPORT</span><br><span class="line">&#123;</span><br><span class="line">    FLOAT TopLeftX;</span><br><span class="line">    FLOAT TopLeftY;</span><br><span class="line">    FLOAT Width;</span><br><span class="line">    FLOAT Height;</span><br><span class="line">    FLOAT MinDepth; // 最小深度值</span><br><span class="line">    FLOAT MAXDepth; // 最大深度值</span><br><span class="line">&#125; D3D12_VIEWPORT ;</span><br></pre></td></tr></table></figure>
+</code></pre><h2 id="TIP"><a href="#TIP" class="headerlink" title="TIP:"></a>TIP:</h2><p>1.不能为同一个渲染目标指定多个视口，而多视口则是一种用于对多个渲染目标同时进行渲染的高级技术。<br>2.命令列表一旦被重置，视口也需要随之而重置。</p>
+<h1 id="设置裁剪矩形："><a href="#设置裁剪矩形：" class="headerlink" title="设置裁剪矩形："></a>设置裁剪矩形：</h1><p>我们可以在相对于后台缓冲区定义一个裁剪矩形，在此矩形外的像素都将被剔除，这个方法用于优化程序性能。<br>裁剪矩形由类型为RECT的D3D12_RECT结构体定义而成：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">typedef struct tagRECT</span><br><span class="line">&#123;</span><br><span class="line">    LONG left;</span><br><span class="line">    LONG top;</span><br><span class="line">    LONG right;</span><br><span class="line">    LONG bottom;</span><br><span class="line">&#125; RECT;</span><br></pre></td></tr></table></figure></p>
+<p>在Direct3D中，要用ID3D12GraphicsCommandList::RSSetScissorRects 方法来设置裁剪矩形。下面的示例将创建并设置一个覆盖后台缓冲区左上角1/4 区域的裁剪矩形：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mScissorRect = &#123;0,0,mClientWidth/2,mClientHeight/2&#125;;</span><br><span class="line">mCommandList-&gt;RSSetScissorRects(1,&amp;mScissorRect); // 数量/指针</span><br></pre></td></tr></table></figure></p>
+<h2 id="TIP："><a href="#TIP：" class="headerlink" title="TIP："></a>TIP：</h2><p>不能为同一个渲染目标指定多个裁剪矩形。 多裁剪矩形是一种用于同时对多个渲染目标进行渲染的高级技术。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/31/DirectX12-设置视口/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-DirectX12-创建深度-模板缓冲区及其视图" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -175,7 +254,7 @@
         <h2 id="深度-模板缓冲区"><a href="#深度-模板缓冲区" class="headerlink" title="深度/模板缓冲区"></a>深度/模板缓冲区</h2><p>深度缓冲区其实就是一种2D纹理，存储着离观察者最近的可视对象的深度信息（如果使用了模板，还会附有模板信息）。纹理是一种GPU资源，因此我们要通过填写D3D12_RESOURCE_DESC结构体来描述纹理资源，再用ID3D12Device::CreateCommittedResource 方法来创建它。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">typedef struct D3D12_RESOURCE_DESC</span><br><span class="line">    &#123;</span><br><span class="line">    D3D12_RESOURCE_DIMENSION Dimension; // 资源的维度</span><br><span class="line">    UINT64 Alignment; </span><br><span class="line">    UINT64 Width; // 以纹理为单位来表示的纹理宽度。对于缓冲区资源来说，此项是缓冲区占用的字节数</span><br><span class="line">    UINT Height; // 以纹理为单位来表示的纹理高度</span><br><span class="line">    UINT16 DepthOrArraySize; // 以文素为单位来表示的纹理深度，纹理数组的大小</span><br><span class="line">    UINT16 MipLevels; // mipmap 层级的数量。</span><br><span class="line">    DXGI_FORMAT Format; // DXGI_FORMAT枚举类型中的成员之一，用于指定纹素的格式。</span><br><span class="line">    DXGI_SAMPLE_DESC SampleDesc; // 多重采样的质量级别以及对每个像素的采样次数，</span><br><span class="line">    D3D12_TEXTURE_LAYOUT Layout; // 用于指定纹理的布局。</span><br><span class="line">    D3D12_RESOURCE_FLAGS Flags; // 资源有关的杂项标记。指定为D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL.</span><br><span class="line">    &#125; 	D3D12_RESOURCE_DESC;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    typedef enum D3D12_RESOURCE_DIMENSION</span><br><span class="line">    &#123;</span><br><span class="line">        D3D12_RESOURCE_DIMENSION_UNKNOWN	= 0,</span><br><span class="line">        D3D12_RESOURCE_DIMENSION_BUFFER	= 1,</span><br><span class="line">        D3D12_RESOURCE_DIMENSION_TEXTURE1D	= 2,</span><br><span class="line">        D3D12_RESOURCE_DIMENSION_TEXTURE2D	= 3,</span><br><span class="line">        D3D12_RESOURCE_DIMENSION_TEXTURE3D	= 4</span><br><span class="line">    &#125; 	D3D12_RESOURCE_DIMENSION;</span><br></pre></td></tr></table></figure></p>
 <pre><code>GPU资源都存于堆（heap）中，其本质是具有特定属性的GPU显存块。ID3D12Device::CreateCommittedResource方法将根据我们提供的属性创建一个资源与一个堆，并把该资源提交到这个堆中。
 </code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">HRESULT STDMETHODCALLTYPE CreateCommittedResource( </span><br><span class="line">            _In_  const D3D12_HEAP_PROPERTIES *pHeapProperties, //（资源欲提交至的）堆所具有的属性。有一些属性是针对高级用法而设。</span><br><span class="line">            D3D12_HEAP_FLAGS HeapFlags, // 与堆有关的额外选项标记。通常设置为D3D12_HEAP_FLAG_NONE.</span><br><span class="line">            _In_  const D3D12_RESOURCE_DESC *pDesc, // 指向一个D3D12_RESOURCE_DESC实例的指针，用它描述待创建的资源。</span><br><span class="line">            D3D12_RESOURCE_STATES InitialResourceState, // 不管何时，每个资源都会处于一种特定的使用状态。在资源创建时，需要用此参数来设置它的初始状态。对于深度/模板缓冲区来说，通常设置为D3D12_RESOURCE_USAGE_INITTAL,我们随后就会将它的状态转换为D3D12_RESOURCE_STATE_COMMON,再利用ResourceBarrier方法辅以D3D12_RESOURCE_STATE_DEPTH_WRITE状态，将其转换为可以绑定在渲染流水线上的深度/模板缓冲区。</span><br><span class="line">            _In_opt_  const D3D12_CLEAR_VALUE *pOptimizedClearValue, // 指向一个D3D12_CLEAR_VALUE对象的指针。描述一个用于清除资源的优化值。</span><br><span class="line">            REFIID riidResource,</span><br><span class="line">            _COM_Outptr_opt_  void **ppvResource);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">typedef struct D3D12_HEAP_PROPERTIES</span><br><span class="line">    &#123;</span><br><span class="line">    D3D12_HEAP_TYPE Type;</span><br><span class="line">    D3D12_CPU_PAGE_PROPERTY CPUPageProperty;</span><br><span class="line">    D3D12_MEMORY_POOL MemoryPoolPreference;</span><br><span class="line">    UINT CreationNodeMask;</span><br><span class="line">    UINT VisibleNodeMask;</span><br><span class="line">    &#125; 	D3D12_HEAP_PROPERTIES;</span><br></pre></td></tr></table></figure>
-<p>实例代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">// Create the depth/stencil buffer and view.</span><br><span class="line">	D3D12_RESOURCE_DESC depthStencilDesc;</span><br><span class="line">	depthStencilDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;</span><br><span class="line">	depthStencilDesc.Alignment = 0;</span><br><span class="line">	depthStencilDesc.Width = mClientWidth;</span><br><span class="line">	depthStencilDesc.Height = mClientHeight;</span><br><span class="line">	depthStencilDesc.DepthOrArraySize = 1;</span><br><span class="line">	depthStencilDesc.MipLevels = 1;</span><br><span class="line"></span><br><span class="line">	// Correction 11/12/2016: SSAO chapter requires an SRV to the depth buffer to read from </span><br><span class="line">	// the depth buffer.  Therefore, because we need to create two views to the same resource:</span><br><span class="line">	//   1. SRV format: DXGI_FORMAT_R24_UNORM_X8_TYPELESS</span><br><span class="line">	//   2. DSV Format: DXGI_FORMAT_D24_UNORM_S8_UINT</span><br><span class="line">	// we need to create the depth buffer resource with a typeless format.  </span><br><span class="line">	depthStencilDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;</span><br><span class="line"></span><br><span class="line">	depthStencilDesc.SampleDesc.Count = m4xMsaaState ? 4 : 1;</span><br><span class="line">	depthStencilDesc.SampleDesc.Quality = m4xMsaaState ? (m4xMsaaQuality - 1) : 0;</span><br><span class="line">	depthStencilDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;</span><br><span class="line">	depthStencilDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;</span><br><span class="line"></span><br><span class="line">	D3D12_CLEAR_VALUE optClear;</span><br><span class="line">	optClear.Format = mDepthStencilFormat;</span><br><span class="line">	optClear.DepthStencil.Depth = 1.0f;</span><br><span class="line">	optClear.DepthStencil.Stencil = 0;</span><br><span class="line">	ThrowIfFailed( md3dDevice-&gt;CreateCommittedResource(</span><br><span class="line">		&amp;CD3DX12_HEAP_PROPERTIES( D3D12_HEAP_TYPE_DEFAULT ),</span><br><span class="line">		D3D12_HEAP_FLAG_NONE,</span><br><span class="line">		&amp;depthStencilDesc,</span><br><span class="line">		D3D12_RESOURCE_STATE_COMMON,</span><br><span class="line">		&amp;optClear,</span><br><span class="line">		IID_PPV_ARGS( mDepthStencilBuffer.GetAddressOf( ) ) ) );</span><br><span class="line"></span><br><span class="line">	// Create descriptor to mip level 0 of entire resource using the format of the resource.</span><br><span class="line">	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc;</span><br><span class="line">	dsvDesc.Flags = D3D12_DSV_FLAG_NONE;</span><br><span class="line">	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;</span><br><span class="line">	dsvDesc.Format = mDepthStencilFormat;</span><br><span class="line">	dsvDesc.Texture2D.MipSlice = 0;</span><br><span class="line">	md3dDevice-&gt;CreateDepthStencilView( mDepthStencilBuffer.Get( ), &amp;dsvDesc, DepthStencilView( ) );</span><br><span class="line"></span><br><span class="line">	// Transition the resource from its initial state to be used as a depth buffer.</span><br><span class="line">	mCommandList-&gt;ResourceBarrier( 1, &amp;CD3DX12_RESOURCE_BARRIER::Transition( mDepthStencilBuffer.Get( ),</span><br><span class="line">		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_DEPTH_WRITE ) );</span><br></pre></td></tr></table></figure></p>
+<p>实例代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">// Create the depth/stencil buffer and view.</span><br><span class="line">	D3D12_RESOURCE_DESC depthStencilDesc;</span><br><span class="line">	depthStencilDesc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;</span><br><span class="line">	depthStencilDesc.Alignment = 0;</span><br><span class="line">	depthStencilDesc.Width = mClientWidth;</span><br><span class="line">	depthStencilDesc.Height = mClientHeight;</span><br><span class="line">	depthStencilDesc.DepthOrArraySize = 1;</span><br><span class="line">	depthStencilDesc.MipLevels = 1;</span><br><span class="line"></span><br><span class="line">	// Correction 11/12/2016: SSAO chapter requires an SRV to the depth buffer to read from </span><br><span class="line">	// the depth buffer.  Therefore, because we need to create two views to the same resource:</span><br><span class="line">	//   1. SRV format: DXGI_FORMAT_R24_UNORM_X8_TYPELESS</span><br><span class="line">	//   2. DSV Format: DXGI_FORMAT_D24_UNORM_S8_UINT</span><br><span class="line">	// we need to create the depth buffer resource with a typeless format.  </span><br><span class="line">	depthStencilDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;</span><br><span class="line"></span><br><span class="line">	depthStencilDesc.SampleDesc.Count = m4xMsaaState ? 4 : 1;</span><br><span class="line">	depthStencilDesc.SampleDesc.Quality = m4xMsaaState ? (m4xMsaaQuality - 1) : 0;</span><br><span class="line">	depthStencilDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;</span><br><span class="line">	depthStencilDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;</span><br><span class="line"></span><br><span class="line">    // 创建上传堆;</span><br><span class="line">	D3D12_CLEAR_VALUE optClear;</span><br><span class="line">	optClear.Format = mDepthStencilFormat;</span><br><span class="line">	optClear.DepthStencil.Depth = 1.0f;</span><br><span class="line">	optClear.DepthStencil.Stencil = 0;</span><br><span class="line">	ThrowIfFailed( md3dDevice-&gt;CreateCommittedResource(</span><br><span class="line">		&amp;CD3DX12_HEAP_PROPERTIES( D3D12_HEAP_TYPE_DEFAULT ),</span><br><span class="line">		D3D12_HEAP_FLAG_NONE,</span><br><span class="line">		&amp;depthStencilDesc,</span><br><span class="line">		D3D12_RESOURCE_STATE_COMMON,</span><br><span class="line">		&amp;optClear,</span><br><span class="line">		IID_PPV_ARGS( mDepthStencilBuffer.GetAddressOf( ) ) ) );</span><br><span class="line"></span><br><span class="line">    // 创建资源描述符</span><br><span class="line">	// Create descriptor to mip level 0 of entire resource using the format of the resource.</span><br><span class="line">	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc;</span><br><span class="line">	dsvDesc.Flags = D3D12_DSV_FLAG_NONE;</span><br><span class="line">	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;</span><br><span class="line">	dsvDesc.Format = mDepthStencilFormat;</span><br><span class="line">	dsvDesc.Texture2D.MipSlice = 0;</span><br><span class="line">	md3dDevice-&gt;CreateDepthStencilView( mDepthStencilBuffer.Get( ), &amp;dsvDesc, DepthStencilView( ) );</span><br><span class="line"></span><br><span class="line">    // 转换;</span><br><span class="line">	// Transition the resource from its initial state to be used as a depth buffer.</span><br><span class="line">	mCommandList-&gt;ResourceBarrier( 1, &amp;CD3DX12_RESOURCE_BARRIER::Transition( mDepthStencilBuffer.Get( ),</span><br><span class="line">		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_DEPTH_WRITE ) );</span><br></pre></td></tr></table></figure></p>
 
       
 
@@ -851,83 +930,6 @@ b) D3D12_COMMAND_LIST_TYPE_BUNDLE. 将命令打包（集合），构建命令列
 
 
   
-    <article id="post-C++记录精确时间" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/05/21/C++记录精确时间/">c++记录精确时间</a>
-    </h1>
-  
-
-        
-        <a href="/2020/05/21/C++记录精确时间/" class="archive-article-date">
-  	<time datetime="2020-05-21T01:53:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>需要包含头文件</p>
-<h2 id="精确时间"><a href="#精确时间" class="headerlink" title="精确时间"></a>精确时间</h2><p>bool QueryPerformanceFrequency(<em>Out</em> LARGE_INTEGER *lpFrequency);<br>返回硬件支持的高精度计数器频率; </p>
-<h2 id="获取机器内部时钟计数"><a href="#获取机器内部时钟计数" class="headerlink" title="获取机器内部时钟计数"></a>获取机器内部时钟计数</h2><p>QueryPerformanceCounter(LARGE_INTEGER* lpPerformanceCount);</p>
-<p>代码如下<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 记录频率</span></span><br><span class="line">    __int64 countsPerSec;</span><br><span class="line">    QueryPerformanceFrequency((LARGE_INTEGER*&amp;countsPerSec);</span><br><span class="line"></span><br><span class="line">    LARGE_INTEGER nBeginTime;</span><br><span class="line">    LARGE_INTEGER nEndTime;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取计数器</span></span><br><span class="line">    QueryPerformanceCounter(&amp;nBeginTime);</span><br><span class="line"></span><br><span class="line">    Sleep(<span class="number">1000</span>);</span><br><span class="line"><span class="comment">// 结束计数器</span></span><br><span class="line">      QueryPerformanceCounter(&amp;nEndTime);</span><br><span class="line"></span><br><span class="line"><span class="comment">//转换获取时间差</span></span><br><span class="line">      <span class="keyword">double</span> Time = (<span class="keyword">double</span>)(nEndTime.QuadPart - nBeginTime.QuadPart) / countsPerSec;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">c++</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/05/21/C++记录精确时间/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1025,19 +1027,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">DirectX12</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">c++</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ue4</a>
+                <a href="javascript:void(0)" class="js-tag color5">DirectX12</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Directx12</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ue4</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Tag: 图形 | 飞舞轻扬</title>
+  <title>DirectX12-设置视口 | 飞舞轻扬</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="飞舞轻扬">
-<meta property="og:url" content="http://yoursite.com/tags/图形/index.html">
+  <meta name="description" content="设置视口我们通常会将3D场景绘制到与整个屏幕（在全屏模式下）或整个窗口工作区大小相当的后台缓冲区中。如果只想绘制到后台缓冲区的某个矩形子区域中。我们把后台缓冲区中的矩形子区域叫做视口，一下时结构体描述它： 123456789typedef struct D3D12_VIEWPORT&amp;#123;    FLOAT TopLeftX;    FLOAT TopLeftY;    FLOAT Width">
+<meta name="keywords" content="DirectX12">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DirectX12-设置视口">
+<meta property="og:url" content="http://yoursite.com/2020/05/31/DirectX12-设置视口/index.html">
 <meta property="og:site_name" content="飞舞轻扬">
+<meta property="og:description" content="设置视口我们通常会将3D场景绘制到与整个屏幕（在全屏模式下）或整个窗口工作区大小相当的后台缓冲区中。如果只想绘制到后台缓冲区的某个矩形子区域中。我们把后台缓冲区中的矩形子区域叫做视口，一下时结构体描述它： 123456789typedef struct D3D12_VIEWPORT&amp;#123;    FLOAT TopLeftX;    FLOAT TopLeftY;    FLOAT Width">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-05-31T09:21:03.757Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="飞舞轻扬">
+<meta name="twitter:title" content="DirectX12-设置视口">
+<meta name="twitter:description" content="设置视口我们通常会将3D场景绘制到与整个屏幕（在全屏模式下）或整个窗口工作区大小相当的后台缓冲区中。如果只想绘制到后台缓冲区的某个矩形子区域中。我们把后台缓冲区中的矩形子区域叫做视口，一下时结构体描述它： 123456789typedef struct D3D12_VIEWPORT&amp;#123;    FLOAT TopLeftX;    FLOAT TopLeftY;    FLOAT Width">
   
     <link rel="alternative" href="/atom.xml" title="飞舞轻扬" type="application/atom+xml">
   
@@ -150,60 +155,172 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-DirectX12-设置视口" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/04/30/光照/" class="archive-article-date">
-  	<time datetime="2019-04-30T02:36:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-30</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/04/30/光照/">光照</a>
+    <h1 class="article-title" itemprop="name">
+      DirectX12-设置视口
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2020/05/31/DirectX12-设置视口/" class="archive-article-date">
+  	<time datetime="2020-05-31T08:38:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="设置视口"><a href="#设置视口" class="headerlink" title="设置视口"></a>设置视口</h1><pre><code>我们通常会将3D场景绘制到与整个屏幕（在全屏模式下）或整个窗口工作区大小相当的后台缓冲区中。如果只想绘制到后台缓冲区的某个矩形子区域中。我们把后台缓冲区中的矩形子区域叫做视口，一下时结构体描述它：
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">typedef struct D3D12_VIEWPORT</span><br><span class="line">&#123;</span><br><span class="line">    FLOAT TopLeftX;</span><br><span class="line">    FLOAT TopLeftY;</span><br><span class="line">    FLOAT Width;</span><br><span class="line">    FLOAT Height;</span><br><span class="line">    FLOAT MinDepth; // 最小深度值</span><br><span class="line">    FLOAT MAXDepth; // 最大深度值</span><br><span class="line">&#125; D3D12_VIEWPORT ;</span><br></pre></td></tr></table></figure>
+</code></pre><h2 id="TIP"><a href="#TIP" class="headerlink" title="TIP:"></a>TIP:</h2><p>1.不能为同一个渲染目标指定多个视口，而多视口则是一种用于对多个渲染目标同时进行渲染的高级技术。<br>2.命令列表一旦被重置，视口也需要随之而重置。</p>
+<h1 id="设置裁剪矩形："><a href="#设置裁剪矩形：" class="headerlink" title="设置裁剪矩形："></a>设置裁剪矩形：</h1><p>我们可以在相对于后台缓冲区定义一个裁剪矩形，在此矩形外的像素都将被剔除，这个方法用于优化程序性能。<br>裁剪矩形由类型为RECT的D3D12_RECT结构体定义而成：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">typedef struct tagRECT</span><br><span class="line">&#123;</span><br><span class="line">    LONG left;</span><br><span class="line">    LONG top;</span><br><span class="line">    LONG right;</span><br><span class="line">    LONG bottom;</span><br><span class="line">&#125; RECT;</span><br></pre></td></tr></table></figure></p>
+<p>在Direct3D中，要用ID3D12GraphicsCommandList::RSSetScissorRects 方法来设置裁剪矩形。下面的示例将创建并设置一个覆盖后台缓冲区左上角1/4 区域的裁剪矩形：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mScissorRect = &#123;0,0,mClientWidth/2,mClientHeight/2&#125;;</span><br><span class="line">mCommandList-&gt;RSSetScissorRects(1,&amp;mScissorRect); // 数量/指针</span><br></pre></td></tr></table></figure></p>
+<h2 id="TIP："><a href="#TIP：" class="headerlink" title="TIP："></a>TIP：</h2><p>不能为同一个渲染目标指定多个裁剪矩形。 多裁剪矩形是一种用于同时对多个渲染目标进行渲染的高级技术。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">图形</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/05/31/DirectX12-设置视口/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2020/05/30/DirectX12-创建深度-模板缓冲区及其视图/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">DirectX12-创建深度/模板缓冲区及其视图</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -226,9 +343,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
