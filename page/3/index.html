@@ -6,11 +6,11 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives | 飞舞轻扬</title>
+  <title>飞舞轻扬</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta property="og:type" content="website">
 <meta property="og:title" content="飞舞轻扬">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+<meta property="og:url" content="http://yoursite.com/page/3/index.html">
 <meta property="og:site_name" content="飞舞轻扬">
 <meta property="og:locale" content="default">
 <meta name="twitter:card" content="summary">
@@ -152,34 +152,44 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-DirectX12-第一节" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/13/DirectX12-第一节/">DirectX12-第一节</a>
+    </h1>
+  
+
+        
+        <a href="/2019/04/13/DirectX12-第一节/" class="archive-article-date">
+  	<time datetime="2019-04-12T16:02:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-13</time>
+</a>
+        
+      </header>
     
-    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一：创建Device"><a href="#一：创建Device" class="headerlink" title="一：创建Device"></a>一：创建Device</h2><h3 id="1-创建Factory"><a href="#1-创建Factory" class="headerlink" title="1.创建Factory"></a>1.创建Factory</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">UINT dxgiFactoryFlags = 0;</span><br><span class="line">ComPtr&lt;IDXGIFactory6&gt; factory;</span><br><span class="line">CreateDXGIFactory2(dxgiFactoryFlags,IID_PPV_ARGS(&amp;factory));</span><br></pre></td></tr></table></figure>
+<h3 id="2-创建上下文-Adapter"><a href="#2-创建上下文-Adapter" class="headerlink" title="2.创建上下文 Adapter"></a>2.创建上下文 Adapter</h3> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">factory-&gt;EnumWarpAdapter(IID_PPV_ARGS(&amp;warpAdapter));</span><br></pre></td></tr></table></figure>
+<h3 id="3-创建Device"><a href="#3-创建Device" class="headerlink" title="3.创建Device"></a>3.创建Device</h3> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">D3D12CreateDevice(warpAdapter.Get(),D3D_FEATURE_LEVEL_11_0,IID_PPV_ARGS(&amp;m_device)); </span><br><span class="line">// DirectX 12 需要设置为 D3D_FEATURE_LEVEL_11_0 或者以上</span><br></pre></td></tr></table></figure>
+<h2 id="二：-创建命令队列"><a href="#二：-创建命令队列" class="headerlink" title="二： 创建命令队列"></a>二： 创建命令队列</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">D3D12_COMMAND_QUEUE_DESC queueDesc = &#123;&#125;;</span><br><span class="line">queueDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;</span><br><span class="line">queueDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;</span><br><span class="line">m_device-&gt;CreateCommandQueue(&amp;queueDesc,IID_PPV_ARGS(&amp;m_commandQueue));</span><br></pre></td></tr></table></figure>
+<h3 id="Type-类型："><a href="#Type-类型：" class="headerlink" title="Type 类型："></a>Type 类型：</h3><p>D3D12_COMMAND_LIST_TYPE_DIRECT（直接命令队列）;<br>D3D12_COMMAND_LIST_TYPE_BUNDLE（捆绑包）;<br>D3D12_COMMAND_LIST_TYPE_COMPUTE（计算命令队列）;<br>D3D12_COMMAND_LIST_TYPE_COPY（复制命令队列）;<br>D3D12_COMMAND_LIST_TYPE_VIDEO_DECODE（视频解码命令队列）;<br>D3D12_COMMAND_LIST_TYPE_VIDEO_PROCESS（视频处理命令队列）;</p>
+<h2 id="三：创建交换缓存区"><a href="#三：创建交换缓存区" class="headerlink" title="三：创建交换缓存区"></a>三：创建交换缓存区</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">DXGI_SWAP_CHAIN_DESC1 swapChainDesc = &#123;&#125;;</span><br><span class="line">swapChainDesc.BufferCount = 3;</span><br><span class="line">swapChainDesc.Width = 1280;</span><br><span class="line">swapChainDesc.Height = 800;</span><br><span class="line">swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;</span><br><span class="line">swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;</span><br><span class="line">swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;</span><br><span class="line">swapChainDesc.SampleDesc.Count = 1;</span><br><span class="line"></span><br><span class="line">ComPtr&lt;IDXGISwapChain&gt; swapChain;</span><br><span class="line">factory-&gt;CreateSwapChainForHwnd(</span><br><span class="line">    m_commandQueue.Get(),</span><br><span class="line">    Win32Application::GetHwnd();</span><br><span class="line">    &amp;swapChainDesc,</span><br><span class="line">    nullptr,</span><br><span class="line">    nullptr,</span><br><span class="line">    &amp;swapChain</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h2 id="四-创建描述符堆对象"><a href="#四-创建描述符堆对象" class="headerlink" title="四.创建描述符堆对象"></a>四.创建描述符堆对象</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">D3D12_DESCRIPTOR_HEAP_DESC rtvHeapDesc = &#123;&#125;;</span><br><span class="line">rtvHeapDesc.NumDescriptors = 3;</span><br><span class="line">rtvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;</span><br><span class="line">rtvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;</span><br><span class="line">m_device-&gt;CreateDescriptorHeap(&amp;rtvHeapDesc,IID_PPV_ARGS(&amp;m_rtvHeap));</span><br><span class="line">m_rtvDescriptorSize = m_device-&gt;GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);</span><br></pre></td></tr></table></figure>
+<h3 id="Type"><a href="#Type" class="headerlink" title="Type"></a>Type</h3><p><strong>D3D12_DESCRIPTOR_HEAP_TYPE : 指定堆中描述符类型的类型化值</strong>。<br>  D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV （用于组合常量缓冲区、着色器资源和无序访问视图的描述符堆。）,<br>  D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER（采样器的描述符堆。）,<br>  D3D12_DESCRIPTOR_HEAP_TYPE_RTV（目标视图的描述符堆。）,<br>  D3D12_DESCRIPTOR_HEAP_TYPE_DSV（深度模板视图的描述符堆。）,<br>  D3D12_DESCRIPTOR_HEAP_TYPE_NUM_TYPES（描述符堆的类型数。）</p>
+<h3 id="Flags"><a href="#Flags" class="headerlink" title="Flags"></a>Flags</h3><p><strong>D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE</strong>:可以在描述符堆上选择性地设置D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE标志，以指示它被绑定在命令列表上，以供着色器引用。没有此标志创建的描述符堆允许应用程序在将描述符复制到着色器可见描述符堆之前在CPU内存中阶段描述符，这是一种便利。但是，应用程序也可以直接将描述符创建为着色器可见描述符堆，而不需要在CPU上执行任何操作。此标志仅适用于CBV、SRV、UAV和采样器。它不适用于其他描述符堆类型，因为着色器不直接引用其他类型。<br><strong>D3D12_DESCRIPTOR_HEAP_FLAG_NONE</strong>: 默认</p>
+<h2 id="五-创建RenderTargetView"><a href="#五-创建RenderTargetView" class="headerlink" title="五.创建RenderTargetView"></a>五.创建RenderTargetView</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(m_rtvHeap-&gt;GetCPUDescriptorHandleForHeapStart());</span><br><span class="line">for (UINT i = 0; i &lt; FrameCount; i++)</span><br><span class="line">&#123;</span><br><span class="line">	ThrowIfFailed(m_swapChain-&gt;GetBuffer(i, IID_PPV_ARGS(&amp;m_renderTargets[i])));</span><br><span class="line">	m_device-&gt;CreateRenderTargetView(m_renderTargets[i].Get(), nullptr, rtvHandle);</span><br><span class="line">	rtvHandle.Offset(1, m_rtvDescriptorSize);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="六-创建命令分配器"><a href="#六-创建命令分配器" class="headerlink" title="六.创建命令分配器"></a>六.创建命令分配器</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">m_device-&gt;CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT,IID_PPV_ARGS(&amp;m_commandAllocator));</span><br></pre></td></tr></table></figure>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/06/03/DirectX12-渲染流水线/" class="archive-article-date">
-  	<time datetime="2020-06-03T05:42:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-03</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/06/03/DirectX12-渲染流水线/">DirectX12-渲染流水线</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -191,363 +201,43 @@
 		</ul>
 	</div>
 
-          
+      
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/04/13/DirectX12-第一节/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/05/31/DirectX12-设置视口/" class="archive-article-date">
-  	<time datetime="2020-05-31T08:38:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-31</time>
-</a>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/05/31/DirectX12-设置视口/">DirectX12-设置视口</a>
-    </h1>
-  
+        
+        
+    </div>
+</aside>
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
-        		</li>
-      		
-		</ul>
-	</div>
 
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/05/30/DirectX12-创建深度-模板缓冲区及其视图/" class="archive-article-date">
-  	<time datetime="2020-05-30T02:49:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-30</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/05/30/DirectX12-创建深度-模板缓冲区及其视图/">DirectX12-创建深度/模板缓冲区及其视图</a>
-    </h1>
-  
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/05/27/DirectX12-创建渲染目标视图/" class="archive-article-date">
-  	<time datetime="2020-05-26T22:02:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-27</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/05/27/DirectX12-创建渲染目标视图/">DirectX12-创建渲染目标视图</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/05/27/DirectX12-创建描述符堆/" class="archive-article-date">
-  	<time datetime="2020-05-26T21:55:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-27</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/05/27/DirectX12-创建描述符堆/">DirectX12-创建描述符堆</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/05/27/DirectX12-描述并创建交换链/" class="archive-article-date">
-  	<time datetime="2020-05-26T21:30:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-27</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/05/27/DirectX12-描述并创建交换链/">DirectX12-描述并创建交换链</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/05/25/DirectX12-初始化Direct3D/" class="archive-article-date">
-  	<time datetime="2020-05-25T15:22:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-25</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/05/25/DirectX12-初始化Direct3D/">DirectX12-初始化Direct3D</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/05/25/DirectX12-命令与多线程/" class="archive-article-date">
-  	<time datetime="2020-05-24T23:35:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-25</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/05/25/DirectX12-命令与多线程/">DirectX12-命令与多线程</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/05/25/DirectX12-资源转换/" class="archive-article-date">
-  	<time datetime="2020-05-24T23:01:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-25</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/05/25/DirectX12-资源转换/">DirectX12-资源转换</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/05/24/DirectX12-CPU与GPU间的同步/" class="archive-article-date">
-  	<time datetime="2020-05-24T05:35:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-24</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/05/24/DirectX12-CPU与GPU间的同步/">DirectX12-CPU与GPU间的同步</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
-  
-
-    
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="page-number" href="/archives/page/3/">3</a><a class="extend next" rel="next" href="/archives/page/2/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
     </nav>
   
 
@@ -571,9 +261,9 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: false,
+		isHome: true,
 		isPost: false,
-		isArchive: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

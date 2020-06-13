@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives | 飞舞轻扬</title>
+  <title>DirectX12-渲染流水线 | 飞舞轻扬</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="飞舞轻扬">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+  <meta name="description" content="渲染流水线概述渲染流水线是以摄像机为观察视角而生成2D图像的一系列完整步骤; 输入装配阶段会从显存读取几何数据(顶点和索引),将他们装配为几何图元. 顶点图元拓扑1. 点列表 2. 线条表 3. 线列表 4. 三角形带 5. 三角形列表 6. 具有邻接数据的图元拓扑 7. 控制点面片列表 索引1. 减少内存 2. 减少图形硬件的处理负荷 3. 若辅以适当的顶点缓存排序,则图形硬件将不必再次处理重复">
+<meta name="keywords" content="DirectX12">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DirectX12-渲染流水线">
+<meta property="og:url" content="http://yoursite.com/2020/06/03/DirectX12-渲染流水线/index.html">
 <meta property="og:site_name" content="飞舞轻扬">
+<meta property="og:description" content="渲染流水线概述渲染流水线是以摄像机为观察视角而生成2D图像的一系列完整步骤; 输入装配阶段会从显存读取几何数据(顶点和索引),将他们装配为几何图元. 顶点图元拓扑1. 点列表 2. 线条表 3. 线列表 4. 三角形带 5. 三角形列表 6. 具有邻接数据的图元拓扑 7. 控制点面片列表 索引1. 减少内存 2. 减少图形硬件的处理负荷 3. 若辅以适当的顶点缓存排序,则图形硬件将不必再次处理重复">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-06-13T23:46:13.198Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="飞舞轻扬">
+<meta name="twitter:title" content="DirectX12-渲染流水线">
+<meta name="twitter:description" content="渲染流水线概述渲染流水线是以摄像机为观察视角而生成2D图像的一系列完整步骤; 输入装配阶段会从显存读取几何数据(顶点和索引),将他们装配为几何图元. 顶点图元拓扑1. 点列表 2. 线条表 3. 线列表 4. 三角形带 5. 三角形列表 6. 具有邻接数据的图元拓扑 7. 控制点面片列表 索引1. 减少内存 2. 减少图形硬件的处理负荷 3. 若辅以适当的顶点缓存排序,则图形硬件将不必再次处理重复">
   
     <link rel="alternative" href="/atom.xml" title="飞舞轻扬" type="application/atom+xml">
   
@@ -150,36 +155,70 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-DirectX12-渲染流水线" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      DirectX12-渲染流水线
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/06/03/DirectX12-渲染流水线/" class="archive-article-date">
+
+        
+        <a href="/2020/06/03/DirectX12-渲染流水线/" class="archive-article-date">
   	<time datetime="2020-06-03T05:42:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-03</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/06/03/DirectX12-渲染流水线/">DirectX12-渲染流水线</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="渲染流水线概述"><a href="#渲染流水线概述" class="headerlink" title="渲染流水线概述"></a>渲染流水线概述</h1><p>渲染流水线是以摄像机为观察视角而生成2D图像的一系列完整步骤;</p>
+<h2 id="输入装配阶段"><a href="#输入装配阶段" class="headerlink" title="输入装配阶段"></a>输入装配阶段</h2><pre><code>会从显存读取几何数据(顶点和索引),将他们装配为几何图元.
+</code></pre><h5 id="顶点"><a href="#顶点" class="headerlink" title="顶点"></a>顶点</h5><h5 id="图元拓扑"><a href="#图元拓扑" class="headerlink" title="图元拓扑"></a>图元拓扑</h5><pre><code>1. 点列表
+2. 线条表
+3. 线列表
+4. 三角形带
+5. 三角形列表
+6. 具有邻接数据的图元拓扑
+7. 控制点面片列表
+</code></pre><h5 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h5><pre><code>1. 减少内存
+2. 减少图形硬件的处理负荷
+3. 若辅以适当的顶点缓存排序,则图形硬件将不必再次处理重复使用的顶点,从缓存中直接取得即可.
+</code></pre><h2 id="顶点着色器阶段"><a href="#顶点着色器阶段" class="headerlink" title="顶点着色器阶段"></a>顶点着色器阶段</h2><pre><code>可以利用顶点着色器实现变换,光照和位移贴图(置换贴图),纹理贴图,法线贴图.不但可以访问输入的顶点数据,也能够访问纹理和其他存于显存中的数据.
+</code></pre><h3 id="局部空间和世界空间"><a href="#局部空间和世界空间" class="headerlink" title="局部空间和世界空间"></a>局部空间和世界空间</h3><pre><code>1.缩放 
+</code></pre><p>$$<br>  \begin{matrix}<br>   ScaleX &amp; 0 &amp; 0 &amp; 0\<br>   0 &amp; ScaleY &amp; 0 &amp; 0\<br>   0 &amp; 0 &amp; ScaleY &amp; 0\<br>   0 &amp; 0 &amp; 0 &amp; 1\<br>  \end{matrix} \tag{S}<br>$$<br>    2.旋转<br>$$<br>  \begin{matrix}<br>   CosQ &amp; SinQ &amp; 0 &amp; 0\<br>   -SinQ &amp; CosQ &amp; 0 &amp; 0\<br>   0 &amp; 0 &amp; 1 &amp; 0\<br>   0 &amp; 0 &amp; 0 &amp; 1\<br>  \end{matrix} \tag{Z}<br>$$<br>    3.平移<br>$$<br>  \begin{matrix}<br>   1 &amp; 0 &amp; 0 &amp; 0\<br>   0 &amp; 1 &amp; 0 &amp; 0\<br>   0 &amp; 0 &amp; 1 &amp; 0\<br>   X &amp; Y &amp; Z &amp; 1\<br>  \end{matrix} \tag{T}<br>$$</p>
+<h3 id="观察空间"><a href="#观察空间" class="headerlink" title="观察空间"></a>观察空间</h3><h3 id="投影和齐次裁剪空间"><a href="#投影和齐次裁剪空间" class="headerlink" title="投影和齐次裁剪空间"></a>投影和齐次裁剪空间</h3><h2 id="曲面细分阶段"><a href="#曲面细分阶段" class="headerlink" title="曲面细分阶段"></a>曲面细分阶段</h2><h3 id="1-Hull-Shader-Stage-壳着色器阶段"><a href="#1-Hull-Shader-Stage-壳着色器阶段" class="headerlink" title="1.Hull Shader Stage(壳着色器阶段)"></a>1.Hull Shader Stage(壳着色器阶段)</h3><h3 id="2-Tessellator-Stage-曲面细分阶段"><a href="#2-Tessellator-Stage-曲面细分阶段" class="headerlink" title="2.Tessellator Stage(曲面细分阶段)"></a>2.Tessellator Stage(曲面细分阶段)</h3><h3 id="3-Domain-Shader-Stage-域着色器阶段"><a href="#3-Domain-Shader-Stage-域着色器阶段" class="headerlink" title="3.Domain Shader Stage(域着色器阶段)"></a>3.Domain Shader Stage(域着色器阶段)</h3><h2 id="几何着色器阶段"><a href="#几何着色器阶段" class="headerlink" title="几何着色器阶段"></a>几何着色器阶段</h2><h2 id="流输出阶段"><a href="#流输出阶段" class="headerlink" title="流输出阶段"></a>流输出阶段</h2><h2 id="光栅化阶段"><a href="#光栅化阶段" class="headerlink" title="光栅化阶段"></a>光栅化阶段</h2><h2 id="像素着色器阶段"><a href="#像素着色器阶段" class="headerlink" title="像素着色器阶段"></a>像素着色器阶段</h2><h2 id="输出合并阶段"><a href="#输出合并阶段" class="headerlink" title="输出合并阶段"></a>输出合并阶段</h2>
+      
 
-        <div class="article-info info-on-right">
-          
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -191,364 +230,105 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/06/03/DirectX12-渲染流水线/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/05/31/DirectX12-设置视口/" class="archive-article-date">
-  	<time datetime="2020-05-31T08:38:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-31</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2020/05/31/DirectX12-设置视口/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">DirectX12-设置视口</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/05/31/DirectX12-设置视口/">DirectX12-设置视口</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/05/30/DirectX12-创建深度-模板缓冲区及其视图/" class="archive-article-date">
-  	<time datetime="2020-05-30T02:49:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-30</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/05/30/DirectX12-创建深度-模板缓冲区及其视图/">DirectX12-创建深度/模板缓冲区及其视图</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/05/27/DirectX12-创建渲染目标视图/" class="archive-article-date">
-  	<time datetime="2020-05-26T22:02:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-27</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/05/27/DirectX12-创建渲染目标视图/">DirectX12-创建渲染目标视图</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/05/27/DirectX12-创建描述符堆/" class="archive-article-date">
-  	<time datetime="2020-05-26T21:55:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-27</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/05/27/DirectX12-创建描述符堆/">DirectX12-创建描述符堆</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/05/27/DirectX12-描述并创建交换链/" class="archive-article-date">
-  	<time datetime="2020-05-26T21:30:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-27</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/05/27/DirectX12-描述并创建交换链/">DirectX12-描述并创建交换链</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/05/25/DirectX12-初始化Direct3D/" class="archive-article-date">
-  	<time datetime="2020-05-25T15:22:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-25</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/05/25/DirectX12-初始化Direct3D/">DirectX12-初始化Direct3D</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/05/25/DirectX12-命令与多线程/" class="archive-article-date">
-  	<time datetime="2020-05-24T23:35:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-25</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/05/25/DirectX12-命令与多线程/">DirectX12-命令与多线程</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/05/25/DirectX12-资源转换/" class="archive-article-date">
-  	<time datetime="2020-05-24T23:01:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-25</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/05/25/DirectX12-资源转换/">DirectX12-资源转换</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/05/24/DirectX12-CPU与GPU间的同步/" class="archive-article-date">
-  	<time datetime="2020-05-24T05:35:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-24</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/05/24/DirectX12-CPU与GPU间的同步/">DirectX12-CPU与GPU间的同步</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">DirectX12</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="page-number" href="/archives/page/3/">3</a><a class="extend next" rel="next" href="/archives/page/2/">Next &raquo;</a>
-    </nav>
   
 
 
@@ -572,8 +352,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
