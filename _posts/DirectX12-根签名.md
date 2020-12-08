@@ -28,7 +28,7 @@ tags: DirectX12
 	// Create root CBVs.
     slotRootParameter[0].InitAsDescriptorTable(1, &cbvTable0);
     
-    CD3DX12_ROOT_SIGNATURE_DESC rootSigDesc(2, slotRootParameter, 0, nullptr, 
+    CD3DX12_ROOT_SIGNATURE_DESC rootSigDesc(_countof(slotRootParameter), slotRootParameter, 0, nullptr, 
         D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT);
 ```
 ### 描述符
