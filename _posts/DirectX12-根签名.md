@@ -23,7 +23,7 @@ tags: DirectX12
     CD3DX12_DESCRIPTOR_RANGE cbvTable0;
     cbvTable0.Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0);
 
-    CD3DX12_ROOT_PARAMETER slotRootParameter[2];
+    CD3DX12_ROOT_PARAMETER slotRootParameter[1];
 
 	// Create root CBVs.
     slotRootParameter[0].InitAsDescriptorTable(1, &cbvTable0);
@@ -33,7 +33,21 @@ tags: DirectX12
 ```
 ### 描述符
 ```
+ 	CD3DX12_ROOT_PARAMETER slotRootParameter[1];
+	slotRootParameter[0].InitAsConstantBufferView(0);// 测试描述符视图
+
+    // draw 
+    mCommandList->SetGraphicsRootSignature(mRootSignature.Get());
+    //设置描述指向的内容;
+    auto passCB = mCurrFrameResource->PassCB->Resource();
+	mCommandList->SetGraphicsRootConstantBufferView(1, passCB->GetGPUVirtualAddress());
 ```
 ### 根签名
 ````
+	CD3DX12_ROOT_PARAMETER slotRootParameter[1];
+	slotRootParameter[0].InitAsConstants(1, 2, 2); // 測試根常量
+
+    // 直接设置参数;
+    float Radius = 1.f;
+	mCommandList->SetGraphicsRoot32BitConstants(2, 1, &Radius, 0);
 ````
