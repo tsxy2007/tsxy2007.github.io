@@ -103,3 +103,22 @@ typedef enum D3D12_COLOR_WRITE_ENABLE {
     C = Csrc X (0,0,0) + Cdst X (1,1,1)
     C = Cdst
 ```
+### 加法混合与减法混合
+```
+    C = Csrc X Fsrc + Cdst X Fdst
+    C = Csrc X(1,1,1) + Cdst X (1,1,1)
+    C = Csrc +  Cdst;
+```
+### 乘法混合
+```
+    C = Csrc X Fsrc + Cdst X Fdst
+    C = Csrc X(0,0,0) + Cdst X (1,1,1)
+    C = Cdst X Csrc;
+```
+### 透明混合
+```
+    C = Csrc X Fsrc + Cdst X Fdst
+    C = Csrc X(as,as,as) + Cdst X (1-as,1-as,1-as)
+    C = as*Cdst X (1-as)*Csrc;
+```
+## 混合与深度缓冲区
