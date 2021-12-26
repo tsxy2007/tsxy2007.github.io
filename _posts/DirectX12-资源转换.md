@@ -15,3 +15,4 @@ D3D12_RESOURCE_BARRIER（资源屏障）；
 	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(defaultBuffer.Get(), 
 		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_DEST));
 ~~~
+**(待完善)**

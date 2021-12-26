@@ -3,7 +3,8 @@ title: DirectX12-CPU与GPU间的同步
 date: 2020-05-24 13:35:35
 tags: DirectX12
 ---
-## CPU与GPU同步
+# CPU与GPU同步
+## 刷新命令队列
 GPU和CPU并行工作的时候，自然会产生一系列的同步问题。
 解决此问题其中的一种办法是： 强制CPU等待，直到GPU完成所有命令的处理，达到某个指定的Fence点为止。我们称之为：刷新命令队列，可以通过fence实现这一点。
 创建fence：
