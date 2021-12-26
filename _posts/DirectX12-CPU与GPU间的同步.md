@@ -15,7 +15,10 @@ HRESULT ID3D12Device::CreateFence(UINT64 InitialValue,D3D12_FENCE_FLAGS Flags,RE
 
 一下是用一个Fence刷新CommandQueue；
 ~~~
-    // 增加Fence值，接下来将命令标记到此Fence point
+UINT64 mCurrentFence = 0;
+void D3DApplication::FlushCommandQueue()
+{
+ // 增加Fence值，接下来将命令标记到此Fence point
     mCurrentFence++; 
 	
     // 向命令队列中添加一条用来设置新Fence point的命令
@@ -33,6 +36,7 @@ HRESULT ID3D12Device::CreateFence(UINT64 InitialValue,D3D12_FENCE_FLAGS Flags,RE
 		WaitForSingleObject( eventHandle, INFINITE );
 		CloseHandle( eventHandle );
 	}
+}
 ~~~
 ## CPU与GPU异步（渲染帧）
 这种方案并不完美，因为这意味着在等待GPU处理命令的时候，CPU会处于空闲状态.
