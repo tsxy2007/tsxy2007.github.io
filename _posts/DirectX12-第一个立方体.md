@@ -209,62 +209,143 @@ float4 PS(VertexOut pin) : SV_Target
 		DirectX::XMFLOAT4X4 WorldViewProj = MathHelper::Identity4x4();
 	};
 	```
+
    3. **绑定上传资源缓冲区**
-	```
-	// 创建上传缓冲区
-	template<typename T>
-	class UploadBuffer
-	{
-	public:
-		UploadBuffer(ID3D12Device* device, UINT elementCount, bool isConstantBuffer)
-			:mIsConstantBuffer(isConstantBuffer)
+   	```
+		// 创建上传缓冲区
+		template<typename T>
+		class UploadBuffer
 		{
-			// 计算资源大小
-			mElementByteSize = sizeof(T);
-			if (isConstantBuffer)
+		public:
+			UploadBuffer(ID3D12Device* device, UINT elementCount, bool isConstantBuffer)
+				:mIsConstantBuffer(isConstantBuffer)
 			{
-				mElementByteSize = d3dUtil::CalcConstantBufferByteSize(mElementByteSize)	;
+				// 计算资源大小
+				mElementByteSize = sizeof(T);
+				if (isConstantBuffer)
+				{
+					mElementByteSize = d3dUtil::CalcConstantBufferByteSize	(mElementByteSize)	;
+				}
+				// 创建上传缓冲区;
+				CD3DX12_HEAP_PROPERTIES hProperties(D3D12_HEAP_TYPE_UPLOAD);
+				CD3DX12_RESOURCE_DESC ResourceDesc = CD3DX12_RESOURCE_DESC::Buffer		(mElementByteSize * elementCount);
+				device->CreateCommittedResource(
+					&hProperties,
+					D3D12_HEAP_FLAG_NONE,
+					&ResourceDesc,
+					D3D12_RESOURCE_STATE_GENERIC_READ,
+					nullptr,
+					IID_PPV_ARGS(&mUploadBuffer)
+				);
+	
+				mUploadBuffer->Map(0, nullptr, reinterpret_cast<void**>(&mMappedData));
 			}
-			// 创建上传缓冲区;
-			CD3DX12_HEAP_PROPERTIES hProperties(D3D12_HEAP_TYPE_UPLOAD);
-			CD3DX12_RESOURCE_DESC ResourceDesc = CD3DX12_RESOURCE_DESC::Buffer	(mElementByteSize * elementCount);
-			device->CreateCommittedResource(
-				&hProperties,
-				D3D12_HEAP_FLAG_NONE,
-				&ResourceDesc,
-				D3D12_RESOURCE_STATE_GENERIC_READ,
-				nullptr,
-				IID_PPV_ARGS(&mUploadBuffer)
-			);
-
-			mUploadBuffer->Map(0, nullptr, reinterpret_cast<void**>(&mMappedData));
-		}
-		UploadBuffer(const UploadBuffer& rhs) = delete;
-		UploadBuffer& operator=(const UploadBuffer& rhs) = delete;
-		~UploadBuffer()
-		{
-			if (mUploadBuffer != nullptr)
-				mUploadBuffer->Unmap(0, nullptr);
-
-			mMappedData = nullptr;
-		}
-
-		ID3D12Resource* Resource()const
-		{
-			return mUploadBuffer.Get();
-		}
-
-		void CopyData(int elementIndex, const T& data)
-		{
-			memcpy(&mMappedData[elementIndex * mElementByteSize], &data, sizeof(T));
-		}
-
-	private:
-		Microsoft::WRL::ComPtr<ID3D12Resource> mUploadBuffer;
-		BYTE* mMappedData = nullptr;
-		UINT mElementByteSize = 0;
-		bool mIsConstantBuffer = false;
-	};
+			UploadBuffer(const UploadBuffer& rhs) = delete;
+			UploadBuffer& operator=(const UploadBuffer& rhs) = delete;
+			~UploadBuffer()
+			{
+				if (mUploadBuffer != nullptr)
+					mUploadBuffer->Unmap(0, nullptr);
+	
+				mMappedData = nullptr;
+			}
+	
+			ID3D12Resource* Resource()const
+			{
+				return mUploadBuffer.Get();
+			}
+	
+			void CopyData(int elementIndex, const T& data)
+			{
+				memcpy(&mMappedData[elementIndex * mElementByteSize], &data, sizeof(T));
+			}
+	
+		private:
+			Microsoft::WRL::ComPtr<ID3D12Resource> mUploadBuffer;
+			BYTE* mMappedData = nullptr;
+			UINT mElementByteSize = 0;
+			bool mIsConstantBuffer = false;
+		};
 
 	```
-### 常量缓冲区描述符
+
+   4. **常量缓冲区描述符**
+   ```
+   	D3D12_DESCRIPTOR_HEAP_DESC cbvHeapDesc;
+	cbvHeapDesc.NumDescriptors = 1;
+	cbvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	cbvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	cbvHeapDesc.NodeMask = 0;
+	mD3DDevice->CreateDescriptorHeap(&cbvHeapDesc, IID_PPV_ARGS(&mCbvHeap));
+   ```
+
+   5. **根签名和描述符表**
+   
+   [根签名和描述符表](https://zhuanlan.zhihu.com/p/454741999)
+
+
+## 光栅器状态
+
+	```
+		typedef struct D3D12_RASTERIZER_DESC
+    	{
+    	D3D12_FILL_MODE FillMode; // 渲染模式：默认D3D12_FILL_MODE_SOLID(实体渲染模式)
+    	D3D12_CULL_MODE CullMode; // 剔除模式：
+    	BOOL FrontCounterClockwise; // 设置定点顺时针方向
+    	INT DepthBias; 				// 添加到给定像素的深度值。
+    	FLOAT DepthBiasClamp;       // 像素的最大深度偏差。
+    	FLOAT SlopeScaledDepthBias; //给定像素斜率上的标量。
+    	BOOL DepthClipEnable;		// 指定是否启用基于距离的剪辑。
+    	BOOL MultisampleEnable;     // 指定多样本抗锯齿（MSAA）渲染目标上是使用四边形还是alpha线抗锯齿算法
+    	BOOL AntialiasedLineEnable; // 是否启用行抗锯齿 只有 MultisampleEnable false才能用
+    	UINT ForcedSampleCount;		//
+    	D3D12_CONSERVATIVE_RASTERIZATION_MODE ConservativeRaster; //在UAV渲染或光栅化时强制的样本计数。有效值为0、1、2、4、8和可选的16。0表示不强制采样。
+    	} 	D3D12_RASTERIZER_DESC;
+	```
+
+
+## 流水线状态对象
+
+```
+	void D3DApplication::BuildPSO()
+	{
+		D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc;
+		ZeroMemory(&psoDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
+		//输入布局描述
+		psoDesc.InputLayout = { mInputLayout.data(),(UINT)mInputLayout.size() };
+		psoDesc.pRootSignature = mRootSignature.Get();
+		psoDesc.VS = {
+			reinterpret_cast<BYTE*>(mvsByteCode->GetBufferPointer()),
+			mvsByteCode->GetBufferSize()
+		};
+
+		psoDesc.PS = {
+			reinterpret_cast<BYTE*>(mpsByteCode->GetBufferPointer()),
+			mpsByteCode->GetBufferSize()
+		};
+		// 光栅器
+		psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
+		// 混合
+		psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
+		// 指定图元的拓扑类型
+		psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+		// 同时所用的渲染目标数量
+		psoDesc.NumRenderTargets = 1;
+		// 渲染目标的格式
+		psoDesc.RTVFormats[0] = mBackBufferFormat;
+		// 设置多重采样样本(个数最多32个)
+		psoDesc.SampleMask = UINT_MAX;
+		// 多重采样对每个像素采样的数量
+		psoDesc.SampleDesc.Count = b4xMassState ? 4 : 1;
+		// 多重采样对每个像素采样的质量
+		psoDesc.SampleDesc.Quality = b4xMassState ? (m4xMsaaQulity - 1) : 0;
+		// 指定用于配置深度/模板测试的模板/深度状态
+		psoDesc.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
+		// 深度/模板缓冲区的格式
+		psoDesc.DSVFormat = mDepthStencilFormat;
+		//创建pso 对象
+		mD3DDevice->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&mPSO)); 
+	}
+```
+
+ ## <center> [项目地址](https://github.com/tsxy2007/MyDirectx12)
