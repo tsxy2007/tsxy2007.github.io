@@ -52,7 +52,7 @@ HRESULT DirectX::CreateDDSTextureFromFile12(
 创建纹理资源后，需要创建一个SRV描述符（着色器资源图），
 ```
 D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
-srvHeapDesc.NumDescriptors = 3;
+srvHeapDesc.NumDescriptors = 1;
 srvHeapDesc.Type = D3D12_DESCRIPTROR_HEAP_TYIPE_CBV_SRV_UAV;
 srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 ThrowIfFailed(md3dDevice->CreateDescriptorHeap(
