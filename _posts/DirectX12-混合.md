@@ -98,27 +98,40 @@ typedef enum D3D12_COLOR_WRITE_ENABLE {
 ```
 ## 混合示例
 ### 禁止颜色的写操作
-```
-    C = Csrc X Fsrc + Cdst X Fdst
-    C = Csrc X (0,0,0) + Cdst X (1,1,1)
-    C = Cdst
-```
+
+$$
+C = {C_{src}}\bigotimes{F_{src}}\bigoplus{C_{dst}}\bigotimes{F_{dst}} \\
+
+C = {C_{src}}\bigotimes(0,0,0)+{C_{dst}}\bigotimes(1,1,1) \\
+
+C = C_{dst}
+$$
+
 ### 加法混合与减法混合
-```
-    C = Csrc X Fsrc + Cdst X Fdst
-    C = Csrc X(1,1,1) + Cdst X (1,1,1)
-    C = Csrc +  Cdst;
-```
+$$
+C = {C_{src}}\bigotimes{F_{src}}\bigoplus{C_{dst}}\bigotimes{F_{dst}} \\
+
+C = {C_{src}}\bigotimes(1,1,1)+{C_{dst}}\bigotimes(1,1,1) \\
+
+C = C_{src} + C_{dst}
+$$
 ### 乘法混合
-```
-    C = Csrc X Fsrc + Cdst X Fdst
-    C = Csrc X(0,0,0) + Cdst X (1,1,1)
-    C = Cdst X Csrc;
-```
+$$
+C = {C_{src}}\bigotimes{F_{src}}\bigoplus{C_{dst}}\bigotimes{F_{dst}} \\
+
+C = {C_{src}}\bigotimes(0,0,0)+{C_{dst}}\bigotimes C_{src} \\
+
+C = C_{src} \bigotimes C_{dst}
+$$
 ### 透明混合
-```
-    C = Csrc X Fsrc + Cdst X Fdst
-    C = Csrc X(as,as,as) + Cdst X (1-as,1-as,1-as)
-    C = as*Cdst X (1-as)*Csrc;
-```
+$$
+C = {C_{src}}\bigotimes{F_{src}}\bigoplus{C_{dst}}\bigotimes{F_{dst}} \\
+
+C = {C_{src}}\bigotimes(a_s,a_s,a_s)+{C_{dst}}\bigotimes (1-a_s,1-a_s,1-a_s) \\
+
+C = a_s C_{src} + (1-a_s)C_{dst}
+$$
 ## 混合与深度缓冲区
+
+
+  <center> [项目地址](https://github.com/tsxy2007/MyDirectx12)
