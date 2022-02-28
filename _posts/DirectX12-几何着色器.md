@@ -26,5 +26,6 @@ void GS(point VertexOut gin[1],
    PointStream<OutputVertexType> : 一系列顶点所定义的点列表
    LineStream<OutputVertexType>: 一系列顶点所定义的线列表
    TriangleStream<OutputVertexType>: 一系列顶点所定义的三角形带。
+4. SV_PrimitiveID: 若指定了该语义，则输入装配器阶段会自动为每个图元生成图元ID。
 
  ## <center> [项目地址](https://github.com/tsxy2007/MyDirectx12)
