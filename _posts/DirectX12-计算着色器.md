@@ -4,7 +4,7 @@ date: 2022-03-07 17:37:58
 tags:
 ---
 
-## 语法
+## 一. 语法
 ```
 cbuffer cbSettings
 {
@@ -28,7 +28,7 @@ void CS(int3 dispatchThreadID : SV_DispatchThreadID) // 线程ID
 4. 每个线程要执行的着色器指令。
 5. 线程ID系统值参数。
 
-## 计算流水线状态对象
+## 二. 计算流水线状态对象
 
 开启计算着色器，需要特定的计算流水线状态描述。代码如下：
 ```
@@ -44,7 +44,7 @@ void CS(int3 dispatchThreadID : SV_DispatchThreadID) // 线程ID
 
 ```
 
-## 数据的输入与输出资源
+## 三. 数据的输入与输出资源
 
 ### 纹理输入
 Texture2D gInputA;
@@ -124,10 +124,89 @@ CD3DX12_DESCRIPTOR_RANGE srvTable;
 
 ### 结构化缓冲区资源
 
+**HLSL:**
 ```
 struct Data
 {
     float3 v1;
     float2 v2;
 }
+
+StructuredBuffer<Data> gInputA : register(t0);
+StructuredBuffer<Data> gInputB : register(t1);
+RWStructuredBuffer<Data> gOutput : register(u0);
+```
+**C++:**
+
+```
+std::vector<Data> dataA(NumDataElements);
+	std::vector<Data> dataB(NumDataElements);
+	for(int i = 0; i < NumDataElements; ++i)
+	{
+		dataA[i].v1 = XMFLOAT3(i, i, i);
+		dataA[i].v2 = XMFLOAT2(i, 0);
+
+		dataB[i].v1 = XMFLOAT3(-i, i, 0.0f);
+		dataB[i].v2 = XMFLOAT2(0, -i);
+	}
+
+	UINT64 byteSize = dataA.size()*sizeof(Data);
+
+	// Create some buffers to be used as SRVs.
+	mInputBufferA = d3dUtil::CreateDefaultBuffer(
+		md3dDevice.Get(),
+		mCommandList.Get(),
+		dataA.data(),
+		byteSize,
+		mInputUploadBufferA);
+
+	mInputBufferB = d3dUtil::CreateDefaultBuffer(
+		md3dDevice.Get(),
+		mCommandList.Get(),
+		dataB.data(),
+		byteSize,
+		mInputUploadBufferB);
+
+	// Create the buffer that will be a UAV.
+	ThrowIfFailed(md3dDevice->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT),
+		D3D12_HEAP_FLAG_NONE,
+		&CD3DX12_RESOURCE_DESC::Buffer(byteSize, D3D12_RESOURCE_FLAG_ALLOW_UNORDERED_ACCESS),
+		D3D12_RESOURCE_STATE_UNORDERED_ACCESS,
+		nullptr,
+		IID_PPV_ARGS(&mOutputBuffer)));
+	
+	ThrowIfFailed(md3dDevice->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_READBACK),
+		D3D12_HEAP_FLAG_NONE,
+		&CD3DX12_RESOURCE_DESC::Buffer(byteSize),
+		D3D12_RESOURCE_STATE_COPY_DEST,
+		nullptr,
+		IID_PPV_ARGS(&mReadBackBuffer)));
+
+```
+
+### 将计算结果复制到系统内存
+
+```
+// Schedule to copy the data to the default buffer to the readback buffer.
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mOutputBuffer.Get(),
+		D3D12_RESOURCE_STATE_COMMON, D3D12_RESOURCE_STATE_COPY_SOURCE));
+
+	mCommandList->CopyResource(mReadBackBuffer.Get(), mOutputBuffer.Get());
+
+	mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(mOutputBuffer.Get(),
+		D3D12_RESOURCE_STATE_COPY_SOURCE, D3D12_RESOURCE_STATE_COMMON));
+```
+
+### 追加缓冲区与消费缓冲区
+```
+struct Particle
+{
+	float3 Position;
+	float3 Velocity;
+	float3 Acceleration;
+};
+ConsumeStructuredBuffer<Particle> gInput;
+AppendStructuredBuffer<Particle> gOutput;
 ```
