@@ -121,3 +121,34 @@ typename  std::common_type<T1, T2>::type  max(T1 a, T2 b)
 }
 ```
 ---
+## 默认模板参数
+1. 如下：
+```
+template<typename T1,typename T2,typename RT = std::decay_t<decltype(true?T1() : T2())>>
+    RT max(T1 a, T2 b)
+    {
+        return b < a ? a : b;
+    }
+```
+2. 代码如下：
+```
+template<typename T1,typename T2,typename RT = std::common_type_t<T1,T2>>
+    RT max(T1 a, T2 b)
+    {
+        return b < a ? a : b;
+    }
+```
+
+3.代码如下：
+```
+ template<typename RT = long, typename T1,typename T2>
+    RT max(T1 a, T2 b)
+    {
+        return b < a ? a : b;
+    }
+```
+---
+## 重载函数模板
+在所有其他因素相同的情况下，模板解析将优先选择**非模板函数**，而不是从模板实例化出来的函数。
+
+---
