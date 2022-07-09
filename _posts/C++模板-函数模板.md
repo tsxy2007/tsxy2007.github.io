@@ -4,7 +4,6 @@ date: 2022-06-24 09:19:00
 tags: c++模板
 category:
 ---
----
 ## 定义如下：
 ```
 #include <iostream>
