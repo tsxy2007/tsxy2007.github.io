@@ -18,6 +18,7 @@ PopDir();
 ~~~
 通过调用关系发现:
 调用命令为D:\Projects\UnrealEngine4_25\Engine\Binaries\Win64\UE4Editor-Win64-Debug-Cmd.exe D:\Projects\XXX\xxx.uproject -run=Cook  -TargetPlatform=WindowsNoEditor -fileopenlog -unversioned  -stdout -CrashForUAT -unattended -NoLogTimes  -UTF8Output
+
 5. 设置启动项为UE4
 设置Command:D:\Projects\UnrealEngine4_25\Engine\Binaries\Win64\UE4Editor-Win64-Debug-Cmd.exe
 设置命令参数为D:\Projects\XXX\xxx.uproject -run=Cook  -TargetPlatform=WindowsNoEditor -fileopenlog -unversioned  -stdout -CrashForUAT 
