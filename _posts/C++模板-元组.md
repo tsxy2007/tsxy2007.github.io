@@ -71,3 +71,14 @@ template<unsigned N>
 		return TupleGet<N>::apply(t);
 	}
 ```
+我们来分析下TupleGet运行原理，假如我们有一个Tuple类型如下：
+```
+Tuple<int, double, std::string,int> t(17, 3.14, "Hello, World!",3);
+```
+我们想要获取get<2>(t)的值即N=1的时候
+```
+TupleGet<2>::apply(t);->t.getTail(); 当前的head是3.14
+TupleGet<1>::apply(t);->t.getTail(); 当前的head是"Hello,World"
+TupleGet<0>::apply(t);->t.getHead(); 当前的head是"Hello,World"
+```
+## 二:构造
