@@ -181,7 +181,7 @@ int32 GuardedMain( const TCHAR* CmdLine )
     // 预初始化引擎
 	int32 ErrorLevel = EnginePreInit( CmdLine );
 
-	// exit if PreInit failed.
+	// 退出如果与初始化失败
 	if ( ErrorLevel != 0 || IsEngineExitRequested() )
 	{
 		return ErrorLevel;
@@ -198,6 +198,7 @@ int32 GuardedMain( const TCHAR* CmdLine )
 		SlowTask.EnterProgressFrame(20);
 
 #if WITH_EDITOR
+        // 如果是编辑器模式初始化
 		if (GIsEditor)
 		{
 			ErrorLevel = EditorInit(GEngineLoop);
@@ -205,10 +206,11 @@ int32 GuardedMain( const TCHAR* CmdLine )
 		else
 #endif
 		{
+            // 游戏模式初始化
 			ErrorLevel = EngineInit();
 		}
 	}
-
+    // 获取当前时间减去起始时间；
 	double EngineInitializationTime = FPlatformTime::Seconds() - GStartTime;
 	UE_LOG(LogLoad, Log, TEXT("(Engine Initialization) Total time: %.2f seconds"), EngineInitializationTime);
 
@@ -218,13 +220,13 @@ int32 GuardedMain( const TCHAR* CmdLine )
 
 	ACCUM_LOADTIME(TEXT("EngineInitialization"), EngineInitializationTime);
 
+    //创建了一个名为“Tick loop starting”的书签，并记录了该书签的时间等信息。
 	BootTimingPoint("Tick loop starting");
 	DumpBootTiming();
 
 	FTrackedActivity::GetEngineActivity().Update(TEXT("Ticking loop"), FTrackedActivity::ELight::Green);
 
-	// Don't tick if we're running an embedded engine - we rely on the outer
-	// application ticking us instead.
+	// 主循环
 	if (!GUELibraryOverrideSettings.bIsEmbedded)
 	{
 		while( !IsEngineExitRequested() )
@@ -233,9 +235,11 @@ int32 GuardedMain( const TCHAR* CmdLine )
 		}
 	}
 
+    //创建了一个名为“Tick loop end”的书签，并记录了该书签的时间等信息。
 	TRACE_BOOKMARK(TEXT("Tick loop end"));
 
 #if WITH_EDITOR
+    // 如果是编辑器模式退出调用；
 	if( GIsEditor )
 	{
 		EditorExit();
