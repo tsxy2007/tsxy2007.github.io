@@ -650,6 +650,7 @@ int32 FEngineLoop::PreInitPreStartupScreen(const TCHAR* CmdLine)
 	// allow the command line to override the platform file singleton
 	bool bFileOverrideFound = false;
 	{
+		// 检查StorageServerClient；StreamingFile；NetworkFile；PakFile；CachedReadFile；SandboxFile；ProfileFile；SimpleProfileFile；FileReadStats；FileOpenLog；LogFile；是否可以使用并加载+初始化；
 		SCOPED_BOOT_TIMING("LaunchCheckForFileOverride");
 		if (LaunchCheckForFileOverride(CmdLine, bFileOverrideFound) == false)
 		{
@@ -662,11 +663,12 @@ int32 FEngineLoop::PreInitPreStartupScreen(const TCHAR* CmdLine)
 #if PLATFORM_DESKTOP && !IS_MONOLITHIC
 	{
 		SCOPED_BOOT_TIMING("AddExtraBinarySearchPaths");
+		// 添加二进制文件加载的路径；
 		FModuleManager::Get().AddExtraBinarySearchPaths();
 	}
 #endif
 
-	// Initialize file manager
+	// Initialize file manager 初始化文件系统；
 	{
 		SCOPED_BOOT_TIMING("IFileManager::Get().ProcessCommandLineOptions");
 		IFileManager::Get().ProcessCommandLineOptions();
@@ -695,19 +697,21 @@ int32 FEngineLoop::PreInitPreStartupScreen(const TCHAR* CmdLine)
 	}
 
 	// remember thread id of the main thread
+	// 记住主线程ID
 	GGameThreadId = FPlatformTLS::GetCurrentThreadId();
 	GIsGameThreadIdInitialized = true;
 
+	// 绑定线程到指定核心（intel大小核设置太恶心）
 	FPlatformProcess::SetThreadAffinityMask(FPlatformAffinity::GetMainGameMask());
 	FPlatformProcess::SetupGameThread();
 
 	// These bools are the mode selector and are mutually exclusive. This function selects the mode by calling one of the 
 	// SetIsRunningAs* lambdas, which it does based on commandline and configuration considerations in a specific order.
 	// TODO: Convert these bools to an enum since they are mutually exclusive.
-	bool bHasCommandletToken = false;
-	bool bHasEditorToken = false;
-	bool bIsRunningAsDedicatedServer = false;
-	bool bIsRegularClient = false;
+	bool bHasCommandletToken = false; // 是否包含命令行
+	bool bHasEditorToken = false; 	// 是否是Editor模式
+	bool bIsRunningAsDedicatedServer = false; // 是否运行在DS服务器
+	bool bIsRegularClient = false; // 是否是客户端
 
 	FString TokenToForward;
 
@@ -719,6 +723,7 @@ int32 FEngineLoop::PreInitPreStartupScreen(const TCHAR* CmdLine)
 	EGameStringType GameStringType = EGameStringType::Unknown;
 	FString         GameString     = ExtractGameStringArgument(TokenArray, QuotedTokenArray, GameStringType);
 
+	// 判定模式
 	auto IsModeSelected = [&bHasCommandletToken, &bHasEditorToken, &bIsRegularClient, &bIsRunningAsDedicatedServer]()
 	{
 		return bHasCommandletToken || bHasEditorToken || bIsRegularClient || bIsRunningAsDedicatedServer;
@@ -976,13 +981,13 @@ int32 FEngineLoop::PreInitPreStartupScreen(const TCHAR* CmdLine)
 #if WITH_FIXED_TIME_STEP_SUPPORT
 	// "-Deterministic" is a shortcut for "-UseFixedTimeStep -FixedSeed"
 	bool bDeterministic = FParse::Param(FCommandLine::Get(), TEXT("Deterministic"));
-
+    //启用或禁用固定时间步长的使用。
 	FApp::SetUseFixedTimeStep(bDeterministic || FParse::Param(FCommandLine::Get(), TEXT("UseFixedTimeStep")));
 
 	FApp::bUseFixedSeed = bDeterministic || FApp::IsBenchmarking() || FParse::Param(FCommandLine::Get(), TEXT("FixedSeed"));
 #endif
 
-	// Initialize random number generator.
+	// 初始化随机系统
 	{
 		uint32 Seed1 = 0;
 		uint32 Seed2 = 0;
