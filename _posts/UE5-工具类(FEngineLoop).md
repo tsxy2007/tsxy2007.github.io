@@ -604,9 +604,11 @@ int32 FEngineLoop::PreInitPreStartupScreen(const TCHAR* CmdLine)
 		for(;;)
 		{
 			bool bExpandedAliases = false;
+			//处理命令行别名
 			LaunchCheckForCommandLineAliases(CommandLineAliasesConfigFile, PrevAliasExpansions, bExpandedAliases);
 
 			bool bExpandedCmdLineFile = false;
+			//查找命令行文件
 			LaunchCheckForCmdLineFile(PrevCmdLineFileExpansions, bExpandedCmdLineFile);
 
 			if(bExpandedAliases || bExpandedCmdLineFile)
@@ -680,7 +682,7 @@ int32 FEngineLoop::PreInitPreStartupScreen(const TCHAR* CmdLine)
 		FPlatformFileManager::Get().InitializeNewAsyncIO();
 	}
 #endif
-
+	// 广播文件系统事件并删除；
 	FDelayedAutoRegisterHelper::RunAndClearDelayedAutoRegisterDelegates(EDelayedRegisterRunPhase::FileSystemReady);
 
 	if (GIsGameAgnosticExe)
@@ -730,6 +732,7 @@ int32 FEngineLoop::PreInitPreStartupScreen(const TCHAR* CmdLine)
 	};
 #if UE_EDITOR || WITH_ENGINE || WITH_EDITOR
 	FString CommandletCommandLine;
+	// 判定是否是命令模式
 	auto SetIsRunningAsCommandlet = [&CommandletCommandLine, &QuotedTokenArray,
 		&bHasCommandletToken, &bIsRunningAsDedicatedServer, &bHasEditorToken, &bIsRegularClient, &IsModeSelected, &TokenToForward]
 		(FStringView CommandletName)
@@ -768,6 +771,7 @@ int32 FEngineLoop::PreInitPreStartupScreen(const TCHAR* CmdLine)
 		PRIVATE_GAllowCommandletAudio = FParse::Param(FCommandLine::Get(), TEXT("AllowCommandletAudio"));
 	};
 #endif // UE_EDITOR || WITH_ENGINE || WITH_EDITOR
+	// 判定是否是常规客户端
 	auto SetIsRunningAsRegularClient = [&IsModeSelected, &bIsRegularClient, &TokenArray, &TokenToForward]()
 	{
 		checkf(!IsModeSelected(), TEXT("SetIsRunningAsRegularClient should not be called after mode has been selected."));
@@ -796,6 +800,7 @@ int32 FEngineLoop::PreInitPreStartupScreen(const TCHAR* CmdLine)
 		checkf(!PRIVATE_GIsRunningCommandlet, TEXT("It should not be possible for PRIVATE_GIsRunningCommandlet to have been set when calling SetIsRunningAsRegularClient"));
 #endif
 	};
+	// 判定是否是常规服务器
 	auto SetIsRunningAsDedicatedServer = [&IsModeSelected, &bIsRunningAsDedicatedServer]()
 	{
 		checkf(!IsModeSelected(), TEXT("SetIsRunningAsDedicatedServer should not be called after mode has been selected."));
@@ -811,6 +816,7 @@ int32 FEngineLoop::PreInitPreStartupScreen(const TCHAR* CmdLine)
 #endif
 	};
 #if WITH_EDITORONLY_DATA
+	// 判定是否是编辑器模式；
 	auto SetIsRunningAsEditor = [&IsModeSelected, &bHasEditorToken]()
 	{
 		checkf(!IsModeSelected(), TEXT("SetIsRunningAsEditor should not be called after mode has been selected."));
@@ -1008,6 +1014,7 @@ int32 FEngineLoop::PreInitPreStartupScreen(const TCHAR* CmdLine)
 	if (!GIsGameAgnosticExe && FApp::HasProjectName() && !FPaths::IsProjectFilePathSet())
 	{
 		// If we are using a non-agnostic exe where a name was specified but we did not specify a project path. Assemble one based on the game name.
+		// 设置项目文件路径；
 		const FString ProjectFilePath = FPaths::Combine(*FPaths::ProjectDir(), *FString::Printf(TEXT("%s.%s"), FApp::GetProjectName(), *FProjectDescriptor::GetExtension()));
 		FPaths::SetProjectFilePath(ProjectFilePath);
 	}
@@ -1045,6 +1052,7 @@ int32 FEngineLoop::PreInitPreStartupScreen(const TCHAR* CmdLine)
 		if (IProjectManager::Get().IsEnterpriseProject() && FPaths::DirectoryExists(FPaths::EnterpriseDir()))
 		{
 			// Add the enterprise binaries directory if we're an enterprise project
+			// 添加二进制文件路径；
 			FModuleManager::Get().AddBinariesDirectory(*FPaths::Combine(FPaths::EnterpriseDir(), TEXT("Binaries"), FPlatformProcess::GetBinariesSubdirectory()), false);
 		}
 	}
@@ -1063,6 +1071,7 @@ int32 FEngineLoop::PreInitPreStartupScreen(const TCHAR* CmdLine)
 
 #if WITH_ENGINE
 	// Add the default engine shader dir
+	// 添加默认的shader路径；
 	AddShaderSourceDirectoryMapping(TEXT("/Engine"), FPlatformProcess::ShaderDir());
 
 #if WITH_EDITOR
@@ -1081,7 +1090,7 @@ int32 FEngineLoop::PreInitPreStartupScreen(const TCHAR* CmdLine)
 		{
 			UE_LOG(LogInit, Fatal, TEXT("Failed to create Intermediate/ShaderAutogen/ directory '%s'. Make sure Intermediate exists."), *AutogenAbsolutePath);
 		}
-
+		// 设置ShaderAutogen为shader路径；
 		AddShaderSourceDirectoryMapping(TEXT("/ShaderAutogen"), AutogenAbsolutePath);
 	}
 #endif //WITH_EDITOR
@@ -1096,6 +1105,7 @@ int32 FEngineLoop::PreInitPreStartupScreen(const TCHAR* CmdLine)
 	if (bCreateTaskGraphAndThreadPools)
 	{
 		// initialize task graph sub-system with potential multiple threads
+		// 初始化TaskGraph然后挂在到主线程；
 		SCOPED_BOOT_TIMING("FTaskGraphInterface::Startup");
 		FTaskGraphInterface::Startup(FPlatformMisc::NumberOfWorkerThreadsToSpawn());
 		FTaskGraphInterface::Get().AttachToThread(ENamedThreads::GameThread);
@@ -1126,6 +1136,7 @@ int32 FEngineLoop::PreInitPreStartupScreen(const TCHAR* CmdLine)
 			// when we are in the editor we like to do things like build lighting and such
 			// this thread pool can be used for those purposes
 			extern CORE_API int32 GUseNewTaskBackend;
+			// 初始化线程池；
 			if (!GUseNewTaskBackend)
 			{
 				GLargeThreadPool = FQueuedThreadPool::Allocate();
@@ -1169,6 +1180,7 @@ int32 FEngineLoop::PreInitPreStartupScreen(const TCHAR* CmdLine)
 		}
 #endif
 		{
+			// 初始化Background线程池；
 			GBackgroundPriorityThreadPool = FQueuedThreadPool::Allocate();
 			int32 NumThreadsInThreadPool = 2;
 			if (FPlatformProperties::IsServerOnly())
@@ -1181,6 +1193,7 @@ int32 FEngineLoop::PreInitPreStartupScreen(const TCHAR* CmdLine)
 	}
 
 	// this can start using TaskGraph and ThreadPool so they must be created before
+	// 广播线程池初始化成功然后销毁；
 	FDelayedAutoRegisterHelper::RunAndClearDelayedAutoRegisterDelegates(EDelayedRegisterRunPhase::TaskGraphSystemReady);
 
 #if STATS
@@ -1194,6 +1207,7 @@ int32 FEngineLoop::PreInitPreStartupScreen(const TCHAR* CmdLine)
 	// Load Core modules required for everything else to work (needs to be loaded before InitializeRenderingCVarsCaching)
 	{
 		SCOPED_BOOT_TIMING("LoadCoreModules");
+		// 加载核心模块；
 		if (!LoadCoreModules())
 		{
 			UE_LOG(LogInit, Error, TEXT("Failed to load Core modules."));
@@ -1254,20 +1268,25 @@ int32 FEngineLoop::PreInitPreStartupScreen(const TCHAR* CmdLine)
 #endif
 
 	// init Oodle here
+
+	// 初始化Oodle压缩模块；
 	FOodleDataCompression::StartupPreInit();
 
 	{
 		SCOPED_BOOT_TIMING("LoadPreInitModules");
+		// 预加载模块：Engine；Renderer；AnimGraphRuntime；SlateRHIRenderer；Landscape；RenderCore；TextureCompressor；Virtualization；AudioEditor；AnimationModifiers；
 		LoadPreInitModules();
 	}
 
 #if WITH_ENGINE && CSV_PROFILER
+	// 注册开始帧结束帧事件；统计+命令；
 	FCoreDelegates::OnBeginFrame.AddStatic(UpdateCoreCsvStats_BeginFrame);
 	FCoreDelegates::OnEndFrame.AddStatic(UpdateCoreCsvStats_EndFrame);
 	FCsvProfiler::Get()->Init();
 #endif
 
 #if WITH_ENGINE
+	// APP生命周期事件绑定；
 	AppLifetimeEventCapture::Init();
 
 	if (bHasEditorToken)
@@ -1290,6 +1309,7 @@ int32 FEngineLoop::PreInitPreStartupScreen(const TCHAR* CmdLine)
 
 #if WITH_ENGINE && TRACING_PROFILER
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
+	// 废弃UE4.26之后；
 	FTracingProfiler::Get()->Init();
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 #endif
@@ -1615,7 +1635,9 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 	{
 		// If we're not creating the slate application there is some basic initialization
 		// that it does that still must be done
+		// 按键初始化； 
 		EKeys::Initialize();
+		//应用初始化样式；
 		FSlateApplication::InitializeCoreStyle();
 	}
 
